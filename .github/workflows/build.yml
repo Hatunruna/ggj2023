@@ -8,16 +8,32 @@ on:
 
 env:
   BUILD_TYPE: Release
-  VCPKG_COMMIT: f14984af3738e69f197bf0e647a8dca12de92996
 
 jobs:
   build-windows:
     runs-on: windows-latest
 
     env:
-      VCPKG_ROOT: ${{github.workspace}}/vcpkg
+      VCPKG_COMMIT: f14984af3738e69f197bf0e647a8dca12de92996
+      PATH:
 
     steps:
+      # Install latest cmake version
+      - name: cmake cache
+        id: cache-cmake
+        uses: actions/cache@v3
+        with:
+          path: cmake
+          key: ${{ runner.os }}-cmake-3.25.1
+
+      - name: Download cmake
+        if: steps.cache-cmake.outputs.cache-hit != 'true'
+        run: |
+          mkdir ${{github.workspace}}/cmake
+          Invoke-WebRequest https://github.com/Kitware/CMake/releases/download/v3.25.1/cmake-3.25.1-windows-x86_64.zip -OutFile ${{github.workspace}}/cmake/cmake.zip
+          Expand-Archive -Path ${{github.workspace}}/cmake/cmake.zip -DestinationPath ${{github.workspace}}/cmake
+          cp ${{github.workspace}}/cmake/cmake-3.25.1-windows-x86_64/bin/* ${{github.workspace}}/cmake
+
       # Compile vcpkg
       - name: vcpkg cache
         id: cache-vcpkg
@@ -70,24 +86,17 @@ jobs:
 
       - name: Configure gf
         if: steps.cache-gf.outputs.cache-hit != 'true'
-        shell: cmd
-        run: |
-          set PATH=%PATH%;${{github.workspace}}/gf/build/library/${{ env.BUILD_TYPE }}
-          cmake -DGF_USE_EMBEDDED_LIBS=OFF -DGF_BUILD_GAMES=OFF -DGF_BUILD_EXAMPLES=OFF -DGF_BUILD_DOCUMENTATION=OFF -DGF_DEBUG=OFF -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/gf/install -DCMAKE_UNITY_BUILD=ON -S ${{ github.workspace }}/gf -B ${{ github.workspace }}/gf/build
+        run: ${{github.workspace}}\cmake\cmake.exe -DGF_USE_EMBEDDED_LIBS=OFF -DGF_BUILD_GAMES=OFF -DGF_BUILD_EXAMPLES=OFF -DGF_BUILD_DOCUMENTATION=OFF -DGF_DEBUG=OFF -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/gf/install -DCMAKE_UNITY_BUILD=ON -S ${{ github.workspace }}/gf -B ${{ github.workspace }}/gf/build
 
       - name: Build gf
         if: steps.cache-gf.outputs.cache-hit != 'true'
         shell: cmd
-        run: |
-          set PATH=%PATH%;${{github.workspace}}/gf/build/library/${{ env.BUILD_TYPE }}
-          cmake --build ${{ github.workspace }}/gf/build --config ${{ env.BUILD_TYPE }} --parallel
+        run: ${{github.workspace}}\cmake\cmake.exe  --build ${{ github.workspace }}/gf/build --config ${{ env.BUILD_TYPE }} --parallel
 
       - name: Install gf
         if: steps.cache-gf.outputs.cache-hit != 'true'
         shell: cmd
-        run: |
-          set PATH=%PATH%;${{github.workspace}}/gf/build/library/${{ env.BUILD_TYPE }}
-          cmake --install ${{ github.workspace }}/gf/build --config ${{ env.BUILD_TYPE }}
+        run: ${{github.workspace}}\cmake\cmake.exe --install ${{ github.workspace }}/gf/build --config ${{ env.BUILD_TYPE }}
 
       # Build the game
       - uses: actions/checkout@v3
@@ -96,21 +105,18 @@ jobs:
           submodules: 'true'
 
       - name: Configure game
-        shell: cmd
-        run: cmake -S ${{github.workspace}}/ggj2023/ -B ${{github.workspace}}/ggj2023/build -DCMAKE_UNITY_BUILD=ON -DCMAKE_PREFIX_PATH=${{ github.workspace }}/gf/install -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake -T host=x64 -A x64
+        run: ${{github.workspace}}\cmake\cmake.exe -S ${{github.workspace}}/ggj2023/ -B ${{github.workspace}}/ggj2023/build -DCMAKE_UNITY_BUILD=ON -DCMAKE_PREFIX_PATH=${{ github.workspace }}/gf/install -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake -T host=x64 -A x64
 
       - name: Build game
-        shell: cmd
-        run: cmake --build ${{github.workspace}}/ggj2023/build --config ${{env.BUILD_TYPE}} --parallel
+        run: ${{github.workspace}}\cmake\cmake.exe --build ${{github.workspace}}/ggj2023/build --config ${{env.BUILD_TYPE}} --parallel
 
       - name: Debug dll
         working-directory: ${{github.workspace}}/ggj2023/build/Release
-        shell: cmd
         run: dir /s
 
       - name: Create game
         working-directory: ${{github.workspace}}/ggj2023/build
-        run: cpack --config CPackConfig.cmake -C ${{env.BUILD_TYPE}}
+        run: ${{github.workspace}}\cmake\cpack.exe --config CPackConfig.cmake -C ${{env.BUILD_TYPE}}
 
       - uses: actions/upload-artifact@v3
         with:
