@@ -110,7 +110,7 @@ jobs:
 
       - name: Debug dll
         working-directory: ${{github.workspace}}/ggj2023/build/Release
-        run: dir /s
+        run: ls
 
       - name: Create game
         working-directory: ${{github.workspace}}/ggj2023/build
