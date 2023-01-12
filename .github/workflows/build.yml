@@ -101,6 +101,10 @@ jobs:
       - name: Build game
         run: cmake --build ${{github.workspace}}/ggj2023/build --config ${{env.BUILD_TYPE}} --parallel
 
+      -name: Debug dll
+        working-directory: ${{github.workspace}}/ggj2023/build/Release
+        run: dir
+
       - name: Create game
         working-directory: ${{github.workspace}}/ggj2023/build
         run: cpack --config CPackConfig.cmake -C ${{env.BUILD_TYPE}}
