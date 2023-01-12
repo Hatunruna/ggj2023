@@ -49,7 +49,8 @@ jobs:
 
       - name: Extract gf revision
         shell: bash
-        run: echo "revision=$(git -C ${{github.workspace}}/gf rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+        working-directory: ${{github.workspace}}/gf
+        run: echo "revision=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
         id: extract-gf-revision
 
       - name: gf cache
@@ -72,7 +73,7 @@ jobs:
         shell: cmd
         run: |
           set PATH=%PATH%;${{github.workspace}}/gf/build/library/${{ env.BUILD_TYPE }}
-          cmake -DGF_USE_EMBEDDED_LIBS=OFF -DGF_BUILD_GAMES=OFF -DGF_BUILD_EXAMPLES=OFF -DGF_BUILD_DOCUMENTATION=OFF -DGF_DEBUG=OFF -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake -DBUILD_TESTING=OFF -S ${{ github.workspace }}/gf -B ${{ github.workspace }}/gf/build
+          cmake -DGF_USE_EMBEDDED_LIBS=OFF -DGF_BUILD_GAMES=OFF -DGF_BUILD_EXAMPLES=OFF -DGF_BUILD_DOCUMENTATION=OFF -DGF_DEBUG=OFF -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/gf/install -S ${{ github.workspace }}/gf -B ${{ github.workspace }}/gf/build
 
       - name: Build gf
         if: steps.cache-gf.outputs.cache-hit != 'true'
@@ -81,6 +82,13 @@ jobs:
           set PATH=%PATH%;${{github.workspace}}/gf/build/library/${{ env.BUILD_TYPE }}
           cmake --build ${{ github.workspace }}/gf/build --config ${{ env.BUILD_TYPE }} --parallel
 
+      - name: Install gf
+        if: steps.cache-gf.outputs.cache-hit != 'true'
+        shell: cmd
+        run: |
+          set PATH=%PATH%;${{github.workspace}}/gf/build/library/${{ env.BUILD_TYPE }}
+          cmake --install ${{ github.workspace }}/gf/install --config ${{ env.BUILD_TYPE }}
+
       # Build the game
       - uses: actions/checkout@v3
         with:
@@ -88,7 +96,7 @@ jobs:
           submodules: 'true'
 
       - name: Configure game
-        run: cmake -S ${{github.workspace}}/ggj2023/ -B ${{github.workspace}}/ggj2023/build -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake -T host=x64 -A x64
+        run: cmake -S ${{github.workspace}}/ggj2023/ -B ${{github.workspace}}/ggj2023/build -DCMAKE_PREFIX_PATH=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/gf/install -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake -T host=x64 -A x64
 
       - name: Build game
         run: cmake --build ${{github.workspace}}/ggj2023/build --config ${{env.BUILD_TYPE}} --parallel
