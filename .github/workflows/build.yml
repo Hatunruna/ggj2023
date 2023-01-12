@@ -103,6 +103,7 @@ jobs:
 
       - name: Debug dll
         working-directory: ${{github.workspace}}/ggj2023/build/Release
+        shell: cmd
         run: dir /s
 
       - name: Create game
