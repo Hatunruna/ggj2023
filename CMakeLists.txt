@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.18...3.21)
 
 set(GAME Game)
 
@@ -60,7 +60,7 @@ if (WIN32)
     DESTINATION .
     CONFIGURATIONS Debug
   )
-  
+
   install(
     FILES
       $<TARGET_FILE_DIR:${GAME}>/SDL2.dll

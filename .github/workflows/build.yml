@@ -103,7 +103,7 @@ jobs:
           submodules: 'true'
 
       - name: Configure game
-        run: ${{github.workspace}}\cmake\cmake-3.25.1-windows-x86_64\bin\cmake.exe -S ${{github.workspace}}/ggj2023/ -B ${{github.workspace}}/ggj2023/build -DCMAKE_UNITY_BUILD=ON -DCMAKE_PREFIX_PATH=${{ github.workspace }}/gf/install -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake -T host=x64 -A x64
+        run: ${{github.workspace}}\cmake\cmake-3.25.1-windows-x86_64\bin\cmake.exe -DCMAKE_UNITY_BUILD=ON -DCMAKE_PREFIX_PATH=${{ github.workspace }}/gf/install -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake -T host=x64 -A x64 -S ${{github.workspace}}/ggj2023/ -B ${{github.workspace}}/ggj2023/build
 
       - name: Build game
         run: ${{github.workspace}}\cmake\cmake-3.25.1-windows-x86_64\bin\cmake.exe --build ${{github.workspace}}/ggj2023/build --config ${{env.BUILD_TYPE}} --parallel
