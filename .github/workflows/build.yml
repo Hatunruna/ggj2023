@@ -15,7 +15,6 @@ jobs:
 
     env:
       VCPKG_COMMIT: f14984af3738e69f197bf0e647a8dca12de92996
-      PATH:
 
     steps:
       # Install latest cmake version
