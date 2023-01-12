@@ -39,31 +39,42 @@ target_link_libraries(${GAME}
 )
 
 if (WIN32)
+  add_custom_command(TARGET ${GAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:${GAME}> $<TARGET_FILE_DIR:${GAME}>
+    COMMAND_EXPAND_LISTS
+  )
+
   install(
     FILES
-      $<$<CONFIG:DEBUG>:${CMAKE_BINARY_DIR}/Debug/SDL2d.dll>
-      $<$<CONFIG:DEBUG>:${CMAKE_BINARY_DIR}/Debug/brotlicommon.dll>
-      $<$<CONFIG:DEBUG>:${CMAKE_BINARY_DIR}/Debug/brotlidec.dll>
-      $<$<CONFIG:DEBUG>:${CMAKE_BINARY_DIR}/Debug/bz2d.dll>
-      $<$<CONFIG:DEBUG>:${CMAKE_BINARY_DIR}/Debug/freetyped.dll>
-      $<$<CONFIG:DEBUG>:${CMAKE_BINARY_DIR}/Debug/gf0.dll>
-      $<$<CONFIG:DEBUG>:${CMAKE_BINARY_DIR}/Debug/gfcore0.dll>
-      $<$<CONFIG:DEBUG>:${CMAKE_BINARY_DIR}/Debug/libpng16d.dll>
-      $<$<CONFIG:DEBUG>:${CMAKE_BINARY_DIR}/Debug/pugixml_d.dll>
-      $<$<CONFIG:DEBUG>:${CMAKE_BINARY_DIR}/Debug/zlibd1.dll>
-      $<$<CONFIG:DEBUG>:${CMAKE_BINARY_DIR}/Debug/prises.pdb>
-
-      $<$<CONFIG:RELEASE>:${CMAKE_BINARY_DIR}/Release/SDL2.dll>
-      $<$<CONFIG:RELEASE>:${CMAKE_BINARY_DIR}/Release/brotlicommon.dll>
-      $<$<CONFIG:RELEASE>:${CMAKE_BINARY_DIR}/Release/brotlidec.dll>
-      $<$<CONFIG:RELEASE>:${CMAKE_BINARY_DIR}/Release/bz2.dll>
-      $<$<CONFIG:RELEASE>:${CMAKE_BINARY_DIR}/Release/freetype.dll>
-      $<$<CONFIG:RELEASE>:${CMAKE_BINARY_DIR}/Release/gf0.dll>
-      $<$<CONFIG:RELEASE>:${CMAKE_BINARY_DIR}/Release/gfcore0.dll>
-      $<$<CONFIG:RELEASE>:${CMAKE_BINARY_DIR}/Release/libpng16.dll>
-      $<$<CONFIG:RELEASE>:${CMAKE_BINARY_DIR}/Release/pugixml.dll>
-      $<$<CONFIG:RELEASE>:${CMAKE_BINARY_DIR}/Release/zlib1.dll>
+      $<TARGET_FILE_DIR:${GAME}>/SDL2d.dll
+      $<TARGET_FILE_DIR:${GAME}>/brotlicommon.dll
+      $<TARGET_FILE_DIR:${GAME}>/brotlidec.dll
+      $<TARGET_FILE_DIR:${GAME}>/bz2d.dll
+      $<TARGET_FILE_DIR:${GAME}>/freetyped.dll
+      $<TARGET_FILE_DIR:${GAME}>/gf0.dll
+      $<TARGET_FILE_DIR:${GAME}>/gfcore0.dll
+      $<TARGET_FILE_DIR:${GAME}>/libpng16d.dll
+      $<TARGET_FILE_DIR:${GAME}>/pugixml_d.dll
+      $<TARGET_FILE_DIR:${GAME}>/zlibd1.dll
+      $<TARGET_FILE_DIR:${GAME}>/prises.pdb
     DESTINATION .
+    CONFIGURATIONS Debug
+  )
+  
+  install(
+    FILES
+      $<TARGET_FILE_DIR:${GAME}>/SDL2.dll
+      $<TARGET_FILE_DIR:${GAME}>/brotlicommon.dll
+      $<TARGET_FILE_DIR:${GAME}>/brotlidec.dll
+      $<TARGET_FILE_DIR:${GAME}>/bz2.dll
+      $<TARGET_FILE_DIR:${GAME}>/freetype.dll
+      $<TARGET_FILE_DIR:${GAME}>/gf0.dll
+      $<TARGET_FILE_DIR:${GAME}>/gfcore0.dll
+      $<TARGET_FILE_DIR:${GAME}>/libpng16.dll
+      $<TARGET_FILE_DIR:${GAME}>/pugixml.dll
+      $<TARGET_FILE_DIR:${GAME}>/zlib1.dll
+    DESTINATION .
+    CONFIGURATIONS Release
   )
 
   install(TARGETS ${GAME} DESTINATION .)
