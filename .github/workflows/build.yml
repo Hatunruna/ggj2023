@@ -58,7 +58,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: gf
-          key: ${{ runner.os }}-vcpkg-${{ steps.extract-gf-revision.outputs.revision }}
+          key: ${{ runner.os }}-gf-${{ steps.extract-gf-revision.outputs.revision }}
 
       - uses: actions/checkout@v3
         if: steps.cache-gf.outputs.cache-hit != 'true'
