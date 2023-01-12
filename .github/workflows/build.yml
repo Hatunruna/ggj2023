@@ -87,7 +87,7 @@ jobs:
         shell: cmd
         run: |
           set PATH=%PATH%;${{github.workspace}}/gf/build/library/${{ env.BUILD_TYPE }}
-          cmake --install ${{ github.workspace }}/gf/install --config ${{ env.BUILD_TYPE }}
+          cmake --install ${{ github.workspace }}/gf/build --config ${{ env.BUILD_TYPE }}
 
       # Build the game
       - uses: actions/checkout@v3
