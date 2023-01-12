@@ -47,3 +47,9 @@ install(
   DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/data/${GAME}"
   DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/games"
 )
+
+# Package rules
+if (WIN32)
+  set(CPACK_GENERATOR "ZIP")
+  include(CPack)
+endif()
