@@ -102,8 +102,8 @@ jobs:
           cp ${{github.workspace}}\vcpkg\installed\x64-windows\bin\brotlidec.dll ${{github.workspace}}/ggj2023/build/${{env.BUILD_TYPE}}
           cp ${{github.workspace}}\vcpkg\installed\x64-windows\bin\bz2.dll ${{github.workspace}}/ggj2023/build/${{env.BUILD_TYPE}}
           cp ${{github.workspace}}\vcpkg\installed\x64-windows\bin\freetype.dll ${{github.workspace}}/ggj2023/build/${{env.BUILD_TYPE}}
-          cp ${{github.workspace}}\vcpkg\installed\x64-windows\bin\gf0.dll ${{github.workspace}}/ggj2023/build/${{env.BUILD_TYPE}}
-          cp ${{github.workspace}}\vcpkg\installed\x64-windows\bin\gfcore0.dll ${{github.workspace}}/ggj2023/build/${{env.BUILD_TYPE}}
+          cp ${{github.workspace}}\gf\install\bin\gf0.dll ${{github.workspace}}/ggj2023/build/${{env.BUILD_TYPE}}
+          cp ${{github.workspace}}\gf\install\bin\gfcore0.dll ${{github.workspace}}/ggj2023/build/${{env.BUILD_TYPE}}
           cp ${{github.workspace}}\vcpkg\installed\x64-windows\bin\libpng16.dll ${{github.workspace}}/ggj2023/build/${{env.BUILD_TYPE}}
           cp ${{github.workspace}}\vcpkg\installed\x64-windows\bin\pugixml.dll ${{github.workspace}}/ggj2023/build/${{env.BUILD_TYPE}}
           cp ${{github.workspace}}\vcpkg\installed\x64-windows\bin\zlib1.dll ${{github.workspace}}/ggj2023/build/${{env.BUILD_TYPE}}
