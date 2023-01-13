@@ -119,60 +119,61 @@ jobs:
           if-no-files-found: error
 
 
-  # build-linux:
-  #   runs-on: ubuntu-22.04
+  build-linux:
+    runs-on: ubuntu-22.04
 
-  #   steps:
-  #     # Dependencies
-  #     - name: Install dependency
-  #       run: |
-  #         sudo apt update
-  #         sudo apt install -y libsdl2-dev libboost-dev libfreetype6-dev zlib1g-dev libpugixml-dev libbox2d-dev
+    steps:
+      # Dependencies
+      - name: Install dependency
+        run: |
+          sudo apt update
+          sudo apt install -y libsdl2-dev libboost-dev libfreetype6-dev zlib1g-dev libpugixml-dev
 
-  #     # gf build
-  #     - name: gf cache
-  #       id: cache-gf
-  #       uses: actions/cache@v3
-  #       with:
-  #         path: gf
-  #         key: ${{ runner.os }}-gf-1.0.0
+      # Compile GF
+      - uses: actions/checkout@v3
+        with:
+          repository: GamedevFramework/gf
+          submodules: recursive
+          path: gf
 
-  #     - uses: actions/checkout@v3
-  #       if: steps.cache-gf.outputs.cache-hit != 'true'
-  #       with:
-  #         repository: GamedevFramework/gf
-  #         submodules: recursive
-  #         path: gf
+      - name: Extract gf revision
+        shell: bash
+        working-directory: ${{github.workspace}}/gf
+        run: echo "revision=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+        id: extract-gf-revision
 
-  #     - name: Patch SDL2 dependencies
-  #       if: steps.cache-gf.outputs.cache-hit != 'true'
-  #       run: |
-  #         cat ${{github.workspace}}/gf/library/CMakeLists.txt | sed 's/SDL2::SDL2/\$\{SDL2_LIBRARIES\}/' | tee ${{github.workspace}}/gf/library/CMakeLists.txt > /dev/null
-  #         echo 'include_directories(SYSTEM ${SDL2_INCLUDE_DIRS})' >> ${{github.workspace}}/gf/library/CMakeLists.txt
+      - name: gf cache
+        id: cache-gf
+        uses: actions/cache@v3
+        with:
+          path: gf
+          key: ${{ runner.os }}-gf-${{ steps.extract-gf-revision.outputs.revision }}
 
-  #     - name: Configure gf
-  #       if: steps.cache-gf.outputs.cache-hit != 'true'
-  #       run: cmake -DGF_BUILD_GAMES=OFF -DGF_BUILD_EXAMPLES=OFF -DGF_BUILD_DOCUMENTATION=OFF -DGF_SINGLE_COMPILTATION_UNIT=OFF -DGF_DEBUG=OFF -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/gf/build/install -S \${{github.workspace}}/gf/ -B ${{github.workspace}}/gf/build
+      - name: Configure gf
+        if: steps.cache-gf.outputs.cache-hit != 'true'
+        run: cmake -DGF_USE_EMBEDDED_LIBS=OFF -DGF_BUILD_GAMES=OFF -DGF_BUILD_EXAMPLES=OFF -DGF_BUILD_DOCUMENTATION=OFF -DGF_DEBUG=OFF -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/gf/install -DCMAKE_UNITY_BUILD=ON -S ${{ github.workspace }}/gf -B ${{ github.workspace }}/gf/build
 
-  #     - name: Build gf
-  #       if: steps.cache-gf.outputs.cache-hit != 'true'
-  #       run: cmake --build ${{github.workspace}}/gf/build --config ${{env.BUILD_TYPE}} --parallel
+      - name: Build gf
+        if: steps.cache-gf.outputs.cache-hit != 'true'
+        shell: cmd
+        run: cmake --build ${{ github.workspace }}/gf/build --config ${{ env.BUILD_TYPE }} --parallel
 
-  #     - name: Install gf
-  #       if: steps.cache-gf.outputs.cache-hit != 'true'
-  #       run: cmake --install ${{github.workspace}}/gf/build --config ${{env.BUILD_TYPE}} --strip
+      - name: Install gf
+        if: steps.cache-gf.outputs.cache-hit != 'true'
+        shell: cmd
+        run: cmake --install ${{ github.workspace }}/gf/build --config ${{ env.BUILD_TYPE }}
 
-  #     # ggj2023 build
-  #     - uses: actions/checkout@v3
-  #       with:
-  #         path: ggj2023
-  #         submodules: 'true'
+      # Build the game
+      - uses: actions/checkout@v3
+        with:
+          path: ggj2023
+          submodules: 'true'
 
-  #     - name: Configure ggj2023
-  #       run: cmake -S ${{github.workspace}}/ggj2023/ -B ${{github.workspace}}/ggj2023/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_PREFIX_PATH=${{github.workspace}}/gf/build/install
+      - name: Configure ggj2023
+        run: cmake -S ${{github.workspace}}/ggj2023/ -B ${{github.workspace}}/ggj2023/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_PREFIX_PATH=${{github.workspace}}/gf/build/install
 
-  #     - name: Build ggj2023
-  #       run: cmake --build ${{github.workspace}}/ggj2023/build --config ${{env.BUILD_TYPE}} --parallel
+      - name: Build ggj2023
+        run: cmake --build ${{github.workspace}}/ggj2023/build --config ${{env.BUILD_TYPE}} --parallel
 
   # build-macos:
   #   runs-on: macos-12
