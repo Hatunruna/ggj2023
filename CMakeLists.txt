@@ -44,36 +44,37 @@ if (WIN32)
     COMMAND_EXPAND_LISTS
   )
 
-  # install(
-  #   FILES
-  #     $<TARGET_FILE_DIR:${GAME}>/SDL2d.dll
-  #     $<TARGET_FILE_DIR:${GAME}>/brotlicommon.dll
-  #     $<TARGET_FILE_DIR:${GAME}>/brotlidec.dll
-  #     $<TARGET_FILE_DIR:${GAME}>/bz2d.dll
-  #     $<TARGET_FILE_DIR:${GAME}>/freetyped.dll
-  #     $<TARGET_FILE_DIR:${GAME}>/gf0.dll
-  #     $<TARGET_FILE_DIR:${GAME}>/gfcore0.dll
-  #     $<TARGET_FILE_DIR:${GAME}>/libpng16d.dll
-  #     $<TARGET_FILE_DIR:${GAME}>/pugixml_d.dll
-  #     $<TARGET_FILE_DIR:${GAME}>/zlibd1.dll
-  #     $<TARGET_FILE_DIR:${GAME}>/prises.pdb
-  #   DESTINATION .
-  #   CONFIGURATIONS Debug
-  # )
+  install(
+    FILES
+      $<TARGET_FILE_DIR:${GAME}>/SDL2d.dll
+      $<TARGET_FILE_DIR:${GAME}>/brotlicommon.dll
+      $<TARGET_FILE_DIR:${GAME}>/brotlidec.dll
+      $<TARGET_FILE_DIR:${GAME}>/bz2d.dll
+      $<TARGET_FILE_DIR:${GAME}>/freetyped.dll
+      $<TARGET_FILE_DIR:${GAME}>/gf0.dll
+      $<TARGET_FILE_DIR:${GAME}>/gfcore0.dll
+      $<TARGET_FILE_DIR:${GAME}>/libpng16d.dll
+      $<TARGET_FILE_DIR:${GAME}>/pugixml_d.dll
+      $<TARGET_FILE_DIR:${GAME}>/zlibd1.dll
+      $<TARGET_FILE_DIR:${GAME}>/prises.pdb
+    DESTINATION .
+    CONFIGURATIONS Debug
+  )
 
   install(
     FILES
       $<TARGET_FILE_DIR:${GAME}>/SDL2.dll
-      # $<TARGET_FILE_DIR:${GAME}>/brotlicommon.dll
-      # $<TARGET_FILE_DIR:${GAME}>/brotlidec.dll
-      # $<TARGET_FILE_DIR:${GAME}>/bz2.dll
-      # $<TARGET_FILE_DIR:${GAME}>/freetype.dll
+      $<TARGET_FILE_DIR:${GAME}>/brotlicommon.dll
+      $<TARGET_FILE_DIR:${GAME}>/brotlidec.dll
+      $<TARGET_FILE_DIR:${GAME}>/bz2.dll
+      $<TARGET_FILE_DIR:${GAME}>/freetype.dll
       $<TARGET_FILE_DIR:${GAME}>/gf0.dll
       $<TARGET_FILE_DIR:${GAME}>/gfcore0.dll
-      # $<TARGET_FILE_DIR:${GAME}>/libpng16.dll
-      # $<TARGET_FILE_DIR:${GAME}>/pugixml.dll
-      # $<TARGET_FILE_DIR:${GAME}>/zlib1.dll
+      $<TARGET_FILE_DIR:${GAME}>/libpng16.dll
+      $<TARGET_FILE_DIR:${GAME}>/pugixml.dll
+      $<TARGET_FILE_DIR:${GAME}>/zlib1.dll
     DESTINATION .
+    CONFIGURATIONS Release
   )
 
   install(TARGETS ${GAME} DESTINATION .)
