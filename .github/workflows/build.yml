@@ -61,14 +61,6 @@ jobs:
           path: gf
           key: ${{ runner.os }}-gf-${{ steps.extract-gf-revision.outputs.revision }}
 
-      - uses: actions/checkout@v3
-        if: steps.cache-gf.outputs.cache-hit != 'true'
-        with:
-          repository: GamedevFramework/gf
-          submodules: recursive
-          ref: ${{ steps.extract_branch.outputs.branch }}
-          path: gf
-
       - name: Configure gf
         if: steps.cache-gf.outputs.cache-hit != 'true'
         run: cmake -DGF_USE_EMBEDDED_LIBS=OFF -DGF_BUILD_GAMES=OFF -DGF_BUILD_EXAMPLES=OFF -DGF_BUILD_DOCUMENTATION=OFF -DGF_DEBUG=OFF -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/gf/install -DCMAKE_UNITY_BUILD=ON -S ${{ github.workspace }}/gf -B ${{ github.workspace }}/gf/build
