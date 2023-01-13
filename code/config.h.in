@@ -1,6 +1,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define GAME_DATADIR    "@GAME_DATADIR@"
+#define GAME_DATADIR          "@GAME_DATADIR@"
+#define GAME_RELATIVE_DATADIR "@GAME_RELATIVE_DATADIR@"
 
 #endif // CONFIG_H
