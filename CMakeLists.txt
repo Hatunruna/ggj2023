@@ -15,7 +15,7 @@ if (UNIX)
 endif ()
 
 set(GAME_DATADIR "${CMAKE_INSTALL_PREFIX}/share/games/${GAME}" CACHE PATH "Game Data Dir")
-set(GAME_RELATIVE_DATADIR "./share/${GAME}" CACHE STRING "Game Relative Data Dir")
+set(GAME_RELATIVE_DATADIR "./share/games/${GAME}" CACHE STRING "Game Relative Data Dir")
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/code/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h @ONLY)
 
 add_executable(${GAME}
