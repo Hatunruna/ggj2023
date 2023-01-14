@@ -23,7 +23,11 @@ add_executable(${GAME}
   code/bits/GameData.cc
   code/bits/GameHub.cc
   code/bits/GameState.cc
+  code/bits/HeroEntity.cc
   code/bits/MainScene.cc
+  code/bits/MapData.cc
+  code/bits/MapEntity.cc
+  code/bits/SplitEntity.cc
   code/bits/StartScene.cc
   code/bits/TitleEntity.cc
 )

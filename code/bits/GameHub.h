@@ -5,6 +5,7 @@
 
 #include "GameData.h"
 #include "GameState.h"
+#include "MainScene.h"
 #include "StartScene.h"
 
 namespace xy {
@@ -16,6 +17,7 @@ namespace xy {
     GameState state;
 
     StartScene start;
+    MainScene main;
   };
 
 

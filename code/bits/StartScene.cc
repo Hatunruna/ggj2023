@@ -15,10 +15,11 @@ namespace xy {
   {
     setClearColor(gf::Color::Black);
 
-//     m_startAction.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::A);
-//     m_startAction.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::B);
-//     m_startAction.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::X);
-//     m_startAction.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::Y);
+    m_startAction.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::A);
+    m_startAction.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::B);
+    m_startAction.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::X);
+    m_startAction.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::Y);
+    m_startAction.addScancodeKeyControl(gf::Scancode::Space);
     addAction(m_startAction);
 
 //     m_fullscreenAction.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::Guide);
@@ -37,7 +38,10 @@ namespace xy {
     }
 
     if (m_startAction.isActive()) {
-//       m_game.replaceScene(m_game.introduction, m_game.blackout, gf::seconds(TransitionDelay));
+      m_game.data.map.createNewMap(m_game.random);
+      m_game.state.lisa.position = gf::vec(1, 1);
+      m_game.state.ryan.position = gf::vec(3, 1);
+      m_game.replaceScene(m_game.main); //, m_game.blackout, gf::seconds(TransitionDelay));
     }
   }
 

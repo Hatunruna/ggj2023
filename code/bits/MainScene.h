@@ -4,6 +4,10 @@
 #include <gf/Scene.h>
 #include <gf/Action.h>
 
+#include "HeroEntity.h"
+#include "MapEntity.h"
+#include "SplitEntity.h"
+
 namespace xy {
 
   struct GameHub;
@@ -28,13 +32,24 @@ namespace xy {
     gf::ExtendView m_rtWorldView;
     gf::ScreenView m_rtHudView;
 
-    // entities
+    // containers
 
     gf::EntityContainer m_ltWorldEntities;
     gf::EntityContainer m_ltHudEntities;
 
     gf::EntityContainer m_rtWorldEntities;
     gf::EntityContainer m_rtHudEntities;
+
+    // entities
+
+    MapEntity m_ltMap;
+    MapEntity m_rtMap;
+
+    HeroEntity m_ltHero;
+    HeroEntity m_rtHero;
+
+
+    SplitEntity m_split;
 
     // actions
 
