@@ -63,7 +63,7 @@ jobs:
 
       - name: Configure gf
         if: steps.cache-gf.outputs.cache-hit != 'true'
-        run: cmake -DGF_USE_EMBEDDED_LIBS=OFF -DGF_BUILD_GAMES=OFF -DGF_BUILD_EXAMPLES=OFF -DGF_BUILD_DOCUMENTATION=OFF -DGF_DEBUG=OFF -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/gf/install -DCMAKE_UNITY_BUILD=ON -S ${{ github.workspace }}/gf -B ${{ github.workspace }}/gf/build
+        run: cmake -DGF_USE_EMBEDDED_LIBS=OFF -DGF_BUILD_GAMES=OFF -DGF_BUILD_EXAMPLES=OFF -DGF_BUILD_DOCUMENTATION=OFF -DGF_DEBUG=OFF -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/gf/install -DCMAKE_UNITY_BUILD=ON -S ${{ github.workspace }}/gf -B ${{ github.workspace }}/gf/build
 
       - name: Build gf
         if: steps.cache-gf.outputs.cache-hit != 'true'
@@ -82,7 +82,7 @@ jobs:
           submodules: 'true'
 
       - name: Configure game
-        run: cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_PREFIX_PATH=${{ github.workspace }}/gf/install -T host=x64 -A x64 -S ${{github.workspace}}/ggj2023/ -B ${{github.workspace}}/ggj2023/build
+        run: cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_PREFIX_PATH=${{ github.workspace }}/gf/install -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake -T host=x64 -A x64 -S ${{github.workspace}}/ggj2023/ -B ${{github.workspace}}/ggj2023/build
 
       - name: Build game
         run: cmake --build ${{github.workspace}}/ggj2023/build --config ${{env.BUILD_TYPE}} --parallel
@@ -143,7 +143,7 @@ jobs:
 
       - name: Configure gf
         if: steps.cache-gf.outputs.cache-hit != 'true'
-        run: cmake -DGF_USE_EMBEDDED_LIBS=OFF -DGF_BUILD_GAMES=OFF -DGF_BUILD_EXAMPLES=OFF -DGF_BUILD_DOCUMENTATION=OFF -DGF_DEBUG=OFF -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/gf/install -DCMAKE_UNITY_BUILD=ON -S ${{ github.workspace }}/gf -B ${{ github.workspace }}/gf/build
+        run: cmake -DGF_USE_EMBEDDED_LIBS=OFF -DGF_BUILD_GAMES=OFF -DGF_BUILD_EXAMPLES=OFF -DGF_BUILD_DOCUMENTATION=OFF -DGF_DEBUG=OFF -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/gf/install -DCMAKE_UNITY_BUILD=ON -S ${{ github.workspace }}/gf -B ${{ github.workspace }}/gf/build
 
       - name: Build gf
         if: steps.cache-gf.outputs.cache-hit != 'true'
