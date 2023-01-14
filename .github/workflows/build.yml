@@ -158,7 +158,7 @@ jobs:
           submodules: 'true'
 
       - name: Configure ggj2023
-        run: cmake -S ${{github.workspace}}/ggj2023/ -B ${{github.workspace}}/ggj2023/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_PREFIX_PATH=${{github.workspace}}/gf/build/install
+        run: cmake -S ${{github.workspace}}/ggj2023/ -B ${{github.workspace}}/ggj2023/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_PREFIX_PATH=${{github.workspace}}/gf/install
 
       - name: Build ggj2023
         run: cmake --build ${{github.workspace}}/ggj2023/build --config ${{env.BUILD_TYPE}} --parallel
