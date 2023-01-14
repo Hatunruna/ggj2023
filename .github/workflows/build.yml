@@ -227,7 +227,7 @@ jobs:
           submodules: 'true'
 
       - name: Configure ggj2023
-        run: cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_PREFIX_PATH=${{ github.workspace }}/gf/install -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake -T host=x64 -A x64 -S ${{github.workspace}}/ggj2023/ -B ${{github.workspace}}/ggj2023/build
+        run: cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_PREFIX_PATH=${{ github.workspace }}/gf/install -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake -S ${{github.workspace}}/ggj2023/ -B ${{github.workspace}}/ggj2023/build
 
       - name: Build ggj2023
         run: cmake --build ${{github.workspace}}/ggj2023/build --config ${{env.BUILD_TYPE}} --parallel
