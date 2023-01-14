@@ -184,7 +184,7 @@ jobs:
         if: steps.cache-vcpkg.outputs.cache-hit != 'true'
         working-directory: ${{github.workspace}}/vcpkg
         run: |
-          mkdir $Env:VCPKG_DEFAULT_BINARY_CACHE
+          mkdir $VCPKG_DEFAULT_BINARY_CACHE
           ./bootstrap-vcpkg.sh
           ./vcpkg install boost-algorithm:x64-osx boost-container:x64-osx boost-filesystem:x64-osx boost-heap:x64-osx freetype:x64-osx pugixml:x64-osx sdl2:x64-osx stb:x64-osx zlib:x64-osx
 
