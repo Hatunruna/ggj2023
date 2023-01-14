@@ -67,12 +67,10 @@ jobs:
 
       - name: Build gf
         if: steps.cache-gf.outputs.cache-hit != 'true'
-        shell: cmd
         run: cmake --build ${{ github.workspace }}/gf/build --config ${{ env.BUILD_TYPE }} --parallel
 
       - name: Install gf
         if: steps.cache-gf.outputs.cache-hit != 'true'
-        shell: cmd
         run: cmake --install ${{ github.workspace }}/gf/build --config ${{ env.BUILD_TYPE }}
 
       # Build the game
@@ -147,12 +145,10 @@ jobs:
 
       - name: Build gf
         if: steps.cache-gf.outputs.cache-hit != 'true'
-        shell: cmd
         run: cmake --build ${{ github.workspace }}/gf/build --config ${{ env.BUILD_TYPE }} --parallel
 
       - name: Install gf
         if: steps.cache-gf.outputs.cache-hit != 'true'
-        shell: cmd
         run: cmake --install ${{ github.workspace }}/gf/build --config ${{ env.BUILD_TYPE }}
 
       # Build the game
