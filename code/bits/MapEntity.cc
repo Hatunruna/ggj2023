@@ -20,9 +20,12 @@ namespace xy {
     gf::ShapeParticles rectangles;
 
     const MapState& mapState = m_state.maps[static_cast<int>(m_hero)];
+    const int levelIndex = m_state.heros[static_cast<int>(m_hero)].levelIndex;
+    const gf::Array2D<MapData::Cell>& level = m_data.map.levels[levelIndex];
+    const gf::SquareMap& fov = m_state.maps[static_cast<int>(m_hero)].levelsFov[levelIndex];
 
-    for (auto position : m_data.map.level.getPositionRange()) {
-      const MapData::Cell& cell = m_data.map.level(position);
+    for (auto position : level.getPositionRange()) {
+      const MapData::Cell& cell = level(position);
 
       gf::Color4f color;
       switch (cell.type) {
@@ -35,11 +38,11 @@ namespace xy {
         break;
       }
 
-      if (!mapState.fieldOfView.isInFieldOfVision(position))
+      if (!fov.isInFieldOfVision(position))
       {
-        if (!mapState.fieldOfView.isExplored(position)) {
+        if (!fov.isExplored(position)) {
           color = gf::Color::Black;
-        } else if (mapState.fieldOfView.isExplored(position)) {
+        } else if (fov.isExplored(position)) {
           color = gf::Color::darker(color, 0.7f);
         }
       }

@@ -16,7 +16,7 @@ namespace xy {
       CellType type;
     };
 
-    gf::Array2D<Cell> level;
+    std::vector<gf::Array2D<Cell>> levels;
 
     void createNewMap(gf::Random& random);
   };

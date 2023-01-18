@@ -7,7 +7,7 @@ namespace xy {
   class GameData;
 
   struct MapState {
-    gf::SquareMap fieldOfView = gf::SquareMap(gf::vec(1, 1));
+    std::vector<gf::SquareMap> levelsFov;
 
     void initialize(const GameData& data);
   };

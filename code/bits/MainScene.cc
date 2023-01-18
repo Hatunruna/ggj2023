@@ -97,7 +97,8 @@ namespace xy {
 
     auto updateHeroPosition = [this](Hero hero) {
       HeroActions& actions = heroActions[static_cast<int>(hero)];
-      const gf::SquareMap& fov = m_game.state.maps[static_cast<int>(hero)].fieldOfView;
+      const int levelIndex = m_game.state.heros[static_cast<int>(hero)].levelIndex;
+      const gf::SquareMap& fov = m_game.state.maps[static_cast<int>(hero)].levelsFov[levelIndex];
       gf::Vector2i& heroPosition = m_game.state.heros[static_cast<int>(hero)].position;
 
       gf::Vector2i nextPosition = heroPosition;
@@ -112,7 +113,7 @@ namespace xy {
         ++nextPosition.x;
       }
 
-      if (m_game.state.lisaMap.fieldOfView.isWalkable(nextPosition)) {
+      if (fov.isWalkable(nextPosition)) {
         heroPosition = nextPosition;
       }
     };
@@ -130,11 +131,17 @@ namespace xy {
     m_ltWorldView.setCenter(m_game.state.lisa.position * CellSize + CellSize / 2);
     m_rtWorldView.setCenter(m_game.state.ryan.position * CellSize + CellSize / 2);
 
-    // Update fov
-    m_game.state.lisaMap.fieldOfView.clearFieldOfVision();
-    m_game.state.lisaMap.fieldOfView.computeFieldOfVision(m_game.state.lisa.position, 2);
-    m_game.state.ryanMap.fieldOfView.clearFieldOfVision();
-    m_game.state.ryanMap.fieldOfView.computeFieldOfVision(m_game.state.ryan.position, 2);
+    auto updateFov = [this](Hero hero) {
+      const int levelIndex = m_game.state.heros[static_cast<int>(hero)].levelIndex;
+      gf::SquareMap& fov = m_game.state.maps[static_cast<int>(hero)].levelsFov[levelIndex];
+      const gf::Vector2i& heroPosition = m_game.state.heros[static_cast<int>(hero)].position;
+
+      fov.clearFieldOfVision();
+      fov.computeFieldOfVision(heroPosition, 2);
+    };
+
+    updateFov(Hero::Lisa);
+    updateFov(Hero::Ryan);
   }
 
   void MainScene::doRender(gf::RenderTarget& target, const gf::RenderStates& states) {

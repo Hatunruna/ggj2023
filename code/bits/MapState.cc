@@ -4,22 +4,30 @@
 
 namespace xy {
   void MapState::initialize(const GameData& data) {
-    const gf::Vector2i mapSize = data.map.level.getSize();
+    auto generateFov = [](gf::SquareMap& fov, const gf::Array2D<MapData::Cell>& level) {
+      const gf::Vector2i mapSize = level.getSize();
 
-    fieldOfView = std::move(gf::SquareMap(mapSize));
+      for (int col = 0; col < mapSize.width; ++col) {
+        for (int row = 0; row < mapSize.height; ++row) {
+          const MapData::Cell& cell = level(gf::vec(col, row));
+          switch (cell.type) {
+          case MapData::CellType::Floor:
+            fov.setEmpty(gf::vec(col, row));
+            break;
 
-    for (int col = 0; col < mapSize.width; ++col) {
-      for (int row = 0; row < mapSize.height; ++row) {
-        const MapData::Cell& cell = data.map.level(gf::vec(col, row));
-        switch (cell.type) {
-        case MapData::CellType::Floor:
-          fieldOfView.setEmpty(gf::vec(col, row));
-          break;
-
-        default:
-          break;
+          default:
+            break;
+          }
         }
       }
+    };
+
+    const int levelsCount = data.map.levels.size();
+    levelsFov.clear();
+    for (int i = 0; i < levelsCount; ++i) {
+      const gf::Vector2i mapSize = data.map.levels[i].getSize();
+      levelsFov.emplace_back(mapSize);
+      generateFov(levelsFov[i], data.map.levels[i]);
     }
   }
 }
