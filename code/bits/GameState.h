@@ -6,6 +6,7 @@
 #include <gf/Path.h>
 
 #include "HeroState.h"
+#include "MapState.h"
 
 namespace xy {
 
@@ -14,6 +15,9 @@ namespace xy {
 
     HeroState lisa;
     HeroState ryan;
+
+    MapState lisaMap;
+    MapState ryanMap;
 
     void loadFromFile(const gf::Path& filename);
     void saveToFile(const gf::Path& filename);
