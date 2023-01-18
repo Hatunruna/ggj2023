@@ -54,6 +54,16 @@ namespace xy {
     // actions
 
     gf::Action m_fullscreenAction;
+
+    gf::Action m_lisaUp;
+    gf::Action m_lisaDown;
+    gf::Action m_lisaLeft;
+    gf::Action m_lisaRight;
+
+    gf::Action m_ryanUp;
+    gf::Action m_ryanDown;
+    gf::Action m_ryanLeft;
+    gf::Action m_ryanRight;
   };
 
 }

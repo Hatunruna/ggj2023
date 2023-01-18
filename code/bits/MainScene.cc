@@ -19,6 +19,14 @@ namespace xy {
   , m_ltHero(game.data, game.state, Hero::Lisa)
   , m_rtHero(game.data, game.state, Hero::Ryan)
   , m_fullscreenAction("Fullscreen")
+  , m_lisaUp("LisaUp")
+  , m_lisaDown("LisaDown")
+  , m_lisaLeft("LisaLeft")
+  , m_lisaRight("LisaRight")
+  , m_ryanUp("RyanUp")
+  , m_ryanDown("RyanDown")
+  , m_ryanLeft("RyanLeft")
+  , m_ryanRight("RyanRight")
   {
     auto ltViewport = gf::RectF::fromPositionSize({ 0.0f, 0.0f }, { 0.5f, 1.0f });
     m_ltWorldView.setViewport(ltViewport);
@@ -45,6 +53,38 @@ namespace xy {
 
 //     m_fullscreenAction.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::Guide);
     addAction(m_fullscreenAction);
+
+    m_lisaUp.addScancodeKeyControl(gf::Scancode::W);
+    m_lisaUp.addScancodeKeyControl(gf::Scancode::Up);
+    addAction(m_lisaUp);
+
+    m_lisaDown.addScancodeKeyControl(gf::Scancode::S);
+    m_lisaDown.addScancodeKeyControl(gf::Scancode::Down);
+    addAction(m_lisaDown);
+
+    m_lisaLeft.addScancodeKeyControl(gf::Scancode::A);
+    m_lisaLeft.addScancodeKeyControl(gf::Scancode::Left);
+    addAction(m_lisaLeft);
+
+    m_lisaRight.addScancodeKeyControl(gf::Scancode::D);
+    m_lisaRight.addScancodeKeyControl(gf::Scancode::Right);
+    addAction(m_lisaRight);
+
+    m_ryanUp.addGamepadAxisControl(gf::AnyGamepad, gf::GamepadAxis::LeftY, gf::GamepadAxisDirection::Negative);
+    m_ryanUp.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::DPadUp);
+    addAction(m_ryanUp);
+
+    m_ryanDown.addGamepadAxisControl(gf::AnyGamepad, gf::GamepadAxis::LeftY, gf::GamepadAxisDirection::Positive);
+    m_ryanDown.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::DPadDown);
+    addAction(m_ryanDown);
+
+    m_ryanLeft.addGamepadAxisControl(gf::AnyGamepad, gf::GamepadAxis::LeftX, gf::GamepadAxisDirection::Negative);
+    m_ryanLeft.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::DPadLeft);
+    addAction(m_ryanLeft);
+
+    m_ryanRight.addGamepadAxisControl(gf::AnyGamepad, gf::GamepadAxis::LeftX, gf::GamepadAxisDirection::Positive);
+    m_ryanRight.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::DPadRight);
+    addAction(m_ryanRight);
   }
 
   void MainScene::doHandleActions([[maybe_unused]] gf::Window& window) {
@@ -56,6 +96,27 @@ namespace xy {
       window.toggleFullscreen();
     }
 
+    if (m_lisaUp.isActive()) {
+      --m_game.state.lisa.position.y;
+    } else if (m_lisaDown.isActive()){
+      ++m_game.state.lisa.position.y;
+    }
+    if (m_lisaLeft.isActive()) {
+      --m_game.state.lisa.position.x;
+    } else if (m_lisaRight.isActive()) {
+      ++m_game.state.lisa.position.x;
+    }
+
+    if (m_ryanUp.isActive()) {
+      --m_game.state.ryan.position.y;
+    } else if (m_ryanDown.isActive()){
+      ++m_game.state.ryan.position.y;
+    }
+    if (m_ryanLeft.isActive()) {
+      --m_game.state.ryan.position.x;
+    } else if (m_ryanRight.isActive()) {
+      ++m_game.state.ryan.position.x;
+    }
   }
 
   void MainScene::doUpdate(gf::Time time) {
