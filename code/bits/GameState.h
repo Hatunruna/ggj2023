@@ -1,6 +1,7 @@
 #ifndef XY_GAME_STATE_H
 #define XY_GAME_STATE_H
 
+#include <array>
 #include <cstdint>
 
 #include <gf/Path.h>
@@ -13,11 +14,13 @@ namespace xy {
   struct GameState {
     static constexpr uint16_t Version = 1;
 
-    HeroState lisa;
-    HeroState ryan;
+    std::array<HeroState, 2> heros;
+    HeroState& lisa = heros[0];
+    HeroState& ryan = heros[1];
 
-    MapState lisaMap;
-    MapState ryanMap;
+    std::array<MapState, 2> maps;
+    MapState& lisaMap = maps[0];
+    MapState& ryanMap = maps[1];
 
     void loadFromFile(const gf::Path& filename);
     void saveToFile(const gf::Path& filename);
