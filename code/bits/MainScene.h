@@ -12,59 +12,62 @@ namespace xy {
 
   struct GameHub;
 
-  class MainScene : public gf::Scene {
-  public:
-    MainScene(GameHub& game);
+struct HeroActions {
+  HeroActions();
 
-  private:
-    void doHandleActions(gf::Window& window) override;
-    void doUpdate(gf::Time time) override;
-    void doRender(gf::RenderTarget& target, const gf::RenderStates& states) override;
+  gf::Action up;
+  gf::Action down;
+  gf::Action left;
+  gf::Action right;
+};
 
-  private:
-    GameHub& m_game;
+class MainScene : public gf::Scene {
+public:
+  MainScene(GameHub& game);
 
-    // views
+private:
+  void doHandleActions(gf::Window& window) override;
+  void doUpdate(gf::Time time) override;
+  void doRender(gf::RenderTarget& target, const gf::RenderStates& states) override;
 
-    gf::ExtendView m_ltWorldView;
-    gf::ScreenView m_ltHudView;
+private:
+  GameHub& m_game;
 
-    gf::ExtendView m_rtWorldView;
-    gf::ScreenView m_rtHudView;
+  // views
 
-    // containers
+  gf::ExtendView m_ltWorldView;
+  gf::ScreenView m_ltHudView;
 
-    gf::EntityContainer m_ltWorldEntities;
-    gf::EntityContainer m_ltHudEntities;
+  gf::ExtendView m_rtWorldView;
+  gf::ScreenView m_rtHudView;
 
-    gf::EntityContainer m_rtWorldEntities;
-    gf::EntityContainer m_rtHudEntities;
+  // containers
 
-    // entities
+  gf::EntityContainer m_ltWorldEntities;
+  gf::EntityContainer m_ltHudEntities;
 
-    MapEntity m_ltMap;
-    MapEntity m_rtMap;
+  gf::EntityContainer m_rtWorldEntities;
+  gf::EntityContainer m_rtHudEntities;
 
-    HeroEntity m_ltHero;
-    HeroEntity m_rtHero;
+  // entities
+
+  MapEntity m_ltMap;
+  MapEntity m_rtMap;
+
+  HeroEntity m_ltHero;
+  HeroEntity m_rtHero;
 
 
-    SplitEntity m_split;
+  SplitEntity m_split;
 
-    // actions
+  // actions
 
-    gf::Action m_fullscreenAction;
+  gf::Action m_fullscreenAction;
 
-    gf::Action m_lisaUp;
-    gf::Action m_lisaDown;
-    gf::Action m_lisaLeft;
-    gf::Action m_lisaRight;
-
-    gf::Action m_ryanUp;
-    gf::Action m_ryanDown;
-    gf::Action m_ryanLeft;
-    gf::Action m_ryanRight;
-  };
+  std::array<HeroActions, 2> heroActions;
+  HeroActions& lisaActions = heroActions[0];
+  HeroActions& ryanActions = heroActions[1];
+};
 
 }
 

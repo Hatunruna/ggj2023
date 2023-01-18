@@ -9,6 +9,13 @@ namespace xy {
 
   constexpr float ViewSize = 500.0f;
 
+  HeroActions::HeroActions()
+  : up("Up")
+  , down("Down")
+  , left("Left")
+  , right("Right") {
+  }
+
   MainScene::MainScene(GameHub& game)
   : gf::Scene(game.getRenderer().getSize())
   , m_game(game)
@@ -19,14 +26,6 @@ namespace xy {
   , m_ltHero(game.data, game.state, Hero::Lisa)
   , m_rtHero(game.data, game.state, Hero::Ryan)
   , m_fullscreenAction("Fullscreen")
-  , m_lisaUp("LisaUp")
-  , m_lisaDown("LisaDown")
-  , m_lisaLeft("LisaLeft")
-  , m_lisaRight("LisaRight")
-  , m_ryanUp("RyanUp")
-  , m_ryanDown("RyanDown")
-  , m_ryanLeft("RyanLeft")
-  , m_ryanRight("RyanRight")
   {
     auto ltViewport = gf::RectF::fromPositionSize({ 0.0f, 0.0f }, { 0.5f, 1.0f });
     m_ltWorldView.setViewport(ltViewport);
@@ -54,37 +53,37 @@ namespace xy {
 //     m_fullscreenAction.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::Guide);
     addAction(m_fullscreenAction);
 
-    m_lisaUp.addScancodeKeyControl(gf::Scancode::W);
-    m_lisaUp.addScancodeKeyControl(gf::Scancode::Up);
-    addAction(m_lisaUp);
+    lisaActions.up.addScancodeKeyControl(gf::Scancode::W);
+    lisaActions.up.addScancodeKeyControl(gf::Scancode::Up);
+    addAction(lisaActions.up);
 
-    m_lisaDown.addScancodeKeyControl(gf::Scancode::S);
-    m_lisaDown.addScancodeKeyControl(gf::Scancode::Down);
-    addAction(m_lisaDown);
+    lisaActions.down.addScancodeKeyControl(gf::Scancode::S);
+    lisaActions.down.addScancodeKeyControl(gf::Scancode::Down);
+    addAction(lisaActions.down);
 
-    m_lisaLeft.addScancodeKeyControl(gf::Scancode::A);
-    m_lisaLeft.addScancodeKeyControl(gf::Scancode::Left);
-    addAction(m_lisaLeft);
+    lisaActions.left.addScancodeKeyControl(gf::Scancode::A);
+    lisaActions.left.addScancodeKeyControl(gf::Scancode::Left);
+    addAction(lisaActions.left);
 
-    m_lisaRight.addScancodeKeyControl(gf::Scancode::D);
-    m_lisaRight.addScancodeKeyControl(gf::Scancode::Right);
-    addAction(m_lisaRight);
+    lisaActions.right.addScancodeKeyControl(gf::Scancode::D);
+    lisaActions.right.addScancodeKeyControl(gf::Scancode::Right);
+    addAction(lisaActions.right);
 
-    m_ryanUp.addGamepadAxisControl(gf::AnyGamepad, gf::GamepadAxis::LeftY, gf::GamepadAxisDirection::Negative);
-    m_ryanUp.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::DPadUp);
-    addAction(m_ryanUp);
+    ryanActions.up.addGamepadAxisControl(gf::AnyGamepad, gf::GamepadAxis::LeftY, gf::GamepadAxisDirection::Negative);
+    ryanActions.up.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::DPadUp);
+    addAction(ryanActions.up);
 
-    m_ryanDown.addGamepadAxisControl(gf::AnyGamepad, gf::GamepadAxis::LeftY, gf::GamepadAxisDirection::Positive);
-    m_ryanDown.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::DPadDown);
-    addAction(m_ryanDown);
+    ryanActions.down.addGamepadAxisControl(gf::AnyGamepad, gf::GamepadAxis::LeftY, gf::GamepadAxisDirection::Positive);
+    ryanActions.down.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::DPadDown);
+    addAction(ryanActions.down);
 
-    m_ryanLeft.addGamepadAxisControl(gf::AnyGamepad, gf::GamepadAxis::LeftX, gf::GamepadAxisDirection::Negative);
-    m_ryanLeft.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::DPadLeft);
-    addAction(m_ryanLeft);
+    ryanActions.left.addGamepadAxisControl(gf::AnyGamepad, gf::GamepadAxis::LeftX, gf::GamepadAxisDirection::Negative);
+    ryanActions.left.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::DPadLeft);
+    addAction(ryanActions.left);
 
-    m_ryanRight.addGamepadAxisControl(gf::AnyGamepad, gf::GamepadAxis::LeftX, gf::GamepadAxisDirection::Positive);
-    m_ryanRight.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::DPadRight);
-    addAction(m_ryanRight);
+    ryanActions.right.addGamepadAxisControl(gf::AnyGamepad, gf::GamepadAxis::LeftX, gf::GamepadAxisDirection::Positive);
+    ryanActions.right.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::DPadRight);
+    addAction(ryanActions.right);
   }
 
   void MainScene::doHandleActions([[maybe_unused]] gf::Window& window) {
@@ -96,37 +95,30 @@ namespace xy {
       window.toggleFullscreen();
     }
 
-    gf::Vector2i nextPosition = m_game.state.lisa.position;
-    if (m_lisaUp.isActive()) {
-      --nextPosition.y;
-    } else if (m_lisaDown.isActive()){
-      ++nextPosition.y;
-    }
-    if (m_lisaLeft.isActive()) {
-      --nextPosition.x;
-    } else if (m_lisaRight.isActive()) {
-      ++nextPosition.x;
-    }
+    auto updateHeroPosition = [this](Hero hero) {
+      HeroActions& actions = heroActions[static_cast<int>(hero)];
+      const gf::SquareMap& fov = m_game.state.maps[static_cast<int>(hero)].fieldOfView;
+      gf::Vector2i& heroPosition = m_game.state.heros[static_cast<int>(hero)].position;
 
-    if (m_game.state.lisaMap.fieldOfView.isWalkable(nextPosition)) {
-      m_game.state.lisa.position = nextPosition;
-    }
+      gf::Vector2i nextPosition = heroPosition;
+      if (actions.up.isActive()) {
+        --nextPosition.y;
+      } else if (actions.down.isActive()){
+        ++nextPosition.y;
+      }
+      if (actions.left.isActive()) {
+        --nextPosition.x;
+      } else if (actions.right.isActive()) {
+        ++nextPosition.x;
+      }
 
-    nextPosition = m_game.state.ryan.position;
-    if (m_ryanUp.isActive()) {
-      --nextPosition.y;
-    } else if (m_ryanDown.isActive()){
-      ++nextPosition.y;
-    }
-    if (m_ryanLeft.isActive()) {
-      --nextPosition.x;
-    } else if (m_ryanRight.isActive()) {
-      ++nextPosition.x;
-    }
+      if (m_game.state.lisaMap.fieldOfView.isWalkable(nextPosition)) {
+        heroPosition = nextPosition;
+      }
+    };
 
-    if (m_game.state.ryanMap.fieldOfView.isWalkable(nextPosition)) {
-      m_game.state.ryan.position = nextPosition;
-    }
+    updateHeroPosition(Hero::Lisa);
+    updateHeroPosition(Hero::Ryan);
   }
 
   void MainScene::doUpdate(gf::Time time) {
