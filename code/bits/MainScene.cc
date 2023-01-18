@@ -96,26 +96,36 @@ namespace xy {
       window.toggleFullscreen();
     }
 
+    gf::Vector2i nextPosition = m_game.state.lisa.position;
     if (m_lisaUp.isActive()) {
-      --m_game.state.lisa.position.y;
+      --nextPosition.y;
     } else if (m_lisaDown.isActive()){
-      ++m_game.state.lisa.position.y;
+      ++nextPosition.y;
     }
     if (m_lisaLeft.isActive()) {
-      --m_game.state.lisa.position.x;
+      --nextPosition.x;
     } else if (m_lisaRight.isActive()) {
-      ++m_game.state.lisa.position.x;
+      ++nextPosition.x;
     }
 
+    if (m_game.state.lisaMap.fieldOfView.isWalkable(nextPosition)) {
+      m_game.state.lisa.position = nextPosition;
+    }
+
+    nextPosition = m_game.state.ryan.position;
     if (m_ryanUp.isActive()) {
-      --m_game.state.ryan.position.y;
+      --nextPosition.y;
     } else if (m_ryanDown.isActive()){
-      ++m_game.state.ryan.position.y;
+      ++nextPosition.y;
     }
     if (m_ryanLeft.isActive()) {
-      --m_game.state.ryan.position.x;
+      --nextPosition.x;
     } else if (m_ryanRight.isActive()) {
-      ++m_game.state.ryan.position.x;
+      ++nextPosition.x;
+    }
+
+    if (m_game.state.ryanMap.fieldOfView.isWalkable(nextPosition)) {
+      m_game.state.ryan.position = nextPosition;
     }
   }
 
@@ -127,6 +137,12 @@ namespace xy {
 
     m_ltWorldView.setCenter(m_game.state.lisa.position * CellSize + CellSize / 2);
     m_rtWorldView.setCenter(m_game.state.ryan.position * CellSize + CellSize / 2);
+
+    // Update fov
+    m_game.state.lisaMap.fieldOfView.clearFieldOfVision();
+    m_game.state.lisaMap.fieldOfView.computeFieldOfVision(m_game.state.lisa.position, 2);
+    m_game.state.ryanMap.fieldOfView.clearFieldOfVision();
+    m_game.state.ryanMap.fieldOfView.computeFieldOfVision(m_game.state.ryan.position, 2);
   }
 
   void MainScene::doRender(gf::RenderTarget& target, const gf::RenderStates& states) {

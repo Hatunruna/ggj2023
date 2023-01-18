@@ -12,7 +12,7 @@ namespace xy {
       for (int row = 0; row < mapSize.height; ++row) {
         const MapData::Cell& cell = data.map.level(gf::vec(col, row));
         switch (cell.type) {
-        case MapData::CellType::Wall:
+        case MapData::CellType::Floor:
           fieldOfView.setEmpty(gf::vec(col, row));
           break;
 

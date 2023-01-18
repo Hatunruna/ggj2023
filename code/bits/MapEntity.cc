@@ -9,17 +9,6 @@
 
 namespace xy {
 
-  constexpr gf::Color4f Colors[] = {
-    gf::ColorF::Black,
-    gf::ColorF::White,
-    gf::ColorF::Orange,
-    gf::ColorF::Rose,
-    gf::ColorF::Chartreuse,
-    gf::ColorF::Spring,
-    gf::ColorF::Violet,
-    gf::ColorF::Azure,
-  };
-
   MapEntity::MapEntity(const GameData& data, const GameState& state, Hero hero)
   : m_data(data)
   , m_state(state)
@@ -29,6 +18,8 @@ namespace xy {
 
   void MapEntity::render(gf::RenderTarget &target, const gf::RenderStates &states) {
     gf::ShapeParticles rectangles;
+
+    const MapState& mapState = m_state.maps[static_cast<int>(m_hero)];
 
     for (auto position : m_data.map.level.getPositionRange()) {
       const MapData::Cell& cell = m_data.map.level(position);
@@ -40,8 +31,17 @@ namespace xy {
         break;
 
       case MapData::CellType::Wall:
-        color = gf::Color::Gray(0.8f);
+        color = gf::Color::Blue;
         break;
+      }
+
+      if (!mapState.fieldOfView.isInFieldOfVision(position))
+      {
+        if (!mapState.fieldOfView.isExplored(position)) {
+          color = gf::Color::Black;
+        } else if (mapState.fieldOfView.isExplored(position)) {
+          color = gf::Color::darker(color, 0.7f);
+        }
       }
 
       rectangles.addRectangle(position * CellSize, CellSize, color);
