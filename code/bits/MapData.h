@@ -7,8 +7,13 @@
 namespace xy {
 
   struct MapData {
+    enum class CellType {
+      Wall,
+      Floor,
+    };
+
     struct Cell {
-      int color;
+      CellType type;
     };
 
     gf::Array2D<Cell> level;
@@ -19,4 +24,3 @@ namespace xy {
 }
 
 #endif // XY_MAP_DATA_H
-

@@ -31,9 +31,20 @@ namespace xy {
     gf::ShapeParticles rectangles;
 
     for (auto position : m_data.map.level.getPositionRange()) {
-      int color = m_data.map.level(position).color;
-      assert(0 <= color && color < 8);
-      rectangles.addRectangle(position * CellSize, CellSize, Colors[color]);
+      const MapData::Cell& cell = m_data.map.level(position);
+
+      gf::Color4f color;
+      switch (cell.type) {
+      case MapData::CellType::Floor:
+        color = gf::Color::White;
+        break;
+
+      case MapData::CellType::Wall:
+        color = gf::Color::Gray(0.8f);
+        break;
+      }
+
+      rectangles.addRectangle(position * CellSize, CellSize, color);
     }
 
     target.draw(rectangles, states);
