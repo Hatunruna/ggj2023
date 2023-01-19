@@ -36,6 +36,12 @@ namespace xy {
     // Set first position as floor
     levels[0](gf::vec(1, 1)).type = CellType::Floor;
     levels[0](gf::vec(3, 1)).type = CellType::Floor;
+
+    // Set stairs
+    levels[0](gf::vec(1, 2)).type = CellType::StairUp;
+    levels[1](gf::vec(1, 2)).type = CellType::StairDown;
+    levels[0](gf::vec(3, 2)).type = CellType::StairUp;
+    levels[1](gf::vec(3, 2)).type = CellType::StairDown;
   }
 
 }

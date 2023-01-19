@@ -36,6 +36,14 @@ namespace xy {
       case MapData::CellType::Wall:
         color = gf::Color::Blue;
         break;
+
+      case MapData::CellType::StairDown:
+        color = gf::Color::Yellow;
+        break;
+
+      case MapData::CellType::StairUp:
+        color = gf::Color::Magenta;
+        break;
       }
 
       if (!fov.isInFieldOfVision(position))

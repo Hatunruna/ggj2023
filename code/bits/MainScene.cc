@@ -99,9 +99,9 @@ namespace xy {
       HeroActions& actions = heroActions[static_cast<int>(hero)];
       const int levelIndex = m_game.state.heros[static_cast<int>(hero)].levelIndex;
       const gf::SquareMap& fov = m_game.state.maps[static_cast<int>(hero)].levelsFov[levelIndex];
-      gf::Vector2i& heroPosition = m_game.state.heros[static_cast<int>(hero)].position;
+      HeroState& heroState = m_game.state.heros[static_cast<int>(hero)];
 
-      gf::Vector2i nextPosition = heroPosition;
+      gf::Vector2i nextPosition = heroState.position;
       if (actions.up.isActive()) {
         --nextPosition.y;
       } else if (actions.down.isActive()){
@@ -113,8 +113,17 @@ namespace xy {
         ++nextPosition.x;
       }
 
-      if (fov.isWalkable(nextPosition)) {
-        heroPosition = nextPosition;
+      if (nextPosition != heroState.position && fov.isWalkable(nextPosition)) {
+        heroState.position = nextPosition;
+        heroState.useStairs = false;
+      }
+
+      if (m_game.data.map.levels[levelIndex](nextPosition).type == MapData::CellType::StairDown && !heroState.useStairs) {
+        --heroState.levelIndex;
+        heroState.useStairs = true;
+      } else if (m_game.data.map.levels[levelIndex](nextPosition).type == MapData::CellType::StairUp && !heroState.useStairs) {
+        ++heroState.levelIndex;
+        heroState.useStairs = true;
       }
     };
 

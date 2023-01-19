@@ -12,6 +12,8 @@ namespace xy {
           const MapData::Cell& cell = level(gf::vec(col, row));
           switch (cell.type) {
           case MapData::CellType::Floor:
+          case MapData::CellType::StairDown:
+          case MapData::CellType::StairUp:
             fov.setEmpty(gf::vec(col, row));
             break;
 

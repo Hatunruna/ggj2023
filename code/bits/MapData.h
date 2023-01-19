@@ -10,6 +10,8 @@ namespace xy {
     enum class CellType {
       Wall,
       Floor,
+      StairUp,
+      StairDown,
     };
 
     struct Cell {
