@@ -100,6 +100,7 @@ namespace xy {
       const int levelIndex = m_game.state.heros[static_cast<int>(hero)].levelIndex;
       const gf::SquareMap& fov = m_game.state.maps[static_cast<int>(hero)].levelsFov[levelIndex];
       HeroState& heroState = m_game.state.heros[static_cast<int>(hero)];
+      const HeroState& otherHeroState = m_game.state.heros[getOtherHeroIndex(hero)];
 
       gf::Vector2i nextPosition = heroState.position;
       if (actions.up.isActive()) {
@@ -113,7 +114,10 @@ namespace xy {
         ++nextPosition.x;
       }
 
-      if (nextPosition != heroState.position && fov.isWalkable(nextPosition)) {
+      bool nextPositionAlreadyOccupied =
+        (otherHeroState.levelIndex == levelIndex)
+        && (otherHeroState.position == nextPosition);
+      if (nextPosition != heroState.position && fov.isWalkable(nextPosition) && !nextPositionAlreadyOccupied) {
         heroState.position = nextPosition;
         heroState.useStairs = false;
       }
