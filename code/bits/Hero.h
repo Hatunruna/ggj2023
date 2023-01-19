@@ -8,6 +8,8 @@ namespace xy {
     Ryan,
   };
 
+  int getOtherHeroIndex(Hero hero);
+
 }
 
 #endif // XY_HERO_H
