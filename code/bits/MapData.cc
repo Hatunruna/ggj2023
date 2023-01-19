@@ -13,7 +13,11 @@ namespace xy {
   void MapData::createNewMap(gf::Random& random) {
     auto generateLevel = [&random](gf::Array2D<Cell>& level) {
       for (auto position : level.getPositionRange()) {
-        level(position).type = static_cast<CellType>(random.computeUniformInteger(0, 1));
+        CellType type = CellType::Floor;
+        if (random.computeUniformInteger(0, 99) < 20) {
+          type = CellType::Wall;
+        }
+        level(position).type = type;
       }
 
       // Force wall on border
