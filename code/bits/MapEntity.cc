@@ -44,6 +44,7 @@ namespace xy {
         break;
       }
 
+#if 0
       if (!fov.isInFieldOfVision(position))
       {
         if (!fov.isExplored(position)) {
@@ -52,6 +53,7 @@ namespace xy {
           color = gf::Color::darker(color, 0.7f);
         }
       }
+#endif
 
       rectangles.addRectangle(position * CellSize, CellSize, color);
     }

@@ -7,7 +7,8 @@
 
 namespace xy {
 
-  constexpr float ViewSize = 1000.0f;
+//   constexpr float ViewSize = 1000.0f;
+  constexpr float ViewSize = 5000.0f;
 
   HeroActions::HeroActions()
   : up("Up")

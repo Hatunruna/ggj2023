@@ -1,19 +1,125 @@
 #include "MapState.h"
 
+#include <gf/Rect.h>
+
 namespace xy {
 
   namespace {
+    constexpr int SpaceWidth = 21;
+    constexpr int CorridorWidth = 2;
 
-    constexpr int MapWidth = 100;
-    constexpr int MapHeight = 100;
-    constexpr gf::Vector2i MapSize = gf::vec(MapWidth, MapHeight);
+    constexpr int MapLength = SpaceWidth * 3 + CorridorWidth * 2 + 2;
+    constexpr gf::Vector2i MapSize = gf::vec(MapLength, MapLength);
+
+    constexpr int Corridor0 = MapLength / 2;
+    constexpr int Corridor1 = 1 + SpaceWidth;
+    constexpr int Corridor2 = Corridor1 + CorridorWidth + SpaceWidth;
+
+
+    constexpr int RoomsCount = 16;
+    constexpr int MaxRetries = 100;
+
+
+    gf::Vector2i computeRoomSize(gf::Random& random) {
+      switch (random.computeUniformInteger(0, 9)) {
+        case 0:
+          return gf::vec(12, 16);
+        case 1:
+          return gf::vec(16, 12);
+        case 2:
+          return gf::vec(9, 12);
+        case 3:
+          return gf::vec(12, 9);
+        case 4:
+        case 5:
+          return gf::vec(10, 10);
+        case 6:
+        case 7:
+          return gf::vec(14, 14);
+        case 8:
+          return gf::vec(6, 8);
+        default:
+          return gf::vec(8, 6);
+      }
+
+      return gf::vec(6, 8);
+    }
 
   }
 
   std::vector<gf::Array2D<MapCell>> createProceduralMap(gf::Random& random) {
     auto generateLevel = [&random](gf::Vector2i mapSize) -> gf::Array2D<MapCell> {
-      gf::Array2D<MapCell> level(mapSize);
+      gf::Array2D<MapCell> level(mapSize, { MapCellType::Wall });
 
+      std::vector<gf::RectI> corridors;
+
+      if (random.computeBernoulli(0.5)) {
+        // 2 horizontal, 1 vertical
+
+        int h1 = random.computeUniformInteger(Corridor1 - 2, Corridor1 + 2);
+        int h2 = random.computeUniformInteger(Corridor2 - 2, Corridor2 + 2);
+        int v0 = random.computeUniformInteger(Corridor0 - 2, Corridor0 + 2);
+
+        corridors.push_back(gf::RectI::fromPositionSize(gf::vec(0, h1), gf::vec(mapSize.width, CorridorWidth)));
+        corridors.push_back(gf::RectI::fromPositionSize(gf::vec(0, h2), gf::vec(mapSize.width, CorridorWidth)));
+        corridors.push_back(gf::RectI::fromPositionSize(gf::vec(v0, 0), gf::vec(CorridorWidth, mapSize.height)));
+      } else {
+        // 1 horizontal, 2 vertical
+
+        int v1 = random.computeUniformInteger(Corridor1 - 2, Corridor1 + 2);
+        int v2 = random.computeUniformInteger(Corridor2 - 2, Corridor2 + 2);
+        int h0 = random.computeUniformInteger(Corridor0 - 2, Corridor0 + 2);
+
+        corridors.push_back(gf::RectI::fromPositionSize(gf::vec(v1, 0), gf::vec(CorridorWidth, mapSize.height)));
+        corridors.push_back(gf::RectI::fromPositionSize(gf::vec(v2, 0), gf::vec(CorridorWidth, mapSize.height)));
+        corridors.push_back(gf::RectI::fromPositionSize(gf::vec(0, h0), gf::vec(mapSize.width, CorridorWidth)));
+      }
+
+      std::vector<gf::RectI> rooms;
+
+      auto hasCollision = [&rooms, &corridors](const gf::RectI& room) {
+        return std::any_of(corridors.begin(), corridors.end(), [&room](const gf::RectI& other) { return room.intersects(other.grow(1)); })
+            || std::any_of(rooms.begin(), rooms.end(), [&room](const gf::RectI& other) { return room.intersects(other.grow(1)); });
+      };
+
+      for (int i = 0; i < RoomsCount; ++i) {
+        gf::RectI room;
+        int retries = 0;
+
+        do {
+          auto size = computeRoomSize(random);
+
+          auto position = gf::vec(
+            random.computeUniformInteger(1, mapSize.width - size.width - 2),
+            random.computeUniformInteger(1, mapSize.height - size.height - 2)
+          );
+
+          room = gf::RectI::fromPositionSize(position, size);
+          ++retries;
+        } while (hasCollision(room) && retries < MaxRetries);
+
+        if (retries < MaxRetries) {
+          rooms.push_back(room);
+        }
+      }
+
+      auto createSpace = [&level](gf::RectI space) {
+        for (int x = space.min.x; x < space.max.x; ++x) {
+          for (int y = space.min.y; y < space.max.y; ++y) {
+            level(gf::vec(x, y)).type = MapCellType::Floor;
+          }
+        }
+      };
+
+      for (auto & space : corridors) {
+        createSpace(space);
+      }
+
+      for (auto & space : rooms) {
+        createSpace(space);
+      }
+
+#if 0
       for (auto position : level.getPositionRange()) {
         MapCellType type = MapCellType::Floor;
 
@@ -34,6 +140,7 @@ namespace xy {
         level(gf::vec(i, 0)).type = MapCellType::Wall; // Left
         level(gf::vec(i, MapWidth - 1)).type = MapCellType::Wall; // Right
       }
+#endif
 
       return level;
     };
@@ -76,6 +183,10 @@ namespace xy {
         default:
           break;
         }
+
+        // DEBUG
+        map.setEmpty(gf::vec(col, row));
+
       }
     }
 
