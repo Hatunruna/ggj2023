@@ -3,9 +3,9 @@
 
 namespace xy {
 
-  enum class Hero {
-    Lisa,
-    Ryan,
+  enum class Hero : int {
+    Lisa  = 0,
+    Ryan  = 1,
   };
 
   int getOtherHeroIndex(Hero hero);
