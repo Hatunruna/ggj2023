@@ -11,6 +11,11 @@
 
 namespace xy {
 
+  struct DuplicatedState {
+    HeroState hero;
+    MapState map;
+  };
+
   struct GameState {
     static constexpr uint16_t Version = 1;
 
@@ -21,6 +26,9 @@ namespace xy {
     std::array<MapState, 2> maps;
     MapState& lisaMap = maps[0];
     MapState& ryanMap = maps[1];
+
+//     DuplicatedState& localHero(Hero hero);
+//     DuplicatedState& otherHero(Hero hero);
 
     void loadFromFile(const gf::Path& filename);
     void saveToFile(const gf::Path& filename);

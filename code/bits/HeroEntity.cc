@@ -3,15 +3,13 @@
 #include <gf/Shapes.h>
 #include <gf/RenderTarget.h>
 
-#include "GameData.h"
 #include "GameState.h"
 #include "Settings.h"
 
 namespace xy {
 
-  HeroEntity::HeroEntity(const GameData& data, const GameState& state, Hero hero)
-  : m_data(data)
-  , m_state(state)
+  HeroEntity::HeroEntity(const GameState& state, Hero hero)
+  : m_state(state)
   , m_hero(hero)
   {
   }
@@ -22,7 +20,7 @@ namespace xy {
     gf::Color4f otherColor;
     const HeroState& currentState = m_state.heros[static_cast<int>(m_hero)];
     const HeroState& otherState = m_state.heros[getOtherHeroIndex(m_hero)];
-    const gf::SquareMap& currentFov = m_state.maps[static_cast<int>(m_hero)].levelsFov[currentState.levelIndex];
+    const gf::SquareMap& currentFov = m_state.maps[static_cast<int>(m_hero)].levels[currentState.levelIndex].map;
 
     switch (m_hero) {
       case Hero::Lisa:

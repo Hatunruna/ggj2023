@@ -11,12 +11,11 @@ namespace xy {
 
   class HeroEntity : public gf::Entity {
   public:
-    HeroEntity(const GameData& data, const GameState& state, Hero hero);
+    HeroEntity(const GameState& state, Hero hero);
 
     void render(gf::RenderTarget &target, const gf::RenderStates &states) override;
 
   private:
-    const GameData& m_data;
     const GameState& m_state;
     Hero m_hero;
   };

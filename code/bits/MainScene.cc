@@ -7,7 +7,7 @@
 
 namespace xy {
 
-  constexpr float ViewSize = 500.0f;
+  constexpr float ViewSize = 1000.0f;
 
   HeroActions::HeroActions()
   : up("Up")
@@ -21,10 +21,10 @@ namespace xy {
   , m_game(game)
   , m_ltWorldView({ 0.0f, 0.0f }, { ViewSize, ViewSize })
   , m_rtWorldView({ 0.0f, 0.0f }, { ViewSize, ViewSize })
-  , m_ltMap(game.data, game.state, Hero::Lisa)
-  , m_rtMap(game.data, game.state, Hero::Ryan)
-  , m_ltHero(game.data, game.state, Hero::Lisa)
-  , m_rtHero(game.data, game.state, Hero::Ryan)
+  , m_ltMap(game.state, Hero::Lisa)
+  , m_rtMap(game.state, Hero::Ryan)
+  , m_ltHero(game.state, Hero::Lisa)
+  , m_rtHero(game.state, Hero::Ryan)
   , m_fullscreenAction("Fullscreen")
   {
     auto ltViewport = gf::RectF::fromPositionSize({ 0.0f, 0.0f }, { 0.5f, 1.0f });
@@ -96,10 +96,12 @@ namespace xy {
     }
 
     auto updateHeroPosition = [this](Hero hero) {
-      HeroActions& actions = heroActions[static_cast<int>(hero)];
-      const int levelIndex = m_game.state.heros[static_cast<int>(hero)].levelIndex;
-      const gf::SquareMap& fov = m_game.state.maps[static_cast<int>(hero)].levelsFov[levelIndex];
-      HeroState& heroState = m_game.state.heros[static_cast<int>(hero)];
+      const int index = static_cast<int>(hero);
+
+      HeroActions& actions = heroActions[index];
+      const int levelIndex = m_game.state.heros[index].levelIndex;
+      const gf::SquareMap& fov = m_game.state.maps[index].levels[levelIndex].map;
+      HeroState& heroState = m_game.state.heros[index];
       const HeroState& otherHeroState = m_game.state.heros[getOtherHeroIndex(hero)];
 
       gf::Vector2i nextPosition = heroState.position;
@@ -122,10 +124,10 @@ namespace xy {
         heroState.useStairs = false;
       }
 
-      if (m_game.data.map.levels[levelIndex](nextPosition).type == MapData::CellType::StairDown && !heroState.useStairs) {
+      if (m_game.state.maps[index].levels[levelIndex].cells(nextPosition).type == MapCellType::StairDown && !heroState.useStairs) {
         --heroState.levelIndex;
         heroState.useStairs = true;
-      } else if (m_game.data.map.levels[levelIndex](nextPosition).type == MapData::CellType::StairUp && !heroState.useStairs) {
+      } else if (m_game.state.maps[index].levels[levelIndex].cells(nextPosition).type == MapCellType::StairUp && !heroState.useStairs) {
         ++heroState.levelIndex;
         heroState.useStairs = true;
       }
@@ -145,12 +147,13 @@ namespace xy {
     m_rtWorldView.setCenter(m_game.state.ryan.position * CellSize + CellSize / 2);
 
     auto updateFov = [this](Hero hero) {
-      const int levelIndex = m_game.state.heros[static_cast<int>(hero)].levelIndex;
-      gf::SquareMap& fov = m_game.state.maps[static_cast<int>(hero)].levelsFov[levelIndex];
-      const gf::Vector2i& heroPosition = m_game.state.heros[static_cast<int>(hero)].position;
+      const int index = static_cast<int>(hero);
+      const int levelIndex = m_game.state.heros[index].levelIndex;
+      gf::SquareMap& fov = m_game.state.maps[index].levels[levelIndex].map;
+      const gf::Vector2i& heroPosition = m_game.state.heros[index].position;
 
       fov.clearFieldOfVision();
-      fov.computeFieldOfVision(heroPosition, 2);
+      fov.computeFieldOfVision(heroPosition, 3);
     };
 
     updateFov(Hero::Lisa);
