@@ -17,11 +17,10 @@ namespace xy {
   void MapEntity::render(gf::RenderTarget &target, const gf::RenderStates &states) {
     gf::ShapeParticles rectangles;
 
-    const int index = static_cast<int>(m_hero);
-    const MapState& mapState = m_state.maps[index];
-    const int levelIndex = m_state.heros[index].levelIndex;
-    const gf::Array2D<MapCell>& level = m_state.maps[index].levels[levelIndex].cells;
-    const gf::SquareMap& fov = m_state.maps[index].levels[levelIndex].map;
+    const MapState& mapState = m_state.localPlayer(m_hero).map;
+    const int levelIndex = m_state.localPlayer(m_hero).hero.levelIndex;
+    const gf::Array2D<MapCell>& level = mapState.levels[levelIndex].cells;
+    const gf::SquareMap& fov = mapState.levels[levelIndex].map;
 
     for (auto position : level.getPositionRange()) {
       const MapCell& cell = level(position);

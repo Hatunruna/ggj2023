@@ -16,19 +16,19 @@ namespace xy {
 
   void HeroEntity::render(gf::RenderTarget &target, const gf::RenderStates &states) {
     gf::CircleShape hero(16.0f);
-    gf::Color4f currentColor;
+    gf::Color4f localColor;
     gf::Color4f otherColor;
-    const HeroState& currentState = m_state.heros[static_cast<int>(m_hero)];
-    const HeroState& otherState = m_state.heros[getOtherHeroIndex(m_hero)];
-    const gf::SquareMap& currentFov = m_state.maps[static_cast<int>(m_hero)].levels[currentState.levelIndex].map;
+    const HeroState& localState = m_state.localPlayer(m_hero).hero;
+    const HeroState& otherState = m_state.otherPlayer(m_hero).hero;
+    const gf::SquareMap& localLevel = m_state.localPlayer(m_hero).map.levels[localState.levelIndex].map;
 
     switch (m_hero) {
       case Hero::Lisa:
-        currentColor = gf::Color::Green;
+        localColor = gf::Color::Green;
         otherColor = gf::Color::Blue;
         break;
       case Hero::Ryan:
-        currentColor = gf::Color::Blue;
+        localColor = gf::Color::Blue;
         otherColor = gf::Color::Green;
         break;
     }
@@ -41,10 +41,10 @@ namespace xy {
     };
 
     // Render current
-    renderHero(currentState, currentColor);
+    renderHero(localState, localColor);
 
     // Render other only on the same level
-    if (currentState.levelIndex == otherState.levelIndex && currentFov.isInFieldOfVision(otherState.position)) {
+    if (localState.levelIndex == otherState.levelIndex && localLevel.isInFieldOfVision(otherState.position)) {
       renderHero(otherState, otherColor);
     }
   }

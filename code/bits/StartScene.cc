@@ -32,17 +32,17 @@ namespace xy {
     if (m_startAction.isActive()) {
       auto levels = createProceduralMap(m_game.random);
 
-      m_game.state.lisaMap.levels.clear();
-      m_game.state.ryanMap.levels.clear();
+      m_game.state.lisa.map.levels.clear();
+      m_game.state.ryan.map.levels.clear();
 
       for (auto & level : levels) {
-        m_game.state.lisaMap.levels.push_back(MapLevel(level));
-        m_game.state.ryanMap.levels.push_back(MapLevel(level));
+        m_game.state.lisa.map.levels.push_back(MapLevel(level));
+        m_game.state.ryan.map.levels.push_back(MapLevel(level));
       }
 
       // TODO: set position from generated map
-      m_game.state.lisa.position = gf::vec(1, 1);
-      m_game.state.ryan.position = gf::vec(3, 1);
+      m_game.state.lisa.hero.position = gf::vec(1, 1);
+      m_game.state.ryan.hero.position = gf::vec(3, 1);
 
       m_game.replaceScene(m_game.main); //, m_game.blackout, gf::seconds(TransitionDelay));
     }
