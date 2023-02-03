@@ -25,7 +25,6 @@ namespace xy {
   , m_rtMap(game.state, Hero::Ryan)
   , m_ltHero(game.state, Hero::Lisa)
   , m_rtHero(game.state, Hero::Ryan)
-  , m_fullscreenAction("Fullscreen")
   {
     auto ltViewport = gf::RectF::fromPositionSize({ 0.0f, 0.0f }, { 0.5f, 1.0f });
     m_ltWorldView.setViewport(ltViewport);
@@ -49,9 +48,6 @@ namespace xy {
 
 
     addHudEntity(m_split);
-
-//     m_fullscreenAction.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::Guide);
-    addAction(m_fullscreenAction);
 
     lisaActions.up.addScancodeKeyControl(gf::Scancode::W);
     lisaActions.up.addScancodeKeyControl(gf::Scancode::Up);
@@ -89,10 +85,6 @@ namespace xy {
   void MainScene::doHandleActions([[maybe_unused]] gf::Window& window) {
     if (!isActive()) {
       return;
-    }
-
-    if (m_fullscreenAction.isActive()) {
-      window.toggleFullscreen();
     }
 
     auto updateHeroPosition = [this](Hero hero) {

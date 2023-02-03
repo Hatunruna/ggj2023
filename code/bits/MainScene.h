@@ -62,8 +62,6 @@ private:
 
   // actions
 
-  gf::Action m_fullscreenAction;
-
   std::array<HeroActions, 2> heroActions;
   HeroActions& lisaActions = heroActions[0];
   HeroActions& ryanActions = heroActions[1];

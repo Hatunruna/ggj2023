@@ -10,7 +10,6 @@ namespace xy {
   : gf::Scene(game.getRenderer().getSize())
   , m_game(game)
   , m_startAction("Start")
-  , m_fullscreenAction("Fullscreen")
   , m_titleEntity(game.resources)
   {
     setClearColor(gf::Color::Black);
@@ -22,20 +21,12 @@ namespace xy {
     m_startAction.addScancodeKeyControl(gf::Scancode::Space);
     addAction(m_startAction);
 
-    m_fullscreenAction.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::Back);
-    m_fullscreenAction.addKeycodeKeyControl(gf::Keycode::F);
-    addAction(m_fullscreenAction);
-
     addHudEntity(m_titleEntity);
   }
 
   void StartScene::doHandleActions([[maybe_unused]] gf::Window& window) {
     if (!isActive()) {
       return;
-    }
-
-    if (m_fullscreenAction.isActive()) {
-      window.toggleFullscreen();
     }
 
     if (m_startAction.isActive()) {

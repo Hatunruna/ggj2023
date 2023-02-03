@@ -20,6 +20,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/code/config.h.in ${CMAKE_CURRENT_BINA
 
 add_executable(${GAME}
   code/main.cc
+  code/bits/CommonScene.cc
   code/bits/GameHub.cc
   code/bits/GameState.cc
   code/bits/Hero.cc

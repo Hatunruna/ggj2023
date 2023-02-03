@@ -3,6 +3,7 @@
 
 #include <gf/GameManager.h>
 
+#include "CommonScene.h"
 #include "GameState.h"
 #include "MainScene.h"
 #include "StartScene.h"
@@ -14,6 +15,7 @@ namespace xy {
 
     GameState state;
 
+    CommonScene common;
     StartScene start;
     MainScene main;
   };
