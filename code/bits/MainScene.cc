@@ -28,6 +28,8 @@ namespace xy {
   , m_rtMap(game, game.state, Hero::Ryan)
   , m_ltHero(game.state, Hero::Lisa, m_game.resources)
   , m_rtHero(game.state, Hero::Ryan, m_game.resources)
+  , m_ltRoot(game.state, Hero::Lisa, m_game.resources, m_game.random)
+  , m_rtRoot(game.state, Hero::Ryan, m_game.resources, m_game.random)
   {
     auto ltViewport = gf::RectF::fromPositionSize({ 0.0f, 0.0f }, { 0.5f, 1.0f });
     m_ltWorldView.setViewport(ltViewport);
@@ -45,9 +47,11 @@ namespace xy {
 
     m_ltWorldEntities.addEntity(m_ltMap);
     m_ltWorldEntities.addEntity(m_ltHero);
+    m_ltWorldEntities.addEntity(m_ltRoot);
 
     m_rtWorldEntities.addEntity(m_rtMap);
     m_rtWorldEntities.addEntity(m_rtHero);
+    m_rtWorldEntities.addEntity(m_rtRoot);
 
     m_ltHero.m_otherEntity = &m_rtHero;
     m_rtHero.m_otherEntity = &m_ltHero;

@@ -11,7 +11,6 @@
 #include "Hero.h"
 
 namespace xy {
-  struct GameData;
   struct GameState;
 
   class HeroEntity : public gf::Entity {

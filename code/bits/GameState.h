@@ -10,6 +10,7 @@
 #include "Hero.h"
 #include "HeroState.h"
 #include "MapState.h"
+#include "RootState.h"
 
 namespace xy {
 
@@ -24,6 +25,8 @@ namespace xy {
     std::array<PlayerState, 2> players;
     PlayerState& lisa = players[0];
     PlayerState& ryan = players[1];
+
+    std::vector<RootState> roots;
 
     PlayerState& localPlayer(Hero hero) {
       switch (hero) {

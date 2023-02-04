@@ -51,6 +51,13 @@ namespace xy {
           auto mapLevel = MapLevel(level, m_game.random);
           m_game.state.lisa.map.levels.push_back(mapLevel);
           m_game.state.ryan.map.levels.push_back(std::move(mapLevel));
+
+          RootState root;
+          root.tail = root.head = ryan + gf::diry(5);
+          root.parts.push_back(root.tail);
+
+          m_game.state.roots.push_back(root);
+
         } else {
           auto mapLevel = MapLevel(level, m_game.random);
           m_game.state.lisa.map.levels.push_back(mapLevel);

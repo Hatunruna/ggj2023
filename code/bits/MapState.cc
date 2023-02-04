@@ -330,9 +330,9 @@ namespace xy {
       if (cells(position).type == MapCellType::StairDown) {
         stairs.push_back(position);
       } else if (cells(position).type == MapCellType::LiftL) {
-        starts.push_back(position);
+        starts.push_back(position + gf::diry(1));
       } else if (cells(position).type == MapCellType::LiftR) {
-        starts.push_back(position);
+        starts.push_back(position + gf::diry(1));
       }
     }
 

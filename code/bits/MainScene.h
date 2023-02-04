@@ -7,6 +7,7 @@
 
 #include "HeroEntity.h"
 #include "MapEntity.h"
+#include "RootEntity.h"
 #include "SplitEntity.h"
 
 namespace xy {
@@ -61,6 +62,8 @@ private:
   HeroEntity m_ltHero;
   HeroEntity m_rtHero;
 
+  RootEntity m_ltRoot;
+  RootEntity m_rtRoot;
 
   SplitEntity m_split;
 

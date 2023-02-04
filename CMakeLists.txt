@@ -28,6 +28,7 @@ add_executable(${GAME}
   code/bits/MainScene.cc
   code/bits/MapEntity.cc
   code/bits/MapState.cc
+  code/bits/RootEntity.cc
   code/bits/SplitEntity.cc
   code/bits/StartScene.cc
   code/bits/TitleEntity.cc
