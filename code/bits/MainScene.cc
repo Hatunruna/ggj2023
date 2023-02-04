@@ -7,8 +7,8 @@
 
 namespace xy {
 
-//   constexpr float ViewSize = 1000.0f;
-  constexpr float ViewSize = 5000.0f;
+   constexpr float ViewSize = 1000.0f;
+//  constexpr float ViewSize = 5000.0f;
 
   HeroActions::HeroActions()
   : up("Up")
@@ -26,8 +26,8 @@ namespace xy {
   , m_rtWorldView({ 0.0f, 0.0f }, { ViewSize, ViewSize })
   , m_ltMap(game.state, Hero::Lisa)
   , m_rtMap(game.state, Hero::Ryan)
-  , m_ltHero(game.state, Hero::Lisa)
-  , m_rtHero(game.state, Hero::Ryan)
+  , m_ltHero(game.state, Hero::Lisa, m_game.resources)
+  , m_rtHero(game.state, Hero::Ryan, m_game.resources)
   {
     auto ltViewport = gf::RectF::fromPositionSize({ 0.0f, 0.0f }, { 0.5f, 1.0f });
     m_ltWorldView.setViewport(ltViewport);
@@ -49,6 +49,8 @@ namespace xy {
     m_rtWorldEntities.addEntity(m_rtMap);
     m_rtWorldEntities.addEntity(m_rtHero);
 
+    m_ltHero.m_otherEntity = &m_rtHero;
+    m_rtHero.m_otherEntity = &m_ltHero;
 
     addHudEntity(m_split);
 
