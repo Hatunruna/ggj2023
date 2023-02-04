@@ -9,7 +9,8 @@
 namespace xy {
 
   TitleEntity::TitleEntity(gf::ResourceManager& resources)
-  : m_font(resources.getFont("deportees/Deportees.otf"))
+  : m_font_title(resources.getFont("deportees/Deportees.otf"))
+  , m_font_sub_title(resources.getFont("xfiles1/x-files.ttf"))
 //   , m_backgroundTexture(resources.getTexture("logo.png"))
   {
   }
@@ -30,25 +31,27 @@ namespace xy {
 //     background.setScale(backgroundScale);
 //     target.draw(background, states);
 
-    unsigned titleCharacterSize = coords.getRelativeCharacterSize(0.1f);
+    unsigned titleCharacterSize = coords.getRelativeCharacterSize(0.4f);
 
-    gf::Text title("Root Company", m_font, titleCharacterSize);
+    gf::Text title("Root Company", m_font_title, titleCharacterSize);
     title.setColor(gf::Color::White);
     title.setPosition(coords.getCenter());
-    title.setAnchor(gf::Anchor::Center);
+    title.setAnchor(gf::Anchor::BottomCenter);
     target.draw(title, states);
 
     unsigned subtitleCharacterSize = coords.getRelativeCharacterSize(0.05f);
 
-    gf::Text subtitle("Bienvenu dans notre laboratoire spécialisé dans la culture de plantes anciennes", m_font, subtitleCharacterSize);
+    gf::Text subtitle("welcome in our laboratory about\n the culture of perennial plant", m_font_sub_title, subtitleCharacterSize);
     subtitle.setColor(gf::Color::White);
-    subtitle.setPosition(coords.getRelativePoint({ 0.5f, 0.6f }));
-    subtitle.setAnchor(gf::Anchor::Center);
+    subtitle.setPosition(coords.getRelativePoint({ 0.0f, 0.6f }));
+    //subtitle.setAnchor(gf::Anchor::Center);
+    subtitle.setParagraphWidth(coords.getRelativeSize({ 1.0f, 0.5f}).width);
+    subtitle.setAlignment(gf::Alignment::Center);
     target.draw(subtitle, states);
 
     unsigned instructionsCharacterSize = coords.getRelativeCharacterSize(0.03f);
 
-    gf::Text instructions("Press a button to start", m_font, instructionsCharacterSize);
+    gf::Text instructions("Press a button to start", m_font_sub_title, instructionsCharacterSize);
     instructions.setColor(gf::Color::White);
     instructions.setPosition(coords.getRelativePoint({ 0.5f, 0.9f }));
     instructions.setAnchor(gf::Anchor::Center);

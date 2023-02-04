@@ -13,7 +13,8 @@ namespace xy {
     void update(gf::Time time) override;
     void render(gf::RenderTarget &target, const gf::RenderStates &states) override;
   private:
-    gf::Font& m_font;
+    gf::Font& m_font_title;
+    gf::Font& m_font_sub_title;
 //     gf::Texture& m_backgroundTexture;
   };
 
