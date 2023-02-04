@@ -1,20 +1,25 @@
 #include "MapEntity.h"
 
 #include <gf/Particles.h>
+#include <gf/Sprite.h>
 #include <gf/RenderTarget.h>
 
+#include "GameHub.h"
 #include "GameState.h"
 #include "Settings.h"
 
 namespace xy {
 
-  MapEntity::MapEntity(const GameState& state, Hero hero)
+  MapEntity::MapEntity(GameHub& game, GameState& state, Hero hero)
   : m_state(state)
   , m_hero(hero)
   {
   }
 
   void MapEntity::render(gf::RenderTarget &target, const gf::RenderStates &states) {
+    PlayerState& playerState = m_state.localPlayer(m_hero);
+    target.draw(playerState.map.layers[playerState.hero.levelIndex], states);
+
     gf::ShapeParticles rectangles;
 
     const MapState& mapState = m_state.localPlayer(m_hero).map;
@@ -28,7 +33,7 @@ namespace xy {
       gf::Color4f color;
       switch (cell.type) {
       case MapCellType::Floor:
-        color = gf::Color::White;
+        continue;
         break;
 
       case MapCellType::Wall:

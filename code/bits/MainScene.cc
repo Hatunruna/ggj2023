@@ -24,8 +24,8 @@ namespace xy {
   , m_game(game)
   , m_ltWorldView({ 0.0f, 0.0f }, { ViewSize, ViewSize })
   , m_rtWorldView({ 0.0f, 0.0f }, { ViewSize, ViewSize })
-  , m_ltMap(game.state, Hero::Lisa)
-  , m_rtMap(game.state, Hero::Ryan)
+  , m_ltMap(game, game.state, Hero::Lisa)
+  , m_rtMap(game, game.state, Hero::Ryan)
   , m_ltHero(game.state, Hero::Lisa)
   , m_rtHero(game.state, Hero::Ryan)
   {
