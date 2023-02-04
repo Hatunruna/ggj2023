@@ -51,6 +51,8 @@ namespace xy {
 
   std::vector<gf::Array2D<MapCell>> createProceduralMap(gf::Random& random) {
     auto generateLevel = [&random](gf::Vector2i mapSize, std::vector<gf::RectI>& stairs, int levelNumber) -> gf::Array2D<MapCell> {
+      gf::RectI mapRect = gf::RectI::fromSize(mapSize);
+
       std::vector<gf::RectI> oldStairs = stairs;
 
       std::vector<gf::RectI> corridors;
@@ -172,123 +174,43 @@ namespace xy {
       }
 
       // Create corridor between rooms
-      for (const auto& room: rooms) {
-        std::vector<gf::RectI> possibleCorridors;
 
-        // Check right wall
-        for (int y = room.min.y; y < room.max.y; ++y) {
-          gf::Vector2i nextCell = gf::vec(room.max.x + 1, y);
-          while (nextCell.x < MapSize.width && level(nextCell).type != MapCellType::Floor) {
-            if (nextCell.x >= MapSize.height - 1) {
-              break;
-            }
+      for (const auto & room : rooms) {
 
-            ++nextCell.x;
+        for (gf::Vector2i dir : { gf::vec(0, 1), gf::vec(0, -1), gf::vec(1, 0), gf::vec(-1, 0) }) {
+
+          auto current = room.getCenter();
+          assert(level(current).type == MapCellType::Floor);
+
+          while (level(current + dir).type == MapCellType::Floor) {
+            current += dir;
           }
 
-          if (level(nextCell).type == MapCellType::Floor) {
-            possibleCorridors.push_back(gf::RectI::fromMinMax(gf::vec(room.max.x, y), nextCell + gf::vec(0, 1)));
-          }
-        }
+          assert(mapRect.contains(current));
+          assert(level(current).type == MapCellType::Wall);
 
-        // Choose one random corridor
-        if (possibleCorridors.size() > 0) {
-          int randomCorridor = random.computeUniformInteger(0, static_cast<int>(possibleCorridors.size() - 1));
-          createSpace(possibleCorridors[randomCorridor]);
-        }
+          gf::Vector2i start = current;
+          current += dir;
 
-        // Check left wall
-        possibleCorridors.clear();
-        for (int y = room.min.y; y < room.max.y; ++y) {
-          gf::Vector2i nextCell = gf::vec(room.min.x - 1, y);
-          while (nextCell.x > 0 && level(nextCell).type != MapCellType::Floor) {
-            if (nextCell.x <= 0) {
-              break;
-            }
-
-            --nextCell.x;
+          while (mapRect.contains(current) && level(current).type == MapCellType::Wall
+            && level(current + gf::perp(dir)).type == MapCellType::Wall
+            && level(current - gf::perp(dir)).type == MapCellType::Wall
+            && level(current + 2 * gf::perp(dir)).type == MapCellType::Wall
+            && level(current - 2 * gf::perp(dir)).type == MapCellType::Wall
+          ) {
+            current += dir;
           }
 
-          if (level(nextCell).type == MapCellType::Floor) {
-            possibleCorridors.push_back(gf::RectI::fromMinMax(nextCell, gf::vec(room.min.x, y + 1)));
+          if (mapRect.contains(current) && level(current).type == MapCellType::Floor) {
+            gf::Vector2i stop = current + gf::abs(gf::perp(dir));
+            gf::RectI corridor = gf::RectI::fromMinMax(gf::min(start, stop), gf::max(start, stop));
+
+            corridors.push_back(corridor);
+            createSpace(corridor);
           }
         }
 
-        // Choose one random corridor
-        if (possibleCorridors.size() > 0) {
-          int randomCorridor = random.computeUniformInteger(0, static_cast<int>(possibleCorridors.size() - 1));
-          createSpace(possibleCorridors[randomCorridor]);
-        }
-
-        // Check top wall
-        possibleCorridors.clear();
-        for (int x = room.min.x; x < room.max.x; ++x) {
-          gf::Vector2i nextCell = gf::vec(x, room.min.y - 1);
-          while (level(nextCell).type != MapCellType::Floor) {
-            if (nextCell.y <= 0) {
-              break;
-            }
-
-            --nextCell.y;
-          }
-
-          if (level(nextCell).type == MapCellType::Floor) {
-            possibleCorridors.push_back(gf::RectI::fromMinMax(nextCell, gf::vec(x + 1, room.min.y)));
-          }
-        }
-
-        // Choose one random corridor
-        if (possibleCorridors.size() > 0) {
-          int randomCorridor = random.computeUniformInteger(0, static_cast<int>(possibleCorridors.size() - 1));
-          createSpace(possibleCorridors[randomCorridor]);
-        }
-
-        // Check bottom wall
-        possibleCorridors.clear();
-        for (int x = room.min.x; x < room.max.x; ++x) {
-          gf::Vector2i nextCell = gf::vec(x, room.max.y + 1);
-          while (level(nextCell).type != MapCellType::Floor) {
-            if (nextCell.y >= MapSize.height - 1) {
-              break;
-            }
-
-            ++nextCell.y;
-          }
-
-          if (level(nextCell).type == MapCellType::Floor) {
-            possibleCorridors.push_back(gf::RectI::fromMinMax(gf::vec(x, room.max.y), nextCell + gf::vec(1, 0)));
-          }
-        }
-
-        // Choose one random corridor
-        if (possibleCorridors.size() > 0) {
-          int randomCorridor = random.computeUniformInteger(0, static_cast<int>(possibleCorridors.size() - 1));
-          createSpace(possibleCorridors[randomCorridor]);
-        }
       }
-
-#if 0
-      for (auto position : level.getPositionRange()) {
-        MapCellType type = MapCellType::Floor;
-
-        if (random.computeUniformInteger(0, 99) < 20) {
-          type = MapCellType::Wall;
-        }
-
-        level(position).type = type;
-      }
-
-      // Force wall on border
-      for (int i = 0; i < MapWidth; ++i) {
-        level(gf::vec(0, i)).type = MapCellType::Wall; // Top
-        level(gf::vec(MapHeight - 1, i)).type = MapCellType::Wall; // Bottom
-      }
-
-      for (int i = 0; i < MapHeight; ++i) {
-        level(gf::vec(i, 0)).type = MapCellType::Wall; // Left
-        level(gf::vec(i, MapWidth - 1)).type = MapCellType::Wall; // Right
-      }
-#endif
 
       for (auto & stair : oldStairs) {
         level(stair.getCenter()).type = MapCellType::StairDown;
