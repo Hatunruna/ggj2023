@@ -1,7 +1,6 @@
 #include "MapState.h"
 
-#include <stack>
-
+#include <gf/Direction.h>
 #include <gf/Log.h>
 #include <gf/Rect.h>
 
@@ -59,16 +58,16 @@ namespace xy {
 
       std::vector<gf::RectI> corridors;
 
-      if (random.computeBernoulli(0.5)) {
+      if (levelNumber == 0 || random.computeBernoulli(0.5)) {
         // 2 horizontal, 1 vertical
 
+        int v0 = random.computeUniformInteger(Corridor0 - CorridorExtent, Corridor0 + CorridorExtent);
         int h1 = random.computeUniformInteger(Corridor1 - CorridorExtent, Corridor1 + CorridorExtent);
         int h2 = random.computeUniformInteger(Corridor2 - CorridorExtent, Corridor2 + CorridorExtent);
-        int v0 = random.computeUniformInteger(Corridor0 - CorridorExtent, Corridor0 + CorridorExtent);
 
+        corridors.push_back(gf::RectI::fromPositionSize(gf::vec(v0, 1), gf::vec(CorridorWidth, mapSize.height - 2)));
         corridors.push_back(gf::RectI::fromPositionSize(gf::vec(1, h1), gf::vec(mapSize.width - 2, CorridorWidth)));
         corridors.push_back(gf::RectI::fromPositionSize(gf::vec(1, h2), gf::vec(mapSize.width - 2, CorridorWidth)));
-        corridors.push_back(gf::RectI::fromPositionSize(gf::vec(v0, 1), gf::vec(CorridorWidth, mapSize.height - 2)));
       } else {
         // 1 horizontal, 2 vertical
 
@@ -213,6 +212,17 @@ namespace xy {
 
       }
 
+      if (levelNumber == 0) {
+        // assume that the vertical corridor is the first!
+        gf::RectI corridor = corridors[0];
+
+        auto liftL = corridor.getTopLeft() - gf::diry(1);
+        auto liftR = liftL + gf::dirx(1);
+
+        level(liftL).type = MapCellType::LiftL;
+        level(liftR).type = MapCellType::LiftR;
+      }
+
       for (auto & stair : oldStairs) {
         level(stair.getCenter()).type = MapCellType::StairDown;
       }
@@ -235,11 +245,26 @@ namespace xy {
     return levels;
   }
 
-  MapLevel::MapLevel(const gf::Array2D<MapCell>& generated)
-  : map(generated.getSize())
-  , cells(generated)
-  {
-    const gf::Vector2i mapSize = generated.getSize();
+  std::tuple<gf::Vector2i, gf::Vector2i> computeStartingPositions(const gf::Array2D<MapCell>& cells) {
+    gf::Vector2i lisa = gf::vec(0, 0);
+    gf::Vector2i ryan = gf::vec(0, 0);
+
+    for (auto position : cells.getPositionRange()) {
+      if (cells(position).type == MapCellType::LiftL) {
+        lisa = position + gf::diry(1);
+      } else if (cells(position).type == MapCellType::LiftR) {
+        ryan = position + gf::diry(1);
+      }
+    }
+
+    assert(lisa != gf::vec(0, 0));
+    assert(ryan != gf::vec(0, 0));
+    return std::make_tuple(lisa, ryan);
+  }
+
+  gf::SquareMap computeMap(const gf::Array2D<MapCell>& cells) {
+    const gf::Vector2i mapSize = cells.getSize();
+    gf::SquareMap map(mapSize);
 
     for (int col = 0; col < mapSize.width; ++col) {
       for (int row = 0; row < mapSize.height; ++row) {
@@ -255,20 +280,52 @@ namespace xy {
           break;
         }
 
-        // DEBUG
-        map.setEmpty(gf::vec(col, row));
-
       }
     }
 
-    enum class CellStatus : char {
-      Unexplored,
-      Visited,
-    };
+    return map;
+  }
 
-    gf::Array2D<CellStatus> status(mapSize, CellStatus::Unexplored);
-    std::stack<gf::Vector2i> stack;
-    std::vector<gf::Vector2i> path;
+  enum class CellStatus : char {
+    Unexplored,
+    Visited,
+  };
+
+  std::vector<gf::Vector2i> computeMultiPath(const gf::SquareMap& map, std::vector<gf::Vector2i> starts, gf::Random& random) {
+    std::vector<gf::Vector2i> path = starts;
+    std::vector<gf::Vector2i> queue = starts;;
+
+    gf::Array2D<CellStatus> status(map.getSize(), CellStatus::Unexplored);
+
+    for (auto position : starts) {
+      status(position) = CellStatus::Visited;
+    }
+
+    while (!queue.empty()) {
+      std::shuffle(queue.begin(), queue.end(), random.getEngine());
+
+      gf::Vector2i current = queue.back();
+      queue.pop_back();
+      assert(status(current) == CellStatus::Visited);
+
+      for (auto direction : { gf::Direction::Up, gf::Direction::Left, gf::Direction::Down, gf::Direction::Right }) {
+        gf::Vector2i next = current + gf::displacement(direction);
+
+        if (map.isWalkable(next) && status(next) == CellStatus::Unexplored) {
+          status(next) = CellStatus::Visited;
+          queue.push_back(next);
+        }
+      }
+    }
+
+    return path;
+  }
+
+  MapLevel::MapLevel(const gf::Array2D<MapCell>& generated, gf::Random& random)
+  : cells(generated)
+  , map(computeMap(generated))
+  {
+    const gf::Vector2i mapSize = generated.getSize();
 
 
 

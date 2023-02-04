@@ -35,14 +35,27 @@ namespace xy {
       m_game.state.lisa.map.levels.clear();
       m_game.state.ryan.map.levels.clear();
 
+      bool first = true;
+
       for (auto & level : levels) {
-        m_game.state.lisa.map.levels.push_back(MapLevel(level));
-        m_game.state.ryan.map.levels.push_back(MapLevel(level));
+        if (first) {
+          first = false;
+
+          auto [ lisa, ryan ] = computeStartingPositions(level);
+          m_game.state.lisa.hero.position = m_game.state.lisa.hero.target = lisa;
+          m_game.state.ryan.hero.position = m_game.state.ryan.hero.target = ryan;
+
+          auto mapLevel = MapLevel(level, m_game.random);
+          m_game.state.lisa.map.levels.push_back(mapLevel);
+          m_game.state.ryan.map.levels.push_back(std::move(mapLevel));
+        } else {
+          auto mapLevel = MapLevel(level, m_game.random);
+          m_game.state.lisa.map.levels.push_back(mapLevel);
+          m_game.state.ryan.map.levels.push_back(std::move(mapLevel));
+        }
       }
 
       // TODO: set position from generated map
-      m_game.state.lisa.hero.position = m_game.state.lisa.hero.target = gf::vec(1, 1);
-      m_game.state.ryan.hero.position = m_game.state.ryan.hero.target = gf::vec(3, 1);
 
       m_game.replaceScene(m_game.main); //, m_game.blackout, gf::seconds(TransitionDelay));
     }
