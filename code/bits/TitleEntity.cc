@@ -32,7 +32,7 @@ namespace xy {
 
     unsigned titleCharacterSize = coords.getRelativeCharacterSize(0.1f);
 
-    gf::Text title("The Title of The Game", m_font, titleCharacterSize);
+    gf::Text title("Root Company", m_font, titleCharacterSize);
     title.setColor(gf::Color::White);
     title.setPosition(coords.getCenter());
     title.setAnchor(gf::Anchor::Center);
@@ -40,7 +40,7 @@ namespace xy {
 
     unsigned subtitleCharacterSize = coords.getRelativeCharacterSize(0.05f);
 
-    gf::Text subtitle("The Subtitle of the Game", m_font, subtitleCharacterSize);
+    gf::Text subtitle("Bienvenu dans notre laboratoire spécialisé dans la culture de plantes anciennes", m_font, subtitleCharacterSize);
     subtitle.setColor(gf::Color::White);
     subtitle.setPosition(coords.getRelativePoint({ 0.5f, 0.6f }));
     subtitle.setAnchor(gf::Anchor::Center);
