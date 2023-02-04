@@ -326,15 +326,22 @@ namespace xy {
   , map(computeMap(generated))
   {
     std::vector<gf::Vector2i> stairs;
+    std::vector<gf::Vector2i> starts;
 
     for (auto position : cells.getPositionRange()) {
       if (cells(position).type == MapCellType::StairDown) {
         stairs.push_back(position);
+      } else if (cells(position).type == MapCellType::LiftL) {
+        starts.push_back(position);
+      } else if (cells(position).type == MapCellType::LiftR) {
+        starts.push_back(position);
       }
     }
 
-    assert(stairs.size() == 2);
-    auto starts = map.computeRoute(stairs[0], stairs[1], 0.0);
+    if (stairs.size() == 2) {
+      starts = map.computeRoute(stairs[0], stairs[1], 0.0);
+    }
+
     assert(!starts.empty());
     auto path = computeMultiPath(map, starts, random);
     computeDoorsAndComputers(path);
