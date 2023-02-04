@@ -1,5 +1,6 @@
 #include "MapState.h"
 
+#include <gf/Log.h>
 #include <gf/Rect.h>
 
 namespace xy {
@@ -168,6 +169,102 @@ namespace xy {
 
       for (auto & space : rooms) {
         createSpace(space);
+      }
+
+      // Create corridor between rooms
+      for (const auto& room: rooms) {
+        std::vector<gf::RectI> possibleCorridors;
+
+        // Check right wall
+        for (int y = room.min.y; y < room.max.y; ++y) {
+          gf::Vector2i nextCell = gf::vec(room.max.x + 1, y);
+          while (nextCell.x < MapSize.width && level(nextCell).type != MapCellType::Floor) {
+            if (nextCell.x >= MapSize.height - 1) {
+              break;
+            }
+
+            ++nextCell.x;
+          }
+
+          if (level(nextCell).type == MapCellType::Floor) {
+            possibleCorridors.push_back(gf::RectI::fromMinMax(gf::vec(room.max.x, y), nextCell + gf::vec(0, 1)));
+          }
+        }
+
+        // Choose one random corridor
+        if (possibleCorridors.size() > 0) {
+          int randomCorridor = random.computeUniformInteger(0, static_cast<int>(possibleCorridors.size() - 1));
+          createSpace(possibleCorridors[randomCorridor]);
+        }
+
+        // Check left wall
+        possibleCorridors.clear();
+        for (int y = room.min.y; y < room.max.y; ++y) {
+          gf::Vector2i nextCell = gf::vec(room.min.x - 1, y);
+          while (nextCell.x > 0 && level(nextCell).type != MapCellType::Floor) {
+            if (nextCell.x <= 0) {
+              break;
+            }
+
+            --nextCell.x;
+          }
+
+          if (level(nextCell).type == MapCellType::Floor) {
+            possibleCorridors.push_back(gf::RectI::fromMinMax(nextCell, gf::vec(room.min.x, y + 1)));
+          }
+        }
+
+        // Choose one random corridor
+        if (possibleCorridors.size() > 0) {
+          int randomCorridor = random.computeUniformInteger(0, static_cast<int>(possibleCorridors.size() - 1));
+          createSpace(possibleCorridors[randomCorridor]);
+        }
+
+        // Check top wall
+        possibleCorridors.clear();
+        for (int x = room.min.x; x < room.max.x; ++x) {
+          gf::Vector2i nextCell = gf::vec(x, room.min.y - 1);
+          while (level(nextCell).type != MapCellType::Floor) {
+            if (nextCell.y <= 0) {
+              break;
+            }
+
+            --nextCell.y;
+          }
+
+          if (level(nextCell).type == MapCellType::Floor) {
+            possibleCorridors.push_back(gf::RectI::fromMinMax(nextCell, gf::vec(x + 1, room.min.y)));
+          }
+        }
+
+        // Choose one random corridor
+        if (possibleCorridors.size() > 0) {
+          int randomCorridor = random.computeUniformInteger(0, static_cast<int>(possibleCorridors.size() - 1));
+          createSpace(possibleCorridors[randomCorridor]);
+        }
+
+        // Check bottom wall
+        possibleCorridors.clear();
+        for (int x = room.min.x; x < room.max.x; ++x) {
+          gf::Vector2i nextCell = gf::vec(x, room.max.y + 1);
+          while (level(nextCell).type != MapCellType::Floor) {
+            if (nextCell.y >= MapSize.height - 1) {
+              break;
+            }
+
+            ++nextCell.y;
+          }
+
+          if (level(nextCell).type == MapCellType::Floor) {
+            possibleCorridors.push_back(gf::RectI::fromMinMax(gf::vec(x, room.max.y), nextCell + gf::vec(1, 0)));
+          }
+        }
+
+        // Choose one random corridor
+        if (possibleCorridors.size() > 0) {
+          int randomCorridor = random.computeUniformInteger(0, static_cast<int>(possibleCorridors.size() - 1));
+          createSpace(possibleCorridors[randomCorridor]);
+        }
       }
 
 #if 0

@@ -22,6 +22,7 @@ struct HeroActions {
   gf::Action down;
   gf::Action left;
   gf::Action right;
+  gf::Action interact;
 };
 
 class MainScene : public gf::Scene {
