@@ -14,11 +14,12 @@ namespace xy {
     constexpr int Corridor0 = MapLength / 2;
     constexpr int Corridor1 = 1 + SpaceWidth;
     constexpr int Corridor2 = Corridor1 + CorridorWidth + SpaceWidth;
+    constexpr int CorridorExtent = 4;
 
+    constexpr int StairsSize = 3;
 
     constexpr int RoomsCount = 16;
     constexpr int MaxRetries = 100;
-
 
     gf::Vector2i computeRoomSize(gf::Random& random) {
       switch (random.computeUniformInteger(0, 9)) {
@@ -48,17 +49,17 @@ namespace xy {
   }
 
   std::vector<gf::Array2D<MapCell>> createProceduralMap(gf::Random& random) {
-    auto generateLevel = [&random](gf::Vector2i mapSize) -> gf::Array2D<MapCell> {
-      gf::Array2D<MapCell> level(mapSize, { MapCellType::Wall });
+    auto generateLevel = [&random](gf::Vector2i mapSize, std::vector<gf::RectI>& stairs, int levelNumber) -> gf::Array2D<MapCell> {
+      std::vector<gf::RectI> oldStairs = stairs;
 
       std::vector<gf::RectI> corridors;
 
       if (random.computeBernoulli(0.5)) {
         // 2 horizontal, 1 vertical
 
-        int h1 = random.computeUniformInteger(Corridor1 - 2, Corridor1 + 2);
-        int h2 = random.computeUniformInteger(Corridor2 - 2, Corridor2 + 2);
-        int v0 = random.computeUniformInteger(Corridor0 - 2, Corridor0 + 2);
+        int h1 = random.computeUniformInteger(Corridor1 - CorridorExtent, Corridor1 + CorridorExtent);
+        int h2 = random.computeUniformInteger(Corridor2 - CorridorExtent, Corridor2 + CorridorExtent);
+        int v0 = random.computeUniformInteger(Corridor0 - CorridorExtent, Corridor0 + CorridorExtent);
 
         corridors.push_back(gf::RectI::fromPositionSize(gf::vec(0, h1), gf::vec(mapSize.width, CorridorWidth)));
         corridors.push_back(gf::RectI::fromPositionSize(gf::vec(0, h2), gf::vec(mapSize.width, CorridorWidth)));
@@ -66,21 +67,69 @@ namespace xy {
       } else {
         // 1 horizontal, 2 vertical
 
-        int v1 = random.computeUniformInteger(Corridor1 - 2, Corridor1 + 2);
-        int v2 = random.computeUniformInteger(Corridor2 - 2, Corridor2 + 2);
-        int h0 = random.computeUniformInteger(Corridor0 - 2, Corridor0 + 2);
+        int v1 = random.computeUniformInteger(Corridor1 - CorridorExtent, Corridor1 + CorridorExtent);
+        int v2 = random.computeUniformInteger(Corridor2 - CorridorExtent, Corridor2 + CorridorExtent);
+        int h0 = random.computeUniformInteger(Corridor0 - CorridorExtent, Corridor0 + CorridorExtent);
 
         corridors.push_back(gf::RectI::fromPositionSize(gf::vec(v1, 0), gf::vec(CorridorWidth, mapSize.height)));
         corridors.push_back(gf::RectI::fromPositionSize(gf::vec(v2, 0), gf::vec(CorridorWidth, mapSize.height)));
         corridors.push_back(gf::RectI::fromPositionSize(gf::vec(0, h0), gf::vec(mapSize.width, CorridorWidth)));
       }
 
-      std::vector<gf::RectI> rooms;
+      // TODO: set top of the stairs
+
+      std::vector<gf::RectI> rooms = stairs;
 
       auto hasCollision = [&rooms, &corridors](const gf::RectI& room) {
         return std::any_of(corridors.begin(), corridors.end(), [&room](const gf::RectI& other) { return room.intersects(other.grow(1)); })
             || std::any_of(rooms.begin(), rooms.end(), [&room](const gf::RectI& other) { return room.intersects(other.grow(1)); });
       };
+
+      stairs.clear();
+
+      if (levelNumber % 2 == 0) {
+        auto position1 = gf::vec(
+          random.computeUniformInteger(1, Corridor1 - CorridorExtent - StairsSize - 1),
+          random.computeUniformInteger(Corridor2 + CorridorExtent + 1, MapLength - StairsSize - 2)
+        );
+
+        gf::RectI stair1 = gf::RectI::fromPositionSize(position1, gf::vec(StairsSize, StairsSize));
+
+        assert(!hasCollision(stair1));
+        stairs.push_back(stair1);
+
+        auto position2 = gf::vec(
+          random.computeUniformInteger(Corridor2 + CorridorExtent + 1, MapLength - StairsSize - 2),
+          random.computeUniformInteger(1, Corridor1 - CorridorExtent - StairsSize - 1)
+        );
+
+        gf::RectI stair2 = gf::RectI::fromPositionSize(position2, gf::vec(StairsSize, StairsSize));
+        assert(!hasCollision(stair2));
+        stairs.push_back(stair2);
+
+      } else {
+        auto position1 = gf::vec(
+          random.computeUniformInteger(1, Corridor1 - CorridorExtent - StairsSize - 1),
+          random.computeUniformInteger(1, Corridor1 - CorridorExtent - StairsSize - 1)
+        );
+
+        gf::RectI stair1 = gf::RectI::fromPositionSize(position1, gf::vec(StairsSize, StairsSize));
+
+        assert(!hasCollision(stair1));
+        stairs.push_back(stair1);
+
+        auto position2 = gf::vec(
+          random.computeUniformInteger(Corridor2 + CorridorExtent + 1, MapLength - StairsSize - 2),
+          random.computeUniformInteger(Corridor2 + CorridorExtent + 1, MapLength - StairsSize - 2)
+        );
+
+        gf::RectI stair2 = gf::RectI::fromPositionSize(position2, gf::vec(StairsSize, StairsSize));
+        assert(!hasCollision(stair2));
+        stairs.push_back(stair2);
+
+      }
+
+      rooms.insert(rooms.end(), stairs.begin(), stairs.end());
 
       for (int i = 0; i < RoomsCount; ++i) {
         gf::RectI room;
@@ -102,6 +151,8 @@ namespace xy {
           rooms.push_back(room);
         }
       }
+
+      gf::Array2D<MapCell> level(mapSize, { MapCellType::Wall });
 
       auto createSpace = [&level](gf::RectI space) {
         for (int x = space.min.x; x < space.max.x; ++x) {
@@ -142,24 +193,23 @@ namespace xy {
       }
 #endif
 
+      for (auto & stair : oldStairs) {
+        level(stair.getCenter()).type = MapCellType::StairDown;
+      }
+
+      for (auto & stair : stairs) {
+        level(stair.getCenter()).type = MapCellType::StairUp;
+      }
+
       return level;
     };
 
     std::vector<gf::Array2D<MapCell>> levels;
+    std::vector<gf::RectI> stairs;
 
     for (int i = 0; i < 2; ++i) {
-      levels.emplace_back(generateLevel(MapSize));
+      levels.emplace_back(generateLevel(MapSize, stairs, i));
     }
-
-    // Set first position as floor
-    levels[0](gf::vec(1, 1)).type = MapCellType::Floor;
-    levels[0](gf::vec(3, 1)).type = MapCellType::Floor;
-
-    // Set stairs
-    levels[0](gf::vec(1, 2)).type = MapCellType::StairUp;
-    levels[1](gf::vec(1, 2)).type = MapCellType::StairDown;
-    levels[0](gf::vec(3, 2)).type = MapCellType::StairUp;
-    levels[1](gf::vec(3, 2)).type = MapCellType::StairDown;
 
     return levels;
   }
