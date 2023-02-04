@@ -41,6 +41,8 @@ namespace xy {
       m_game.data.map.createNewMap(m_game.random);
       m_game.state.lisa.position = gf::vec(1, 1);
       m_game.state.ryan.position = gf::vec(3, 1);
+      m_game.state.lisa.target = gf::vec(1, 1);
+      m_game.state.ryan.target = gf::vec(3, 1);
       m_game.state.lisaMap.initialize(m_game.data);
       m_game.state.ryanMap.initialize(m_game.data);
       m_game.replaceScene(m_game.main); //, m_game.blackout, gf::seconds(TransitionDelay));

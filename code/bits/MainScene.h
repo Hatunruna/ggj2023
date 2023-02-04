@@ -3,6 +3,7 @@
 
 #include <gf/Scene.h>
 #include <gf/Action.h>
+#include <gf/Direction.h>
 
 #include "HeroEntity.h"
 #include "MapEntity.h"
@@ -14,6 +15,8 @@ namespace xy {
 
 struct HeroActions {
   HeroActions();
+
+  static int s_index;
 
   gf::Action up;
   gf::Action down;

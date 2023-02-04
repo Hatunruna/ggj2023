@@ -54,35 +54,43 @@ namespace xy {
     addAction(m_fullscreenAction);
 
     lisaActions.up.addScancodeKeyControl(gf::Scancode::W);
-    lisaActions.up.addScancodeKeyControl(gf::Scancode::Up);
+    lisaActions.up.setContinuous();
     addAction(lisaActions.up);
 
     lisaActions.down.addScancodeKeyControl(gf::Scancode::S);
-    lisaActions.down.addScancodeKeyControl(gf::Scancode::Down);
+    lisaActions.down.setContinuous();
     addAction(lisaActions.down);
 
     lisaActions.left.addScancodeKeyControl(gf::Scancode::A);
-    lisaActions.left.addScancodeKeyControl(gf::Scancode::Left);
+    lisaActions.left.setContinuous();
     addAction(lisaActions.left);
 
     lisaActions.right.addScancodeKeyControl(gf::Scancode::D);
-    lisaActions.right.addScancodeKeyControl(gf::Scancode::Right);
+    lisaActions.right.setContinuous();
     addAction(lisaActions.right);
 
     ryanActions.up.addGamepadAxisControl(gf::AnyGamepad, gf::GamepadAxis::LeftY, gf::GamepadAxisDirection::Negative);
     ryanActions.up.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::DPadUp);
+    ryanActions.up.addScancodeKeyControl(gf::Scancode::Up);
+    ryanActions.up.setContinuous();
     addAction(ryanActions.up);
 
     ryanActions.down.addGamepadAxisControl(gf::AnyGamepad, gf::GamepadAxis::LeftY, gf::GamepadAxisDirection::Positive);
     ryanActions.down.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::DPadDown);
+    ryanActions.down.addScancodeKeyControl(gf::Scancode::Down);
+    ryanActions.down.setContinuous();
     addAction(ryanActions.down);
 
     ryanActions.left.addGamepadAxisControl(gf::AnyGamepad, gf::GamepadAxis::LeftX, gf::GamepadAxisDirection::Negative);
     ryanActions.left.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::DPadLeft);
+    ryanActions.left.addScancodeKeyControl(gf::Scancode::Left);
+    ryanActions.left.setContinuous();
     addAction(ryanActions.left);
 
     ryanActions.right.addGamepadAxisControl(gf::AnyGamepad, gf::GamepadAxis::LeftX, gf::GamepadAxisDirection::Positive);
     ryanActions.right.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::DPadRight);
+    ryanActions.right.addScancodeKeyControl(gf::Scancode::Right);
+    ryanActions.right.setContinuous();
     addAction(ryanActions.right);
   }
 
@@ -95,44 +103,26 @@ namespace xy {
       window.toggleFullscreen();
     }
 
-    auto updateHeroPosition = [this](Hero hero) {
+    auto updateHeroDir = [this](Hero hero) {
+      HeroEntity& entity = (hero == Hero::Lisa) ? m_ltHero : m_rtHero;
       HeroActions& actions = heroActions[static_cast<int>(hero)];
-      const int levelIndex = m_game.state.heros[static_cast<int>(hero)].levelIndex;
-      const gf::SquareMap& fov = m_game.state.maps[static_cast<int>(hero)].levelsFov[levelIndex];
-      HeroState& heroState = m_game.state.heros[static_cast<int>(hero)];
-      const HeroState& otherHeroState = m_game.state.heros[getOtherHeroIndex(hero)];
 
-      gf::Vector2i nextPosition = heroState.position;
-      if (actions.up.isActive()) {
-        --nextPosition.y;
-      } else if (actions.down.isActive()){
-        ++nextPosition.y;
-      }
-      if (actions.left.isActive()) {
-        --nextPosition.x;
-      } else if (actions.right.isActive()) {
-        ++nextPosition.x;
-      }
-
-      bool nextPositionAlreadyOccupied =
-        (otherHeroState.levelIndex == levelIndex)
-        && (otherHeroState.position == nextPosition);
-      if (nextPosition != heroState.position && fov.isWalkable(nextPosition) && !nextPositionAlreadyOccupied) {
-        heroState.position = nextPosition;
-        heroState.useStairs = false;
-      }
-
-      if (m_game.data.map.levels[levelIndex](nextPosition).type == MapData::CellType::StairDown && !heroState.useStairs) {
-        --heroState.levelIndex;
-        heroState.useStairs = true;
-      } else if (m_game.data.map.levels[levelIndex](nextPosition).type == MapData::CellType::StairUp && !heroState.useStairs) {
-        ++heroState.levelIndex;
-        heroState.useStairs = true;
+      if (actions.right.isActive()) {
+        entity.move(gf::Direction::Right);
+      } else if (actions.left.isActive()) {
+        entity.move(gf::Direction::Left);
+      } else if (actions.down.isActive()) {
+        entity.move(gf::Direction::Down);
+      } else if (actions.up.isActive()) {
+        entity.move(gf::Direction::Up);
+      } else {
+        entity.move(gf::Direction::Center);
       }
     };
 
-    updateHeroPosition(Hero::Lisa);
-    updateHeroPosition(Hero::Ryan);
+    updateHeroDir(Hero::Lisa);
+    updateHeroDir(Hero::Ryan);
+
   }
 
   void MainScene::doUpdate(gf::Time time) {
@@ -141,8 +131,8 @@ namespace xy {
     m_ltHudEntities.update(time);
     m_rtHudEntities.update(time);
 
-    m_ltWorldView.setCenter(m_game.state.lisa.position * CellSize + CellSize / 2);
-    m_rtWorldView.setCenter(m_game.state.ryan.position * CellSize + CellSize / 2);
+    m_ltWorldView.setCenter(m_game.state.lisa.middle + CellSize / 2);
+    m_rtWorldView.setCenter(m_game.state.ryan.middle + CellSize / 2);
 
     auto updateFov = [this](Hero hero) {
       const int levelIndex = m_game.state.heros[static_cast<int>(hero)].levelIndex;

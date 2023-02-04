@@ -7,6 +7,8 @@ namespace xy {
 
   struct HeroState {
     gf::Vector2i position;
+    gf::Vector2i target;
+    gf::Vector2i middle;
     int levelIndex = 0;
     bool useStairs = false;
   };
