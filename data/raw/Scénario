@@ -1,0 +1,41 @@
+Scénario Root Company
+
+Scène d’introduction
+Ryan et Lisa
+Ryan sans la moindre forme d’énergie, grand et maigre
+Lisa très énergique, petite et ronde
+
+Dans l’ascenseur scène d’introduction :
+Ryan : Dit Lisa pourquoi c’est à nous d’aller faire les larbins.
+Lisa : On n'est pas des larbins Ryan, on nous a confié une tâche de la plus haute importance !
+Ryan : On doit aller chercher une caisse aux archives. Tu parles d’une mission de la plus haute importance.
+Lisa : Écoute, c’est monsieur Cryant qui nous a demandés personnellement de nous en charger. Ce n'est pas tous les jours que le grand patron se déplace pour nous parler !
+Ryan : Oui bah moi à la base je suis laborantin. Je ne suis pas censé aller chercher des archives pour le patron. En plus je suis à la bourre pour mon dernier rapport.
+Lisa : T’inquiète, moi aussi je suis en retard sur certain dossier.
+Ryan : Justement, il a pris les deux les plus à la bourre pour aller tout au fond du bâtiment dans cet ascenseur pourri qui met dix minutes à monter trois étages alors on n'est pas près d’arriver au (niveau étage à définir).
+Lisa : Tu exagères, il met moins de temps que ça. Mais c’est vrai que je ne m’y sens jamais à l’aise.
+Ryan :…
+Lisa :…
+Ryan : Au fait, il y a quoi dans cette caisse .
+Lisa : Je n'en sais rien. Il m’a juste dit que c’était très important et de ne surtout pas l’ouvrir.
+Ryan : Génial. Tu sais au moins à quoi ressemble la boîte !
+Lisa: Oui quand même. Quand on sera devant on la reconnaîtra.
+Ryan : C’est précis ça comme description. Ha, on est enfin arrivé.
+(Ils sortent)
+
+
+Si ils retourne dans l’ascenseur avant d’avoir prit le dossier :
+Ryan : Je te dis que j’ai eu peur tu peux comprendre.
+Lisa : Moi aussi j’avais peur mais on risque de se faire virer.
+Ryan : Je sais mais je suis sûr que si on avait pris cette caisse on serait mort.
+Lisa : On en saura jamais rien…
+Message de fin : Vous avez été virée Game Over.
+
+informations récoltables (pas forcément gardé mais du LORE, DU LORE)
+Info 1 : Les racines appartiennent à l’arbre Ceiba qui sa été empêche de se développer à cause de la caisse. (Informations cruciales/extrêmement rare à trouver (dernier niveau ou proche))
+Info 2 : Les racines poussent plus vite dans le noir (information commune, trouvable au début ou milieu du jeu)
+Info 3 : La caisse contient un produit dangereux à définir (information rare, trouvable milieu, fin de jeu)
+Info 4 : La société as travaillé avec un laboratoire secret de l’état.(information très commune, trouvable au début du jeu)
+Info 5 : Le laboratoire travaille sur la culture Maya
+Info 6 : Le contenu de la caisse est un objet de grande valeur.
+Info 7 : Le patron veut revendre le contenu de la caisse.
