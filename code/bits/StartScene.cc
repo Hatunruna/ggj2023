@@ -41,8 +41,8 @@ namespace xy {
       }
 
       // TODO: set position from generated map
-      m_game.state.lisa.hero.position = gf::vec(1, 1);
-      m_game.state.ryan.hero.position = gf::vec(3, 1);
+      m_game.state.lisa.hero.position = m_game.state.lisa.hero.target = gf::vec(1, 1);
+      m_game.state.ryan.hero.position = m_game.state.ryan.hero.target = gf::vec(3, 1);
 
       m_game.replaceScene(m_game.main); //, m_game.blackout, gf::seconds(TransitionDelay));
     }

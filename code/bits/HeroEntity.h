@@ -22,8 +22,8 @@ namespace xy {
     GameState& m_state;
     Hero m_hero;
     gf::Time m_moveCooldown;
-    gf::Direction m_currentDirection;
-    bool stillRuning;
+    gf::Direction m_currentDirection = gf::Direction::Center;
+    bool m_stillRunning;
   };
 
 }

@@ -17,7 +17,7 @@ namespace xy {
   HeroEntity::HeroEntity(GameState& state, Hero hero)
   : m_state(state)
   , m_hero(hero)
-  , stillRuning(false)
+  , m_stillRunning(false)
   {
   }
 
@@ -78,10 +78,11 @@ namespace xy {
     HeroState& otherState = m_state.otherPlayer(m_hero).hero;
 
     if (dir == gf::Direction::Center) {
-      stillRuning = false;
+      m_stillRunning = false;
       return;
     }
-    stillRuning = true;
+
+    m_stillRunning = true;
 
     if (m_moveCooldown < MoveCooldown) {
 //       gf::Log::debug("Cooldown not yet finished!\n");
