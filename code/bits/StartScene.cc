@@ -10,7 +10,6 @@ namespace xy {
   : gf::Scene(game.getRenderer().getSize())
   , m_game(game)
   , m_startAction("Start")
-  , m_fullscreenAction("Fullscreen")
   , m_titleEntity(game.resources)
   {
     setClearColor(gf::Color::Black);
@@ -22,9 +21,6 @@ namespace xy {
     m_startAction.addScancodeKeyControl(gf::Scancode::Space);
     addAction(m_startAction);
 
-//     m_fullscreenAction.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::Guide);
-    addAction(m_fullscreenAction);
-
     addHudEntity(m_titleEntity);
   }
 
@@ -33,18 +29,21 @@ namespace xy {
       return;
     }
 
-    if (m_fullscreenAction.isActive()) {
-      window.toggleFullscreen();
-    }
-
     if (m_startAction.isActive()) {
-      m_game.data.map.createNewMap(m_game.random);
-      m_game.state.lisa.position = gf::vec(1, 1);
-      m_game.state.ryan.position = gf::vec(3, 1);
-      m_game.state.lisa.target = gf::vec(1, 1);
-      m_game.state.ryan.target = gf::vec(3, 1);
-      m_game.state.lisaMap.initialize(m_game.data);
-      m_game.state.ryanMap.initialize(m_game.data);
+      auto levels = createProceduralMap(m_game.random);
+
+      m_game.state.lisa.map.levels.clear();
+      m_game.state.ryan.map.levels.clear();
+
+      for (auto & level : levels) {
+        m_game.state.lisa.map.levels.push_back(MapLevel(level));
+        m_game.state.ryan.map.levels.push_back(MapLevel(level));
+      }
+
+      // TODO: set position from generated map
+      m_game.state.lisa.hero.position = gf::vec(1, 1);
+      m_game.state.ryan.hero.position = gf::vec(3, 1);
+
       m_game.replaceScene(m_game.main); //, m_game.blackout, gf::seconds(TransitionDelay));
     }
   }

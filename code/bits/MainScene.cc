@@ -7,7 +7,8 @@
 
 namespace xy {
 
-  constexpr float ViewSize = 500.0f;
+//   constexpr float ViewSize = 1000.0f;
+  constexpr float ViewSize = 5000.0f;
 
   HeroActions::HeroActions()
   : up("Up")
@@ -21,11 +22,10 @@ namespace xy {
   , m_game(game)
   , m_ltWorldView({ 0.0f, 0.0f }, { ViewSize, ViewSize })
   , m_rtWorldView({ 0.0f, 0.0f }, { ViewSize, ViewSize })
-  , m_ltMap(game.data, game.state, Hero::Lisa)
-  , m_rtMap(game.data, game.state, Hero::Ryan)
-  , m_ltHero(game.data, game.state, Hero::Lisa)
-  , m_rtHero(game.data, game.state, Hero::Ryan)
-  , m_fullscreenAction("Fullscreen")
+  , m_ltMap(game.state, Hero::Lisa)
+  , m_rtMap(game.state, Hero::Ryan)
+  , m_ltHero(game.state, Hero::Lisa)
+  , m_rtHero(game.state, Hero::Ryan)
   {
     auto ltViewport = gf::RectF::fromPositionSize({ 0.0f, 0.0f }, { 0.5f, 1.0f });
     m_ltWorldView.setViewport(ltViewport);
@@ -49,9 +49,6 @@ namespace xy {
 
 
     addHudEntity(m_split);
-
-//     m_fullscreenAction.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::Guide);
-    addAction(m_fullscreenAction);
 
     lisaActions.up.addScancodeKeyControl(gf::Scancode::W);
     lisaActions.up.setContinuous();
@@ -99,10 +96,6 @@ namespace xy {
       return;
     }
 
-    if (m_fullscreenAction.isActive()) {
-      window.toggleFullscreen();
-    }
-
     auto updateHeroDir = [this](Hero hero) {
       HeroEntity& entity = (hero == Hero::Lisa) ? m_ltHero : m_rtHero;
       HeroActions& actions = heroActions[static_cast<int>(hero)];
@@ -131,16 +124,16 @@ namespace xy {
     m_ltHudEntities.update(time);
     m_rtHudEntities.update(time);
 
-    m_ltWorldView.setCenter(m_game.state.lisa.middle + CellSize / 2);
-    m_rtWorldView.setCenter(m_game.state.ryan.middle + CellSize / 2);
+    m_ltWorldView.setCenter(m_game.state.lisa.hero.middle + CellSize / 2);
+    m_rtWorldView.setCenter(m_game.state.ryan.hero.middle + CellSize / 2);
 
     auto updateFov = [this](Hero hero) {
-      const int levelIndex = m_game.state.heros[static_cast<int>(hero)].levelIndex;
-      gf::SquareMap& fov = m_game.state.maps[static_cast<int>(hero)].levelsFov[levelIndex];
-      const gf::Vector2i& heroPosition = m_game.state.heros[static_cast<int>(hero)].position;
+      const int index = static_cast<int>(hero);
+      const HeroState& heroState = m_game.state.localPlayer(hero).hero;
+      gf::SquareMap& map = m_game.state.localPlayer(hero).map.levels[heroState.levelIndex].map;
 
-      fov.clearFieldOfVision();
-      fov.computeFieldOfVision(heroPosition, 2);
+      map.clearFieldOfVision();
+      map.computeFieldOfVision(heroState.position, 3);
     };
 
     updateFov(Hero::Lisa);

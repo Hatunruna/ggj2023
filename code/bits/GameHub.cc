@@ -6,10 +6,12 @@ namespace xy {
 
   GameHub::GameHub()
   : GameManager("Game", { GAME_RELATIVE_DATADIR, GAME_DATADIR })
+  , common(*this)
   , start(*this)
   , main(*this)
   {
-    pushScene(start);
+    gf::Ref<gf::Scene> scenes[] = { common, start };
+    pushScenes(scenes);
   }
 
 }

@@ -1,26 +1,77 @@
 #ifndef XY_GAME_STATE_H
 #define XY_GAME_STATE_H
 
-#include <array>
+#include <cassert>
 #include <cstdint>
+#include <array>
 
 #include <gf/Path.h>
 
+#include "Hero.h"
 #include "HeroState.h"
 #include "MapState.h"
 
 namespace xy {
 
+  struct PlayerState {
+    HeroState hero;
+    MapState map;
+  };
+
   struct GameState {
     static constexpr uint16_t Version = 1;
 
-    std::array<HeroState, 2> heros;
-    HeroState& lisa = heros[0];
-    HeroState& ryan = heros[1];
+    std::array<PlayerState, 2> players;
+    PlayerState& lisa = players[0];
+    PlayerState& ryan = players[1];
 
-    std::array<MapState, 2> maps;
-    MapState& lisaMap = maps[0];
-    MapState& ryanMap = maps[1];
+    PlayerState& localPlayer(Hero hero) {
+      switch (hero) {
+        case Hero::Lisa:
+          return lisa;
+        case Hero::Ryan:
+          return ryan;
+      }
+
+      assert(false);
+      return lisa;
+    }
+
+    const PlayerState& localPlayer(Hero hero) const {
+      switch (hero) {
+        case Hero::Lisa:
+          return lisa;
+        case Hero::Ryan:
+          return ryan;
+      }
+
+      assert(false);
+      return lisa;
+    }
+
+    PlayerState& otherPlayer(Hero hero) {
+      switch (hero) {
+        case Hero::Lisa:
+          return ryan;
+        case Hero::Ryan:
+          return lisa;
+      }
+
+      assert(false);
+      return lisa;
+    }
+
+    const PlayerState& otherPlayer(Hero hero) const {
+      switch (hero) {
+        case Hero::Lisa:
+          return ryan;
+        case Hero::Ryan:
+          return lisa;
+      }
+
+      assert(false);
+      return lisa;
+    }
 
     void loadFromFile(const gf::Path& filename);
     void saveToFile(const gf::Path& filename);

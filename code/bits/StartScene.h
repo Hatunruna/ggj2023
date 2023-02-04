@@ -21,7 +21,6 @@ namespace xy {
     GameHub& m_game;
 
     gf::Action m_startAction;
-    gf::Action m_fullscreenAction;
 
     TitleEntity m_titleEntity;
   };
