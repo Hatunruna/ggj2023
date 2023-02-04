@@ -45,12 +45,12 @@ namespace xy {
 
     gf::SquareMap map;
     gf::Array2D<MapCell> cells;
+
+    void computeDoorsAndComputers(const std::vector<gf::Vector2i>& path);
   };
 
   struct MapState {
     std::vector<MapLevel> levels;
-
-    void createNewMap(gf::Random& random);
   };
 }
 

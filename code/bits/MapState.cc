@@ -325,10 +325,23 @@ namespace xy {
   : cells(generated)
   , map(computeMap(generated))
   {
-    const gf::Vector2i mapSize = generated.getSize();
+    std::vector<gf::Vector2i> stairs;
 
+    for (auto position : cells.getPositionRange()) {
+      if (cells(position).type == MapCellType::StairDown) {
+        stairs.push_back(position);
+      }
+    }
 
+    assert(stairs.size() == 2);
+    auto starts = map.computeRoute(stairs[0], stairs[1], 0.0);
+    assert(!starts.empty());
+    auto path = computeMultiPath(map, starts, random);
+    computeDoorsAndComputers(path);
+  }
 
+  void MapLevel::computeDoorsAndComputers(const std::vector<gf::Vector2i>& path) {
+    // TODO
   }
 
 }
