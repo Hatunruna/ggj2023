@@ -14,7 +14,9 @@ namespace xy {
   : up("Up")
   , down("Down")
   , left("Left")
-  , right("Right") {
+  , right("Right")
+  , interact("Interact")
+  {
   }
 
   MainScene::MainScene(GameHub& game)
@@ -62,6 +64,9 @@ namespace xy {
     lisaActions.right.addScancodeKeyControl(gf::Scancode::D);
     addAction(lisaActions.right);
 
+    lisaActions.interact.addKeycodeKeyControl(gf::Keycode::Space);
+    addAction(lisaActions.interact);
+
     ryanActions.up.addGamepadAxisControl(gf::AnyGamepad, gf::GamepadAxis::LeftY, gf::GamepadAxisDirection::Negative);
     ryanActions.up.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::DPadUp);
     ryanActions.up.addScancodeKeyControl(gf::Scancode::Up);
@@ -81,6 +86,10 @@ namespace xy {
     ryanActions.right.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::DPadRight);
     ryanActions.right.addScancodeKeyControl(gf::Scancode::Right);
     addAction(ryanActions.right);
+
+    ryanActions.interact.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::A);
+    ryanActions.interact.addKeycodeKeyControl(gf::Keycode::Return);
+    addAction(ryanActions.interact);
   }
 
   void MainScene::doHandleActions([[maybe_unused]] gf::Window& window) {
@@ -129,6 +138,40 @@ namespace xy {
 
     updateHeroPosition(Hero::Lisa);
     updateHeroPosition(Hero::Ryan);
+
+    // Handle interact
+    auto handleInteract = [this](Hero hero) {
+      const int heroIndex = static_cast<int>(hero);
+
+      HeroActions& actions = heroActions[heroIndex];
+      HeroState& heroState = m_game.state.players[heroIndex].hero;
+      const int levelIndex = heroState.levelIndex;
+      MapLevel& level = m_game.state.players[heroIndex].map.levels[levelIndex];
+
+      auto checkComputer = [this, &level, &heroState](gf::Vector2i position) -> bool {
+        const MapCell& cell = level.cells(position);
+        if (cell.type == MapCellType::Computer) {
+          gf::Vector2i doorPosition = cell.computerState.controlledDoor;
+          MapCell& door = level.cells(doorPosition);
+          door.doorState.isOpen = true;
+          level.map.setEmpty(doorPosition);
+          return true;
+        }
+
+        return false;
+      };
+
+      if (actions.interact.isActive()) {
+        if (checkComputer(heroState.position + gf::vec(0, 1))) {
+        } else if (checkComputer(heroState.position + gf::vec(0, -1))) {
+        } else if (checkComputer(heroState.position + gf::vec(1, 0))) {
+        } else if (checkComputer(heroState.position + gf::vec(-1, 0))) {
+        }
+      }
+    };
+
+    handleInteract(Hero::Lisa);
+    handleInteract(Hero::Ryan);
   }
 
   void MainScene::doUpdate(gf::Time time) {

@@ -12,10 +12,22 @@ namespace xy {
     Floor,
     StairUp,
     StairDown,
+    Computer,
+    Door,
   };
 
   struct MapCell {
     MapCellType type;
+
+    union {
+      struct {
+        bool isOpen;
+      } doorState;
+
+      struct {
+        gf::Vector2i controlledDoor;
+      } computerState;
+    };
   };
 
   std::vector<gf::Array2D<MapCell>> createProceduralMap(gf::Random& random);

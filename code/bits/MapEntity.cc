@@ -42,6 +42,18 @@ namespace xy {
       case MapCellType::StairUp:
         color = gf::Color::Magenta;
         break;
+
+      case MapCellType::Computer:
+        color = gf::Color::Cyan;
+        break;
+
+      case MapCellType::Door:
+        if (cell.doorState.isOpen) {
+          color = gf::Color::Orange;
+        } else {
+          color = gf::Color::Chartreuse;
+        }
+        break;
       }
 
 #if 0
