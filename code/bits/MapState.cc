@@ -4,14 +4,12 @@
 #include <gf/Log.h>
 #include <gf/Rect.h>
 
+#include "GameHub.h"
+#include "Settings.h"
+
 namespace xy {
 
   namespace {
-    constexpr int SpaceWidth = 21;
-    constexpr int CorridorWidth = 2;
-
-    constexpr int MapLength = SpaceWidth * 3 + CorridorWidth * 2 + 2;
-    constexpr gf::Vector2i MapSize = gf::vec(MapLength, MapLength);
 
     constexpr int Corridor0 = MapLength / 2;
     constexpr int Corridor1 = 1 + SpaceWidth;

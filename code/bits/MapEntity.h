@@ -6,17 +6,18 @@
 #include "Hero.h"
 
 namespace xy {
-  struct GameData;
+
+  struct GameHub;
   struct GameState;
 
   class MapEntity : public gf::Entity {
   public:
-    MapEntity(const GameState& state, Hero hero);
+    MapEntity(GameHub& game, GameState& state, Hero hero);
 
     void render(gf::RenderTarget &target, const gf::RenderStates &states) override;
 
   private:
-    const GameState& m_state;
+    GameState& m_state;
     Hero m_hero;
   };
 

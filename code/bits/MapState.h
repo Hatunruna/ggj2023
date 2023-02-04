@@ -6,6 +6,7 @@
 
 #include <gf/Array2D.h>
 #include <gf/Map.h>
+#include <gf/TileLayer.h>
 #include <gf/Random.h>
 
 namespace xy {
@@ -51,6 +52,9 @@ namespace xy {
 
   struct MapState {
     std::vector<MapLevel> levels;
+    std::vector<gf::TileLayer> layers;
+
+    void createNewMap(gf::Random& random);
   };
 }
 

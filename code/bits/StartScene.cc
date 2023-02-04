@@ -3,6 +3,7 @@
 #include <gf/Color.h>
 
 #include "GameHub.h"
+#include "Settings.h"
 
 namespace xy {
 
@@ -37,7 +38,9 @@ namespace xy {
 
       bool first = true;
 
-      for (auto & level : levels) {
+      for (int i = 0; i < levels.size(); ++i) {
+        auto & level = levels[i];
+
         if (first) {
           first = false;
 
@@ -53,6 +56,33 @@ namespace xy {
           m_game.state.lisa.map.levels.push_back(mapLevel);
           m_game.state.ryan.map.levels.push_back(std::move(mapLevel));
         }
+
+        auto createLevelTileLayer = [this](const gf::Array2D<MapCell>& cells, Hero hero) -> gf::TileLayer {
+          gf::TileLayer tileLayer = gf::TileLayer::createOrthogonal(MapSize, CellSize);
+          PlayerState& playerState = (hero == Hero::Lisa) ? m_game.state.lisa : m_game.state.ryan;
+          std::size_t tileSetId = tileLayer.createTilesetId();
+          gf::Tileset& tileset = tileLayer.getTileset(tileSetId);
+          tileset.setTexture(m_game.resources.getTexture("images/floor.png"));
+          tileset.setSmooth();
+          tileset.setTileSize(SpriteSize);
+
+          for (const auto& cellPostion: cells.getPositionRange()) {
+            const auto& cell = cells(cellPostion);
+            switch (cell.type) {
+              case MapCellType::Floor:
+                tileLayer.setTile(cellPostion, tileSetId, 0);
+                break;
+
+              default:
+                break;
+            }
+          }
+
+          return std::move(tileLayer);
+        };
+
+        m_game.state.lisa.map.layers.emplace_back(std::move(createLevelTileLayer(level, Hero::Lisa)));
+        m_game.state.ryan.map.layers.emplace_back(std::move(createLevelTileLayer(level, Hero::Ryan)));
       }
 
       // TODO: set position from generated map
