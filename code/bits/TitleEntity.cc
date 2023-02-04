@@ -9,7 +9,7 @@
 namespace xy {
 
   TitleEntity::TitleEntity(gf::ResourceManager& resources)
-  : m_font(resources.getFont("GoudyBookletter1911.otf"))
+  : m_font(resources.getFont("Deportees.otf"))
 //   , m_backgroundTexture(resources.getTexture("logo.png"))
   {
   }
