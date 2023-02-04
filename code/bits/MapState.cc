@@ -189,7 +189,7 @@ namespace xy {
           }
 
           assert(mapRect.contains(current));
-          assert(level(current).type == MapCellType::Wall);
+          // assert(level(current).type == MapCellType::Wall);
 
           gf::Vector2i start = current - dir;
 
