@@ -1,5 +1,7 @@
 #include "MapState.h"
 
+#include <stack>
+
 #include <gf/Log.h>
 #include <gf/Rect.h>
 
@@ -64,9 +66,9 @@ namespace xy {
         int h2 = random.computeUniformInteger(Corridor2 - CorridorExtent, Corridor2 + CorridorExtent);
         int v0 = random.computeUniformInteger(Corridor0 - CorridorExtent, Corridor0 + CorridorExtent);
 
-        corridors.push_back(gf::RectI::fromPositionSize(gf::vec(0, h1), gf::vec(mapSize.width, CorridorWidth)));
-        corridors.push_back(gf::RectI::fromPositionSize(gf::vec(0, h2), gf::vec(mapSize.width, CorridorWidth)));
-        corridors.push_back(gf::RectI::fromPositionSize(gf::vec(v0, 0), gf::vec(CorridorWidth, mapSize.height)));
+        corridors.push_back(gf::RectI::fromPositionSize(gf::vec(1, h1), gf::vec(mapSize.width - 2, CorridorWidth)));
+        corridors.push_back(gf::RectI::fromPositionSize(gf::vec(1, h2), gf::vec(mapSize.width - 2, CorridorWidth)));
+        corridors.push_back(gf::RectI::fromPositionSize(gf::vec(v0, 1), gf::vec(CorridorWidth, mapSize.height - 2)));
       } else {
         // 1 horizontal, 2 vertical
 
@@ -74,12 +76,10 @@ namespace xy {
         int v2 = random.computeUniformInteger(Corridor2 - CorridorExtent, Corridor2 + CorridorExtent);
         int h0 = random.computeUniformInteger(Corridor0 - CorridorExtent, Corridor0 + CorridorExtent);
 
-        corridors.push_back(gf::RectI::fromPositionSize(gf::vec(v1, 0), gf::vec(CorridorWidth, mapSize.height)));
-        corridors.push_back(gf::RectI::fromPositionSize(gf::vec(v2, 0), gf::vec(CorridorWidth, mapSize.height)));
-        corridors.push_back(gf::RectI::fromPositionSize(gf::vec(0, h0), gf::vec(mapSize.width, CorridorWidth)));
+        corridors.push_back(gf::RectI::fromPositionSize(gf::vec(v1, 1), gf::vec(CorridorWidth, mapSize.height - 2)));
+        corridors.push_back(gf::RectI::fromPositionSize(gf::vec(v2, 1), gf::vec(CorridorWidth, mapSize.height - 2)));
+        corridors.push_back(gf::RectI::fromPositionSize(gf::vec(1, h0), gf::vec(mapSize.width - 2, CorridorWidth)));
       }
-
-      // TODO: set top of the stairs
 
       std::vector<gf::RectI> rooms = stairs;
 
@@ -182,15 +182,16 @@ namespace xy {
           auto current = room.getCenter();
           assert(level(current).type == MapCellType::Floor);
 
-          while (level(current + dir).type == MapCellType::Floor) {
+          current += dir;
+
+          while (level(current).type == MapCellType::Floor) {
             current += dir;
           }
 
           assert(mapRect.contains(current));
           assert(level(current).type == MapCellType::Wall);
 
-          gf::Vector2i start = current;
-          current += dir;
+          gf::Vector2i start = current - dir;
 
           while (mapRect.contains(current) && level(current).type == MapCellType::Wall
             && level(current + gf::perp(dir)).type == MapCellType::Wall
@@ -226,8 +227,9 @@ namespace xy {
     std::vector<gf::Array2D<MapCell>> levels;
     std::vector<gf::RectI> stairs;
 
-    for (int i = 0; i < 2; ++i) {
-      levels.emplace_back(generateLevel(MapSize, stairs, i));
+    for (int i = 0; i < 10; ++i) {
+      auto level = generateLevel(MapSize, stairs, i);
+      levels.emplace_back(std::move(level));
     }
 
     return levels;
@@ -258,6 +260,17 @@ namespace xy {
 
       }
     }
+
+    enum class CellStatus : char {
+      Unexplored,
+      Visited,
+    };
+
+    gf::Array2D<CellStatus> status(mapSize, CellStatus::Unexplored);
+    std::stack<gf::Vector2i> stack;
+    std::vector<gf::Vector2i> path;
+
+
 
   }
 
