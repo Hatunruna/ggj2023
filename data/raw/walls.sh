@@ -20,7 +20,10 @@ montage_line "$TMP/walls_10.png" "wall_inter_down"
 montage_line "$TMP/walls_11.png" "wall_cross"
 montage_line "$TMP/walls_12.png" "door_row"
 montage_line "$TMP/walls_13.png" "door_col"
+montage_line "$TMP/walls_14.png" "lift_"
+montage_line "$TMP/walls_15.png" "stairs_"
+montage_line "$TMP/walls_16.png" "computer"
 
-montage "$TMP/*.png" -background none -tile 1x16 -geometry 4096x256  png32:walls.png
+montage "$TMP/*.png" -background none -tile 1x17 -geometry 4096x256  png32:walls.png
 
 rm -rf "$TMP"
