@@ -13,9 +13,8 @@ namespace rc {
     void update(gf::Time time) override;
     void render(gf::RenderTarget &target, const gf::RenderStates &states) override;
   private:
-    gf::Font& m_font_title;
-    gf::Font& m_font_sub_title;
-//     gf::Texture& m_backgroundTexture;
+    gf::Font& m_fontTitle;
+    gf::Font& m_fontSubTitle;
   };
 
 
