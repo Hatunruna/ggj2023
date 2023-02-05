@@ -2,6 +2,7 @@
 #define RC_LIFT_ENTITY_H
 
 #include <gf/Animation.h>
+#include <gf/Coordinates.h>
 #include <gf/Entity.h>
 #include <gf/ResourceManager.h>
 

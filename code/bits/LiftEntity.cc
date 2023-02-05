@@ -82,9 +82,12 @@ namespace rc {
   }
 
   void LiftEntity::render(gf::RenderTarget &target, const gf::RenderStates &states) {
+    gf::Coordinates coords(target);
     gf::AnimatedSprite sprite;
     sprite.setAnimation(*m_currentAnimation);
     sprite.setPosition(gf::vec(0.0f, 0.0f));
+    float scale = coords.getWindowSize().y / 1080.f;
+    sprite.setScale(scale);
     target.draw(sprite, states);
   }
 
