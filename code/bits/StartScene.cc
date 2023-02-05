@@ -79,7 +79,7 @@ namespace rc {
 
           RootState root;
           root.tail = root.head = ryan + gf::diry(5);
-          root.parts.push_back(root.tail);
+          root.parts.push_back({ root.tail, gf::vec(0, 15) });
 
           m_game.state.roots.push_back(root);
 
@@ -209,11 +209,11 @@ namespace rc {
             }
           }
 
-          return std::move(tileLayer);
+          return tileLayer;
         };
 
-        m_game.state.lisa.map.layers.emplace_back(std::move(createLevelTileLayer(level, Hero::Lisa)));
-        m_game.state.ryan.map.layers.emplace_back(std::move(createLevelTileLayer(level, Hero::Ryan)));
+        m_game.state.lisa.map.layers.push_back(createLevelTileLayer(level, Hero::Lisa));
+        m_game.state.ryan.map.layers.push_back(createLevelTileLayer(level, Hero::Ryan));
       }
 
       // TODO: set position from generated map

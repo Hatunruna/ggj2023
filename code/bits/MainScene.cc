@@ -28,8 +28,9 @@ namespace rc {
   , m_rtMap(game, game.state, Hero::Ryan)
   , m_ltHero(game.state, Hero::Lisa, m_game.resources)
   , m_rtHero(game.state, Hero::Ryan, m_game.resources)
-  , m_ltRoot(game.state, Hero::Lisa, m_game.resources, m_game.random)
-  , m_rtRoot(game.state, Hero::Ryan, m_game.resources, m_game.random)
+  , m_rootModel(game.state, m_game.random)
+  , m_ltRoot(game.state, Hero::Lisa, m_game.resources)
+  , m_rtRoot(game.state, Hero::Ryan, m_game.resources)
   {
     auto ltViewport = gf::RectF::fromPositionSize({ 0.0f, 0.0f }, { 0.5f, 1.0f });
     m_ltWorldView.setViewport(ltViewport);
@@ -44,6 +45,8 @@ namespace rc {
     addView(m_rtHudView);
 
     setClearColor(gf::Color::Black);
+
+    addModel(m_rootModel);
 
     m_ltWorldEntities.addEntity(m_ltMap);
     m_ltWorldEntities.addEntity(m_ltHero);

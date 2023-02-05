@@ -8,6 +8,7 @@
 #include "HeroEntity.h"
 #include "MapEntity.h"
 #include "RootEntity.h"
+#include "RootModel.h"
 #include "SplitEntity.h"
 
 namespace rc {
@@ -62,6 +63,7 @@ private:
   HeroEntity m_ltHero;
   HeroEntity m_rtHero;
 
+  RootModel m_rootModel;
   RootEntity m_ltRoot;
   RootEntity m_rtRoot;
 

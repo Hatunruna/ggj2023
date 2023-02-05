@@ -7,11 +7,16 @@
 
 namespace rc {
 
+  struct RootPart {
+    gf::Vector2i position;
+    gf::Vector2i tile;
+  };
+
   struct RootState {
     gf::Vector2i tail;
     gf::Vector2i head;
 
-    std::vector<gf::Vector2i> parts;
+    std::vector<RootPart> parts;
   };
 
 }
