@@ -27,6 +27,10 @@ namespace rc {
   private:
     GameState& m_state;
     gf::Random& m_random;
+    gf::Time m_lightTime;
+    gf::Time m_lightLimit;
+    gf::Time m_darkTime;
+    gf::Time m_darkLimit;
     gf::Time m_time;
   };
 

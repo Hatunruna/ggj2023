@@ -8,7 +8,7 @@ namespace rc {
 
   namespace {
 
-    constexpr gf::Time RootUpdate = gf::seconds(1);
+    constexpr gf::Time RootUpdate = gf::seconds(0.1f);
 
     constexpr int RootsCount[] = {
       4, 4, 4, 4, 12, 4, 4, 4, 4, 12, 4, 4, 4, 4, 8, 0
@@ -31,11 +31,41 @@ namespace rc {
   RootModel::RootModel(GameState& state, gf::Random& random)
   : m_state(state)
   , m_random(random)
+  , m_lightTime(gf::Time::zero())
+  , m_lightLimit(gf::seconds(1.0f))
   , m_time(RootUpdate)
   {
   }
 
   void RootModel::update(gf::Time time) {
+    if (m_state.phase == GamePhase::Light) {
+      m_lightTime += time;
+
+      if (m_lightTime > m_lightLimit) {
+        m_state.phase = GamePhase::Dark;
+        m_darkTime = gf::Time::zero();
+        m_darkLimit = gf::seconds(m_random.computeUniformFloat(0.05f, 0.3f));
+      }
+
+    } else {
+      m_darkTime += time;
+
+      if (m_darkTime > m_darkLimit) {
+        m_state.phase = GamePhase::Light;
+        m_lightTime = gf::Time::zero();
+
+        if (m_random.computeBernoulli(0.3f)) {
+          m_lightLimit = gf::seconds(m_random.computeUniformFloat(5.0f, 8.0f));
+        } else {
+          m_lightLimit = gf::seconds(m_random.computeUniformFloat(0.05f, 0.3f));
+        }
+      }
+    }
+
+    if (m_state.phase == GamePhase::Light) {
+      time = gf::seconds(time.asSeconds() * 0.1f);
+    }
+
     m_time += time;
 
     if (m_time < RootUpdate) {

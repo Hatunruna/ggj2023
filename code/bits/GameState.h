@@ -14,6 +14,11 @@
 
 namespace rc {
 
+  enum class GamePhase {
+    Light,
+    Dark,
+  };
+
   struct PlayerState {
     HeroState hero;
     MapState map;
@@ -21,6 +26,8 @@ namespace rc {
 
   struct GameState {
     static constexpr uint16_t Version = 1;
+
+    GamePhase phase = GamePhase::Light;
 
     std::array<PlayerState, 2> players;
     PlayerState& lisa = players[0];

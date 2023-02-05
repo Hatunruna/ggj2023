@@ -26,6 +26,10 @@ namespace rc {
   }
 
   void RootEntity::render(gf::RenderTarget &target, const gf::RenderStates &states) {
+    if (m_state.phase == GamePhase::Dark) {
+      return;
+    }
+
     const HeroState& localState = m_state.localPlayer(m_hero).hero;
 
     std::size_t levelIndex = localState.levelIndex;

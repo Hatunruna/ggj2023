@@ -58,6 +58,10 @@ namespace rc {
   }
 
   void HeroEntity::render(gf::RenderTarget &target, const gf::RenderStates &states) {
+    if (m_state.phase == GamePhase::Dark) {
+      return;
+    }
+
     const HeroState& localState = m_state.localPlayer(m_hero).hero;
     const HeroState& otherState = m_state.otherPlayer(m_hero).hero;
     const gf::SquareMap& localLevel = m_state.localPlayer(m_hero).map.levels[localState.levelIndex].map;
