@@ -89,42 +89,42 @@ namespace rc {
 
       if (levelNumber % 2 == 0) {
         auto position1 = gf::vec(
-          random.computeUniformInteger(1, Corridor1 - CorridorExtent - StairsSize - 1),
-          random.computeUniformInteger(Corridor2 + CorridorExtent + 1, MapLength - StairsSize - 2)
+          random.computeUniformInteger(1, Corridor1 - CorridorExtent - StairsSize - 2),
+          random.computeUniformInteger(Corridor2 + CorridorExtent + 2, MapLength - StairsSize - 2)
         );
 
         gf::RectI stair1 = gf::RectI::fromPositionSize(position1, gf::vec(StairsSize, StairsSize));
 
-        assert(!hasCollision(stair1));
+        assert(!hasCollision(stair1) && "even");
         stairs.push_back(stair1);
 
         auto position2 = gf::vec(
-          random.computeUniformInteger(Corridor2 + CorridorExtent + 1, MapLength - StairsSize - 2),
-          random.computeUniformInteger(1, Corridor1 - CorridorExtent - StairsSize - 1)
+          random.computeUniformInteger(Corridor2 + CorridorExtent + 2, MapLength - StairsSize - 2),
+          random.computeUniformInteger(1, Corridor1 - CorridorExtent - StairsSize - 2)
         );
 
         gf::RectI stair2 = gf::RectI::fromPositionSize(position2, gf::vec(StairsSize, StairsSize));
-        assert(!hasCollision(stair2));
+        assert(!hasCollision(stair2) && "even");
         stairs.push_back(stair2);
 
       } else {
         auto position1 = gf::vec(
-          random.computeUniformInteger(1, Corridor1 - CorridorExtent - StairsSize - 1),
-          random.computeUniformInteger(1, Corridor1 - CorridorExtent - StairsSize - 1)
+          random.computeUniformInteger(1, Corridor1 - CorridorExtent - StairsSize - 2),
+          random.computeUniformInteger(1, Corridor1 - CorridorExtent - StairsSize - 2)
         );
 
         gf::RectI stair1 = gf::RectI::fromPositionSize(position1, gf::vec(StairsSize, StairsSize));
 
-        assert(!hasCollision(stair1));
+        assert(!hasCollision(stair1) && "odd");
         stairs.push_back(stair1);
 
         auto position2 = gf::vec(
-          random.computeUniformInteger(Corridor2 + CorridorExtent + 1, MapLength - StairsSize - 2),
-          random.computeUniformInteger(Corridor2 + CorridorExtent + 1, MapLength - StairsSize - 2)
+          random.computeUniformInteger(Corridor2 + CorridorExtent + 2, MapLength - StairsSize - 2),
+          random.computeUniformInteger(Corridor2 + CorridorExtent + 2, MapLength - StairsSize - 2)
         );
 
         gf::RectI stair2 = gf::RectI::fromPositionSize(position2, gf::vec(StairsSize, StairsSize));
-        assert(!hasCollision(stair2));
+        assert(!hasCollision(stair2) && "odd");
         stairs.push_back(stair2);
 
       }

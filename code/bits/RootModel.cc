@@ -98,8 +98,6 @@ namespace rc {
 
     RootState& root = m_state.roots[levelIndex];
 
-    gf::Log::debug("Head: %i, %i, Next: %i,%i\n", root.head.x, root.head.y, next.x, next.y);
-
     root.head = next;
     root.parts.push_back({ root.head, gf::vec(0, 0) });
     updateRoot(root);
