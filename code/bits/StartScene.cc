@@ -63,8 +63,11 @@ namespace rc {
     if (m_startAction.isActive()) {
       auto levels = createProceduralMap(m_game.random);
 
+      m_game.state.roots.clear();
       m_game.state.lisa.map.levels.clear();
+      m_game.state.lisa.map.layers.clear();
       m_game.state.ryan.map.levels.clear();
+      m_game.state.ryan.map.layers.clear();
 
       bool first = true;
 
@@ -262,8 +265,7 @@ namespace rc {
         m_game.state.ryan.map.layers.push_back(createLevelTileLayer(m_game.state.ryan.map.levels.back().level.cells, Hero::Ryan));
       }
 
-      // TODO: set position from generated map
-
+      m_game.state.status = GameStatus::Playing;
       m_game.replaceScene(m_game.lift); //, m_game.blackout, gf::seconds(TransitionDelay));
     }
   }

@@ -34,7 +34,7 @@ namespace rc {
     }
 
     if (m_startAction.isActive()) {
-      m_game.replaceAllScenes(m_game.main);
+      m_game.replaceScene(m_game.main);
     }
   }
 
