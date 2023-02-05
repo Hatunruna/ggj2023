@@ -127,6 +127,11 @@ namespace rc {
 
     RootState& root = m_state.roots[levelIndex];
 
+    if (root.head == player.hero.position) {
+      m_state.status = GameStatus::GameOver;
+      return std::nullopt;
+    }
+
     auto path = player.map.levels[levelIndex].map.computeRoute(root.head, player.hero.position, 0.0f);
 
     if (path.size() < 2) {

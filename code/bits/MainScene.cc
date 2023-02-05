@@ -120,17 +120,22 @@ namespace rc {
     auto updateHeroDir = [this](Hero hero) {
       HeroEntity& entity = (hero == Hero::Lisa) ? m_ltHero : m_rtHero;
       HeroActions& actions = heroActions[static_cast<int>(hero)];
+      bool finished = false;
 
       if (actions.right.isActive()) {
-        entity.move(gf::Direction::Right);
+        finished = entity.move(gf::Direction::Right);
       } else if (actions.left.isActive()) {
-        entity.move(gf::Direction::Left);
+        finished = entity.move(gf::Direction::Left);
       } else if (actions.down.isActive()) {
-        entity.move(gf::Direction::Down);
+        finished = entity.move(gf::Direction::Down);
       } else if (actions.up.isActive()) {
-        entity.move(gf::Direction::Up);
+        finished = entity.move(gf::Direction::Up);
       } else {
         entity.move(gf::Direction::Center);
+      }
+
+      if (finished) {
+        m_game.state.status = GameStatus::Victory;
       }
     };
 
@@ -177,6 +182,14 @@ namespace rc {
   }
 
   void MainScene::doUpdate(gf::Time time) {
+    if (m_game.state.status == GameStatus::Victory) {
+      m_game.replaceScene(m_game.gameOver);
+    }
+
+    if (m_game.state.status == GameStatus::GameOver) {
+      m_game.replaceScene(m_game.gameOver);
+    }
+
     m_ltWorldEntities.update(time);
     m_rtWorldEntities.update(time);
     m_ltHudEntities.update(time);

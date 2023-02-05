@@ -3,7 +3,8 @@
 ## 17h
 
 - finir la génération procédurale
-  - ordinateur
+  - racine
+- mécanique ordinateur / porte
 - mécanique croissance plante / lumière
   - lumière
 

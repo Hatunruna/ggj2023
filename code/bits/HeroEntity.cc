@@ -138,20 +138,20 @@ namespace rc {
     }
   }
 
-  void HeroEntity::move(gf::Direction dir) {
+  bool HeroEntity::move(gf::Direction dir) {
     HeroState& currentState = m_state.localPlayer(m_hero).hero;
     HeroState& otherState = m_state.otherPlayer(m_hero).hero;
 
     if (dir == gf::Direction::Center) {
       m_stillRunning = false;
-      return;
+      return false;
     }
 
     m_stillRunning = true;
 
     if (m_moveCooldown < MoveCooldown) {
 //       gf::Log::debug("Cooldown not yet finished!\n");
-      return;
+      return false;
     }
 
     m_currentDirection = dir;
@@ -166,7 +166,7 @@ namespace rc {
       && (otherState.position == nextPos);
     if (nextPos == currentState.position || !level.map.isWalkable(nextPos) || nextPositionAlreadyOccupied) {
 //       gf::Log::debug("Collision!\n");
-      return;
+      return false;
     }
 
     // stairs things
@@ -174,6 +174,10 @@ namespace rc {
       --currentState.levelIndex;
       currentState.useStairs = true;
     } else if (level.level.cells(nextPos).type == MapCellType::StairUp && !currentState.useStairs) {
+      if (currentState.levelIndex + 1 == Levels) {
+        return true;
+      }
+
       ++currentState.levelIndex;
       currentState.useStairs = true;
     } else {
@@ -183,5 +187,6 @@ namespace rc {
 //     gf::Log::debug("New target!\n");
     currentState.target = nextPos;
     m_moveCooldown = gf::seconds(0);
+    return false;
   }
 }
