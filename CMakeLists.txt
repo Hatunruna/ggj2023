@@ -21,10 +21,12 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/code/config.h.in ${CMAKE_CURRENT_BINA
 add_executable(${GAME}
   code/main.cc
   code/bits/CommonScene.cc
+  code/bits/DialogEntity.cc
   code/bits/GameHub.cc
   code/bits/GameState.cc
   code/bits/Hero.cc
   code/bits/HeroEntity.cc
+  code/bits/LiftScene.cc
   code/bits/MainScene.cc
   code/bits/MapEntity.cc
   code/bits/MapState.cc

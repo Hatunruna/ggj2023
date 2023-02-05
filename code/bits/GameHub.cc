@@ -9,6 +9,7 @@ namespace rc {
   , common(*this)
   , start(*this)
   , main(*this)
+  , lift(*this)
   {
     gf::Ref<gf::Scene> scenes[] = { common, start };
     pushScenes(scenes);

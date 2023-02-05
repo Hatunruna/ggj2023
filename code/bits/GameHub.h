@@ -5,6 +5,7 @@
 
 #include "CommonScene.h"
 #include "GameState.h"
+#include "LiftScene.h"
 #include "MainScene.h"
 #include "StartScene.h"
 
@@ -18,6 +19,7 @@ namespace rc {
     CommonScene common;
     StartScene start;
     MainScene main;
+    LiftScene lift;
   };
 
 
