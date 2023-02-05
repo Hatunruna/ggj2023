@@ -9,7 +9,7 @@
 namespace rc {
 
   GameOverEntity::GameOverEntity(gf::ResourceManager& resources)
-  : m_texture(resources.getTexture("images/title.jpg"))
+  : m_texture(resources.getTexture("images/game_over_screen.jpg"))
   {
   }
 
