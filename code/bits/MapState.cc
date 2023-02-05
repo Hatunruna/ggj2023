@@ -243,6 +243,33 @@ namespace xy {
         }
       }
 
+      // Add open door at room entries
+      for (const auto& room: rooms) {
+        // Horizontal doors
+        for (int col = room.min.x - 1; col < room.max.x + 1; ++col) {
+          for (int row: { room.min.y - 1, room.max.y }) {
+            MapCell& cell = level(gf::vec(col, row));
+
+            if (cell.type == MapCellType::Floor) {
+              cell.type = MapCellType::Door;
+              cell.doorState.isOpen = true;
+            }
+          }
+        }
+
+        // Vertical doors
+        for (int col: { room.min.x - 1, room.max.x }) {
+          for (int row = room.min.y - 1; row < room.max.y + 1; ++row) {
+            MapCell& cell = level(gf::vec(col, row));
+
+            if (cell.type == MapCellType::Floor) {
+              cell.type = MapCellType::Door;
+              cell.doorState.isOpen = true;
+            }
+          }
+        }
+      }
+
       return level;
     };
 
@@ -287,6 +314,11 @@ namespace xy {
         case MapCellType::StairUp:
           map.setEmpty(gf::vec(col, row));
           break;
+
+        case MapCellType::Door:
+          if (cell.doorState.isOpen) {
+            map.setEmpty(gf::vec(col, row));
+          }
 
         default:
           break;
@@ -354,9 +386,9 @@ namespace xy {
       starts = map.computeRoute(stairs[0], stairs[1], 0.0);
     }
 
-    assert(!starts.empty());
-    auto path = computeMultiPath(map, starts, random);
-    computeDoorsAndComputers(path);
+    // assert(!starts.empty());
+    // auto path = computeMultiPath(map, starts, random);
+    // computeDoorsAndComputers(path);
   }
 
   void MapLevel::computeDoorsAndComputers(const std::vector<gf::Vector2i>& path) {
