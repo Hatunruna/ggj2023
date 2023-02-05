@@ -3,6 +3,7 @@
 
 #include <gf/GameManager.h>
 
+#include "AudioManager.h"
 #include "CommonScene.h"
 #include "GameState.h"
 #include "GameOverScene.h"
@@ -16,6 +17,8 @@ namespace rc {
   struct GameHub : gf::GameManager {
     GameHub();
 
+    AudioManager audio;
+
     GameState state;
 
     CommonScene common;
@@ -24,6 +27,7 @@ namespace rc {
     MainScene main;
     VictoryScene victory;
     GameOverScene gameOver;
+
   };
 
 

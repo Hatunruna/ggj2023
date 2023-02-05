@@ -33,6 +33,7 @@ namespace rc {
   , m_ltRoot(game.state, Hero::Lisa, m_game.resources)
   , m_rtRoot(game.state, Hero::Ryan, m_game.resources)
   , m_light(game.state)
+  , m_ambianceMusic(game.audio.getMusic("sounds/stage.ogg"))
   {
     auto ltViewport = gf::RectF::fromPositionSize({ 0.0f, 0.0f }, { 0.5f, 1.0f });
     m_ltWorldView.setViewport(ltViewport);
@@ -110,6 +111,9 @@ namespace rc {
     ryanActions.interact.addGamepadButtonControl(gf::AnyGamepad, gf::GamepadButton::A);
     ryanActions.interact.addKeycodeKeyControl(gf::Keycode::Return);
     addAction(ryanActions.interact);
+
+    m_ambianceMusic.setLoop(true);
+    m_ambianceMusic.play();
   }
 
   void MainScene::doHandleActions([[maybe_unused]] gf::Window& window) {

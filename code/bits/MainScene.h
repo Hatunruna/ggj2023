@@ -5,6 +5,8 @@
 #include <gf/Action.h>
 #include <gf/Direction.h>
 
+#include <SFML/Audio.hpp>
+
 #include "HeroEntity.h"
 #include "LightEntity.h"
 #include "MapEntity.h"
@@ -76,6 +78,8 @@ private:
   std::array<HeroActions, 2> heroActions;
   HeroActions& lisaActions = heroActions[0];
   HeroActions& ryanActions = heroActions[1];
+
+  sf::Music& m_ambianceMusic;
 };
 
 }

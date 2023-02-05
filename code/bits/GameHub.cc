@@ -6,6 +6,7 @@ namespace rc {
 
   GameHub::GameHub()
   : GameManager("Root Company", { GAME_RELATIVE_DATADIR, GAME_DATADIR })
+  , audio({ GAME_RELATIVE_DATADIR, GAME_DATADIR })
   , common(*this)
   , start(*this)
   , lift(*this)
