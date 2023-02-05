@@ -178,19 +178,24 @@ namespace rc {
                 const MapCellType cellUp     = (cellPostion.y > 0)                   ? cells(cellPostion + gf::vec( 0, -1)).type : MapCellType::Void;
                 const MapCellType cellDown   = (cellPostion.y < MapSize.height - 1)  ? cells(cellPostion + gf::vec( 0,  1)).type : MapCellType::Void;
 
-                bool cellLeftIsWall = cellLeft == MapCellType::Wall;
-                bool cellRightIsWall = cellRight == MapCellType::Wall;
-                bool cellUpIsWall = cellUp == MapCellType::Wall;
-                bool cellDownIsWall = cellDown == MapCellType::Wall;
+                bool cellLeftIsWall = cellLeft == MapCellType::Wall || cellLeft == MapCellType::Door;
+                bool cellRightIsWall = cellRight == MapCellType::Wall || cellRight == MapCellType::Door;
+                bool cellUpIsWall = cellUp == MapCellType::Wall || cellUp == MapCellType::Door;
+                bool cellDownIsWall = cellDown == MapCellType::Wall || cellDown == MapCellType::Door;
 
-                if (cellLeftIsWall && cellRightIsWall && !cellUpIsWall && !cellDownIsWall) {
+                bool cellLeftIsNotWall = cellLeft != MapCellType::Wall;
+                bool cellRightIsNotWall = cellRight != MapCellType::Wall;
+                bool cellUpIsNotWall = cellUp != MapCellType::Wall;
+                bool cellDownIsNotWall = cellDown != MapCellType::Wall;
+
+                if (cellLeftIsWall && cellRightIsWall && cellUpIsNotWall && cellDownIsNotWall) {
                   if (cell.doorState.isOpen) {
                     tileLayer.setTile(cellPostion, tileSetId, static_cast<int>(TileType::DoorRowOpened));
                   } else {
                     tileLayer.setTile(cellPostion, tileSetId, static_cast<int>(TileType::DoorRowClosed));
                   }
                 }
-                else if (!cellLeftIsWall && !cellRightIsWall && cellUpIsWall && cellDownIsWall) {
+                else if (cellLeftIsNotWall && cellRightIsNotWall && cellUpIsWall && cellDownIsWall) {
                   if (cell.doorState.isOpen) {
                     tileLayer.setTile(cellPostion, tileSetId, static_cast<int>(TileType::DoorColumnOpened));
                   } else {
