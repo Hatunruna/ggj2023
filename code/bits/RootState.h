@@ -1,11 +1,11 @@
-#ifndef XY_ROOT_STATE_H
-#define XY_ROOT_STATE_H
+#ifndef RC_ROOT_STATE_H
+#define RC_ROOT_STATE_H
 
 #include <vector>
 
 #include <gf/Vector.h>
 
-namespace xy {
+namespace rc {
 
   struct RootState {
     gf::Vector2i tail;
@@ -16,4 +16,4 @@ namespace xy {
 
 }
 
-#endif // XY_ROOT_STATE_H
+#endif // RC_ROOT_STATE_H

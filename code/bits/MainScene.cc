@@ -5,7 +5,7 @@
 #include "GameHub.h"
 #include "Settings.h"
 
-namespace xy {
+namespace rc {
 
   constexpr float ViewSize = 1000.0f;
   // constexpr float ViewSize = 5000.0f;

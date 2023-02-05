@@ -4,7 +4,7 @@
 
 #include "GameHub.h"
 
-namespace xy {
+namespace rc {
 
   CommonScene::CommonScene(GameHub& game)
   : gf::Scene(game.getRenderer().getSize())

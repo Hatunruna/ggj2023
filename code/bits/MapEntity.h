@@ -1,11 +1,11 @@
-#ifndef XY_MAP_ENTITY_H
-#define XY_MAP_ENTITY_H
+#ifndef RC_MAP_ENTITY_H
+#define RC_MAP_ENTITY_H
 
 #include <gf/Entity.h>
 
 #include "Hero.h"
 
-namespace xy {
+namespace rc {
 
   struct GameHub;
   struct GameState;
@@ -23,4 +23,4 @@ namespace xy {
 
 }
 
-#endif // XY_MAP_ENTITY_H
+#endif // RC_MAP_ENTITY_H

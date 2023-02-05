@@ -1,9 +1,9 @@
-#ifndef XY_SPLIT_ENTITY_H
-#define XY_SPLIT_ENTITY_H
+#ifndef RC_SPLIT_ENTITY_H
+#define RC_SPLIT_ENTITY_H
 
 #include <gf/Entity.h>
 
-namespace xy {
+namespace rc {
 
   class SplitEntity : public gf::Entity {
   public:
@@ -12,4 +12,4 @@ namespace xy {
 
 }
 
-#endif // XY_SPLIT_ENTITY_H
+#endif // RC_SPLIT_ENTITY_H

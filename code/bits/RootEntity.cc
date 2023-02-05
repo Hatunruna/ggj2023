@@ -7,7 +7,7 @@
 #include "GameState.h"
 #include "Settings.h"
 
-namespace xy {
+namespace rc {
 
   namespace {
     constexpr int RootsBaseSize = 256;

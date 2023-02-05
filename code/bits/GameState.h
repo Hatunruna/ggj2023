@@ -1,5 +1,5 @@
-#ifndef XY_GAME_STATE_H
-#define XY_GAME_STATE_H
+#ifndef RC_GAME_STATE_H
+#define RC_GAME_STATE_H
 
 #include <cassert>
 #include <cstdint>
@@ -12,7 +12,7 @@
 #include "MapState.h"
 #include "RootState.h"
 
-namespace xy {
+namespace rc {
 
   struct PlayerState {
     HeroState hero;
@@ -88,4 +88,4 @@ namespace xy {
 }
 
 
-#endif // XY_GAME_STATE_H
+#endif // RC_GAME_STATE_H

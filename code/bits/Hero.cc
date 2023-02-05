@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-namespace xy {
+namespace rc {
   int getOtherHeroIndex(Hero hero) {
     switch (hero) {
       case Hero::Lisa:

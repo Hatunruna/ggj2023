@@ -2,10 +2,10 @@
 
 #include "config.h"
 
-namespace xy {
+namespace rc {
 
   GameHub::GameHub()
-  : GameManager("Game", { GAME_RELATIVE_DATADIR, GAME_DATADIR })
+  : GameManager("Root Company", { GAME_RELATIVE_DATADIR, GAME_DATADIR })
   , common(*this)
   , start(*this)
   , main(*this)

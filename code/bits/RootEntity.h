@@ -1,5 +1,5 @@
-#ifndef XY_ROOT_ENTITY_H
-#define XY_ROOT_ENTITY_H
+#ifndef RC_ROOT_ENTITY_H
+#define RC_ROOT_ENTITY_H
 
 #include <gf/Entity.h>
 #include <gf/Random.h>
@@ -8,7 +8,7 @@
 
 #include "Hero.h"
 
-namespace xy {
+namespace rc {
   struct GameState;
 
   class RootEntity : public gf::Entity {
@@ -26,4 +26,4 @@ namespace xy {
 
 }
 
-#endif // XY_ROOT_ENTITY_H
+#endif // RC_ROOT_ENTITY_H

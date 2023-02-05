@@ -1,5 +1,5 @@
-#ifndef XY_MAP_STATE_H
-#define XY_MAP_STATE_H
+#ifndef RC_MAP_STATE_H
+#define RC_MAP_STATE_H
 
 #include <tuple>
 #include <vector>
@@ -9,7 +9,7 @@
 #include <gf/TileLayer.h>
 #include <gf/Random.h>
 
-namespace xy {
+namespace rc {
 
   enum class MapCellType {
     Void,
@@ -63,4 +63,4 @@ namespace xy {
   };
 }
 
-#endif // XY_MAP_STATE_H
+#endif // RC_MAP_STATE_H

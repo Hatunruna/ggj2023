@@ -1,9 +1,9 @@
-#ifndef XY_SETTINGS_H
-#define XY_SETTINGS_H
+#ifndef RC_SETTINGS_H
+#define RC_SETTINGS_H
 
 #include <gf/Vector.h>
 
-namespace xy {
+namespace rc {
 
   inline constexpr gf::Vector2f CellSize = gf::vec(64.0f, 64.0f);
   inline constexpr gf::Vector2i SpriteSize = gf::vec(256, 256);
@@ -16,4 +16,4 @@ namespace xy {
 
 }
 
-#endif // XY_SETTINGS_H
+#endif // RC_SETTINGS_H

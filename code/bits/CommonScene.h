@@ -1,10 +1,10 @@
-#ifndef XY_COMMON_SCENE_H
-#define XY_COMMON_SCENE_H
+#ifndef RC_COMMON_SCENE_H
+#define RC_COMMON_SCENE_H
 
 #include <gf/Scene.h>
 #include <gf/Action.h>
 
-namespace xy {
+namespace rc {
 
   struct GameHub;
 
@@ -23,4 +23,4 @@ namespace xy {
 
 }
 
-#endif // XY_COMMON_SCENE_H
+#endif // RC_COMMON_SCENE_H

@@ -4,7 +4,7 @@
 #include <gf/RenderTarget.h>
 #include <gf/Shapes.h>
 
-namespace xy {
+namespace rc {
 
   void SplitEntity::render(gf::RenderTarget &target, const gf::RenderStates &states) {
     gf::Coordinates coordinates(target);

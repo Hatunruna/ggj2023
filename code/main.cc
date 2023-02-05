@@ -5,7 +5,7 @@
 #include "config.h"
 
 int main() {
-  xy::GameHub hub;
+  rc::GameHub hub;
   hub.run();
 
   return EXIT_SUCCESS;

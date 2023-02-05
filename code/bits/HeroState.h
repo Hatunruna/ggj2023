@@ -1,9 +1,9 @@
-#ifndef XY_HERO_STATE_H
-#define XY_HERO_STATE_H
+#ifndef RC_HERO_STATE_H
+#define RC_HERO_STATE_H
 
 #include <gf/Vector.h>
 
-namespace xy {
+namespace rc {
 
   struct HeroState {
     gf::Vector2i position;
@@ -15,4 +15,4 @@ namespace xy {
 
 }
 
-#endif // XY_HERO_STATE_H
+#endif // RC_HERO_STATE_H

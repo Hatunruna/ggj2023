@@ -7,7 +7,7 @@
 #include "GameState.h"
 #include "Settings.h"
 
-namespace xy {
+namespace rc {
 
   namespace {
 
@@ -101,7 +101,7 @@ namespace xy {
   void HeroEntity::renderAnimation(gf::RenderTarget &target, const gf::RenderStates &states) {
     gf::Sprite sprite;
     const HeroState& localState = m_state.localPlayer(m_hero).hero;
-    
+
     switch (m_currentDirection) {
       case gf::Direction::Up:
         sprite = m_pauseTopTexture;

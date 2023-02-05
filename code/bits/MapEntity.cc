@@ -8,7 +8,7 @@
 #include "GameState.h"
 #include "Settings.h"
 
-namespace xy {
+namespace rc {
 
   MapEntity::MapEntity(GameHub& game, GameState& state, Hero hero)
   : m_state(state)

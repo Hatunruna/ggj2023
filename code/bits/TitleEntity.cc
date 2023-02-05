@@ -6,7 +6,7 @@
 #include <gf/Sprite.h>
 #include <gf/Text.h>
 
-namespace xy {
+namespace rc {
 
   TitleEntity::TitleEntity(gf::ResourceManager& resources)
   : m_font_title(resources.getFont("deportees/Deportees.otf"))

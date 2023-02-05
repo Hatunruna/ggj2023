@@ -1,5 +1,5 @@
-#ifndef XY_HERO_ENTITY_H
-#define XY_HERO_ENTITY_H
+#ifndef RC_HERO_ENTITY_H
+#define RC_HERO_ENTITY_H
 
 #include <gf/Entity.h>
 #include <gf/Direction.h>
@@ -10,7 +10,7 @@
 
 #include "Hero.h"
 
-namespace xy {
+namespace rc {
   struct GameState;
 
   class HeroEntity : public gf::Entity {
@@ -51,4 +51,4 @@ namespace xy {
 
 }
 
-#endif // XY_HERO_ENTITY_H
+#endif // RC_HERO_ENTITY_H

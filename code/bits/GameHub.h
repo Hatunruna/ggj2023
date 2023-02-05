@@ -1,5 +1,5 @@
-#ifndef XY_GAME_HUB_H
-#define XY_GAME_HUB_H
+#ifndef RC_GAME_HUB_H
+#define RC_GAME_HUB_H
 
 #include <gf/GameManager.h>
 
@@ -8,7 +8,7 @@
 #include "MainScene.h"
 #include "StartScene.h"
 
-namespace xy {
+namespace rc {
 
   struct GameHub : gf::GameManager {
     GameHub();
@@ -24,4 +24,4 @@ namespace xy {
 }
 
 
-#endif // XY_GAME_HUB_H
+#endif // RC_GAME_HUB_H

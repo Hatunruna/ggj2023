@@ -1,7 +1,7 @@
-#ifndef XY_HERO_H
-#define XY_HERO_H
+#ifndef RC_HERO_H
+#define RC_HERO_H
 
-namespace xy {
+namespace rc {
 
   enum class Hero : int {
     Lisa  = 0,
@@ -12,4 +12,4 @@ namespace xy {
 
 }
 
-#endif // XY_HERO_H
+#endif // RC_HERO_H

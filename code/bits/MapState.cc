@@ -7,7 +7,7 @@
 #include "GameHub.h"
 #include "Settings.h"
 
-namespace xy {
+namespace rc {
 
   namespace {
 
