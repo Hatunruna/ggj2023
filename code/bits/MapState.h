@@ -12,6 +12,7 @@
 namespace xy {
 
   enum class MapCellType {
+    Void,
     Wall,
     Floor,
     StairUp,

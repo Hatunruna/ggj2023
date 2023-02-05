@@ -32,10 +32,6 @@ namespace xy {
 
       gf::Color4f color;
       switch (cell.type) {
-      case MapCellType::Floor:
-        continue;
-        break;
-
       case MapCellType::Wall:
         color = gf::Color::Blue;
         break;
@@ -59,6 +55,8 @@ namespace xy {
           color = gf::Color::Chartreuse;
         }
         break;
+      default:
+        continue;
       }
 
 #if 0

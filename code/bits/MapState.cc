@@ -152,7 +152,7 @@ namespace xy {
         }
       }
 
-      gf::Array2D<MapCell> level(mapSize, { MapCellType::Wall });
+      gf::Array2D<MapCell> level(mapSize, { MapCellType::Void });
 
       auto createSpace = [&level](gf::RectI space) {
         for (int x = space.min.x; x < space.max.x; ++x) {
@@ -227,6 +227,20 @@ namespace xy {
 
       for (auto & stair : stairs) {
         level(stair.getCenter()).type = MapCellType::StairUp;
+      }
+
+      // Add wall
+      for (const auto& cellPosition: level.getPositionRange()) {
+        const MapCell& cell = level(cellPosition);
+
+        if (cell.type == MapCellType::Floor) {
+          for (const auto& neighborsCellPosition: level.get8NeighborsRange(cellPosition)) {
+            MapCell& neighborsCell = level(neighborsCellPosition);
+            if (neighborsCell.type == MapCellType::Void) {
+              neighborsCell.type = MapCellType::Wall;
+            }
+          }
+        }
       }
 
       return level;
@@ -340,9 +354,12 @@ namespace xy {
       starts = map.computeRoute(stairs[0], stairs[1], 0.0);
     }
 
-    assert(!starts.empty());
-    auto path = computeMultiPath(map, starts, random);
-    computeDoorsAndComputers(path);
+    // FIXME: Always trigger on last level
+    // assert(!starts.empty());
+    if (!starts.empty()) {
+      auto path = computeMultiPath(map, starts, random);
+      computeDoorsAndComputers(path);
+    }
   }
 
   void MapLevel::computeDoorsAndComputers(const std::vector<gf::Vector2i>& path) {
