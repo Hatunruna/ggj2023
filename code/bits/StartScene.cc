@@ -110,53 +110,58 @@ namespace xy {
                 const MapCellType cellUp     = (cellPostion.y > 0)                   ? cells(cellPostion + gf::vec( 0, -1)).type : MapCellType::Void;
                 const MapCellType cellDown   = (cellPostion.y < MapSize.height - 1)  ? cells(cellPostion + gf::vec( 0,  1)).type : MapCellType::Void;
 
+                bool cellLeftIsWall =
+                  cellLeft == MapCellType::Wall
+                  || cellLeft == MapCellType::Door
+                  || cellLeft == MapCellType::LiftL
+                  || cellLeft == MapCellType::LiftR;
+                bool cellRightIsWall =
+                  cellRight == MapCellType::Wall
+                  || cellRight == MapCellType::Door
+                  || cellRight == MapCellType::LiftL
+                  || cellRight == MapCellType::LiftR;
+                bool cellUpIsWall = cellUp == MapCellType::Wall || cellUp == MapCellType::Door;
+                bool cellDownIsWall = cellDown == MapCellType::Wall || cellDown == MapCellType::Door;
+
                 // Set line walls (row & col)
-                if (cellLeft == MapCellType::Wall && cellRight == MapCellType::Wall && cellUp != MapCellType::Wall && cellDown != MapCellType::Wall) {
+                if (cellLeftIsWall && cellRightIsWall && !cellUpIsWall && !cellDownIsWall) {
                   tileLayer.setTile(cellPostion, tileSetId, static_cast<int>(TileType::WallRow));
                 }
-                else if (cellLeft != MapCellType::Wall && cellRight != MapCellType::Wall && cellUp == MapCellType::Wall && cellDown == MapCellType::Wall) {
+                else if (!cellLeftIsWall && !cellRightIsWall && cellUpIsWall && cellDownIsWall) {
                   tileLayer.setTile(cellPostion, tileSetId, static_cast<int>(TileType::WallColumn));
                 }
                 // Set corner walls
-                else if (cellLeft == MapCellType::Wall && cellRight != MapCellType::Wall && cellUp != MapCellType::Wall && cellDown == MapCellType::Wall) {
+                else if (cellLeftIsWall && !cellRightIsWall && !cellUpIsWall && cellDownIsWall) {
                   tileLayer.setTile(cellPostion, tileSetId, static_cast<int>(TileType::WallCornerLeftDown));
                 }
-                else if (cellLeft == MapCellType::Wall && cellRight != MapCellType::Wall && cellUp == MapCellType::Wall && cellDown != MapCellType::Wall) {
+                else if (cellLeftIsWall && !cellRightIsWall && cellUpIsWall && !cellDownIsWall) {
                   tileLayer.setTile(cellPostion, tileSetId, static_cast<int>(TileType::WallCornerLeftUp));
                 }
-                else if (cellLeft != MapCellType::Wall && cellRight == MapCellType::Wall && cellUp != MapCellType::Wall && cellDown == MapCellType::Wall) {
+                else if (!cellLeftIsWall && cellRightIsWall && !cellUpIsWall && cellDownIsWall) {
                   tileLayer.setTile(cellPostion, tileSetId, static_cast<int>(TileType::WallCornerRightDown));
                 }
-                else if (cellLeft != MapCellType::Wall && cellRight == MapCellType::Wall && cellUp == MapCellType::Wall && cellDown != MapCellType::Wall) {
+                else if (!cellLeftIsWall && cellRightIsWall && cellUpIsWall && !cellDownIsWall) {
                   tileLayer.setTile(cellPostion, tileSetId, static_cast<int>(TileType::WallCornerRightUp));
                 }
                 // Set intersection (T shape)
-                else if (cellLeft != MapCellType::Wall && cellRight == MapCellType::Wall && cellUp == MapCellType::Wall && cellDown == MapCellType::Wall) {
+                else if (!cellLeftIsWall && cellRightIsWall && cellUpIsWall && cellDownIsWall) {
                   tileLayer.setTile(cellPostion, tileSetId, static_cast<int>(TileType::WallInterRight));
                 }
-                else if (cellLeft == MapCellType::Wall && cellRight != MapCellType::Wall && cellUp == MapCellType::Wall && cellDown == MapCellType::Wall) {
+                else if (cellLeftIsWall && !cellRightIsWall && cellUpIsWall && cellDownIsWall) {
                   tileLayer.setTile(cellPostion, tileSetId, static_cast<int>(TileType::WallInterLeft));
                 }
-                else if (cellLeft == MapCellType::Wall && cellRight == MapCellType::Wall && cellUp != MapCellType::Wall && cellDown == MapCellType::Wall) {
+                else if (cellLeftIsWall && cellRightIsWall && !cellUpIsWall && cellDownIsWall) {
                   tileLayer.setTile(cellPostion, tileSetId, static_cast<int>(TileType::WallInterDown));
                 }
-                else if (cellLeft == MapCellType::Wall && cellRight == MapCellType::Wall && cellUp == MapCellType::Wall && cellDown != MapCellType::Wall) {
+                else if (cellLeftIsWall && cellRightIsWall && cellUpIsWall && !cellDownIsWall) {
                   tileLayer.setTile(cellPostion, tileSetId, static_cast<int>(TileType::WallInterUp));
                 }
                 // Set intersection (Cross shape)
-                else if (cellLeft == MapCellType::Wall && cellRight == MapCellType::Wall && cellUp == MapCellType::Wall && cellDown == MapCellType::Wall) {
+                else if (cellLeftIsWall && cellRightIsWall && cellUpIsWall && cellDownIsWall) {
                   tileLayer.setTile(cellPostion, tileSetId, static_cast<int>(TileType::WallCross));
                 }
                 else {
-                  // Handle doors
-                  // TODO: remove this
-                  // if (cellRight == MapCellType::Wall || cellLeft == MapCellType::Wall) {
-                  //   tileLayer.setTile(cellPostion, tileSetId, static_cast<int>(TileType::WallRow));
-                  // } else if (cellUp == MapCellType::Wall || cellDown == MapCellType::Wall) {
-                  //   tileLayer.setTile(cellPostion, tileSetId, static_cast<int>(TileType::WallColumn));
-                  // } else {
-                  //   assert(false);
-                  // }
+                  assert(false);
                 }
 
                 break;
