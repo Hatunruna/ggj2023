@@ -71,7 +71,7 @@ namespace rc {
 
           // determine the position of Lisa and Ryan
 
-          auto [ lisa, ryan ] = computeStartingPositions(level);
+          auto [ lisa, ryan ] = computeStartingPositions(level.cells);
           m_game.state.lisa.hero.position = m_game.state.lisa.hero.target = lisa;
           m_game.state.ryan.hero.position = m_game.state.ryan.hero.target = ryan;
 
@@ -82,7 +82,7 @@ namespace rc {
           do {
             rootStart.x = m_game.random.computeUniformInteger(0, MapLength);
             rootStart.y = m_game.random.computeUniformInteger(0, MapLength);
-          } while (level(rootStart).type != MapCellType::Floor || gf::manhattanDistance(rootStart, lisa) < MapLength || gf::manhattanDistance(rootStart, ryan) < MapLength);
+          } while (level.cells(rootStart).type != MapCellType::Floor || gf::manhattanDistance(rootStart, lisa) < MapLength || gf::manhattanDistance(rootStart, ryan) < MapLength);
 
           RootState root;
           root.tail = root.head = rootStart;
@@ -233,8 +233,8 @@ namespace rc {
           return tileLayer;
         };
 
-        m_game.state.lisa.map.layers.push_back(createLevelTileLayer(level, Hero::Lisa));
-        m_game.state.ryan.map.layers.push_back(createLevelTileLayer(level, Hero::Ryan));
+        m_game.state.lisa.map.layers.push_back(createLevelTileLayer(level.cells, Hero::Lisa));
+        m_game.state.ryan.map.layers.push_back(createLevelTileLayer(level.cells, Hero::Ryan));
       }
 
       // TODO: set position from generated map

@@ -28,7 +28,7 @@ namespace rc {
 
     const MapState& mapState = m_state.localPlayer(m_hero).map;
     const int levelIndex = m_state.localPlayer(m_hero).hero.levelIndex;
-    const gf::Array2D<MapCell>& level = mapState.levels[levelIndex].cells;
+    const gf::Array2D<MapCell>& level = mapState.levels[levelIndex].level.cells;
     const gf::SquareMap& fov = mapState.levels[levelIndex].map;
 
     for (auto position : level.getPositionRange()) {

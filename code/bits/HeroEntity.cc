@@ -170,10 +170,10 @@ namespace rc {
     }
 
     // stairs things
-    if (level.cells(nextPos).type == MapCellType::StairDown && !currentState.useStairs) {
+    if (level.level.cells(nextPos).type == MapCellType::StairDown && !currentState.useStairs) {
       --currentState.levelIndex;
       currentState.useStairs = true;
-    } else if (level.cells(nextPos).type == MapCellType::StairUp && !currentState.useStairs) {
+    } else if (level.level.cells(nextPos).type == MapCellType::StairUp && !currentState.useStairs) {
       ++currentState.levelIndex;
       currentState.useStairs = true;
     } else {

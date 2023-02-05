@@ -48,8 +48,8 @@ namespace rc {
 
   }
 
-  std::vector<gf::Array2D<MapCell>> createProceduralMap(gf::Random& random) {
-    auto generateLevel = [&random](gf::Vector2i mapSize, std::vector<gf::RectI>& stairs, int levelNumber) -> gf::Array2D<MapCell> {
+  std::vector<GeneratedMap> createProceduralMap(gf::Random& random) {
+    auto generateLevel = [&random](gf::Vector2i mapSize, std::vector<gf::RectI>& stairs, int levelNumber) -> GeneratedMap {
       gf::RectI mapRect = gf::RectI::fromSize(mapSize);
 
       std::vector<gf::RectI> oldStairs = stairs;
@@ -270,10 +270,10 @@ namespace rc {
         }
       }
 
-      return level;
+      return { level, rooms };
     };
 
-    std::vector<gf::Array2D<MapCell>> levels;
+    std::vector<GeneratedMap> levels;
     std::vector<gf::RectI> stairs;
 
     for (int i = 0; i < 10; ++i) {
@@ -365,19 +365,19 @@ namespace rc {
     return path;
   }
 
-  MapLevel::MapLevel(const gf::Array2D<MapCell>& generated, gf::Random& random)
-  : cells(generated)
-  , map(computeMap(generated))
+  MapLevel::MapLevel(const GeneratedMap& generated, gf::Random& random)
+  : level(generated)
+  , map(computeMap(generated.cells))
   {
     std::vector<gf::Vector2i> stairs;
     std::vector<gf::Vector2i> starts;
 
-    for (auto position : cells.getPositionRange()) {
-      if (cells(position).type == MapCellType::StairDown) {
+    for (auto position : generated.cells.getPositionRange()) {
+      if (generated.cells(position).type == MapCellType::StairDown) {
         stairs.push_back(position);
-      } else if (cells(position).type == MapCellType::LiftL) {
+      } else if (generated.cells(position).type == MapCellType::LiftL) {
         starts.push_back(position + gf::diry(1));
-      } else if (cells(position).type == MapCellType::LiftR) {
+      } else if (generated.cells(position).type == MapCellType::LiftR) {
         starts.push_back(position + gf::diry(1));
       }
     }

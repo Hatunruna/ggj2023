@@ -144,10 +144,10 @@ namespace rc {
       MapLevel& level = m_game.state.players[heroIndex].map.levels[levelIndex];
 
       auto checkComputer = [this, &level, &heroState](gf::Vector2i position) -> bool {
-        const MapCell& cell = level.cells(position);
+        const MapCell& cell = level.level.cells(position);
         if (cell.type == MapCellType::Computer) {
           gf::Vector2i doorPosition = cell.computerState.controlledDoor;
-          MapCell& door = level.cells(doorPosition);
+          MapCell& door = level.level.cells(doorPosition);
           door.doorState.isOpen = true;
           level.map.setEmpty(doorPosition);
           return true;

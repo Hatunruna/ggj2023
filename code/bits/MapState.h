@@ -41,16 +41,21 @@ namespace rc {
     };
   };
 
-  std::vector<gf::Array2D<MapCell>> createProceduralMap(gf::Random& random);
+  struct GeneratedMap {
+    gf::Array2D<MapCell> cells;
+    std::vector<gf::RectI> rooms;
+  };
+
+  std::vector<GeneratedMap> createProceduralMap(gf::Random& random);
   std::tuple<gf::Vector2i, gf::Vector2i> computeStartingPositions(const gf::Array2D<MapCell>& cells);
   gf::SquareMap computeMap(const gf::Array2D<MapCell>& cells);
   std::vector<gf::Vector2i> computeMultiPath(const gf::SquareMap& map, std::vector<gf::Vector2i> starts, gf::Random& random);
 
   struct MapLevel {
-    MapLevel(const gf::Array2D<MapCell>& generated, gf::Random& random);
+    MapLevel(const GeneratedMap& generated, gf::Random& random);
 
     gf::SquareMap map;
-    gf::Array2D<MapCell> cells;
+    GeneratedMap level;
 
     void computeDoorsAndComputers(const std::vector<gf::Vector2i>& path);
   };
