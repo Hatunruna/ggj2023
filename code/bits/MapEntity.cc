@@ -44,13 +44,6 @@ namespace xy {
         color = gf::Color::Cyan;
         break;
 
-      case MapCellType::Door:
-        if (cell.doorState.isOpen) {
-          color = gf::Color::Orange;
-        } else {
-          color = gf::Color::Chartreuse;
-        }
-        break;
       default:
         continue;
       }

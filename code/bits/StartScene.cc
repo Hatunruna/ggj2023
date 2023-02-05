@@ -24,6 +24,10 @@ namespace xy {
       WallInterRight        = LayerLayout.x *  9 + 0,
       WallInterDown         = LayerLayout.x * 10 + 0,
       WallCross             = LayerLayout.x * 11 + 0,
+      DoorRowClosed         = LayerLayout.x * 12 + 0,
+      DoorRowOpened         = LayerLayout.x * 12 + 1,
+      DoorColumnClosed      = LayerLayout.x * 13 + 0,
+      DoorColumnOpened      = LayerLayout.x * 13 + 1,
     };
 
   }
@@ -159,6 +163,39 @@ namespace xy {
                 // Set intersection (Cross shape)
                 else if (cellLeftIsWall && cellRightIsWall && cellUpIsWall && cellDownIsWall) {
                   tileLayer.setTile(cellPostion, tileSetId, static_cast<int>(TileType::WallCross));
+                }
+                else {
+                  assert(false);
+                }
+
+                break;
+              }
+
+              case MapCellType::Door:
+              {
+                const MapCellType cellLeft   = (cellPostion.x > 0)                   ? cells(cellPostion + gf::vec(-1,  0)).type : MapCellType::Void;
+                const MapCellType cellRight  = (cellPostion.x < MapSize.width - 1)   ? cells(cellPostion + gf::vec( 1,  0)).type : MapCellType::Void;
+                const MapCellType cellUp     = (cellPostion.y > 0)                   ? cells(cellPostion + gf::vec( 0, -1)).type : MapCellType::Void;
+                const MapCellType cellDown   = (cellPostion.y < MapSize.height - 1)  ? cells(cellPostion + gf::vec( 0,  1)).type : MapCellType::Void;
+
+                bool cellLeftIsWall = cellLeft == MapCellType::Wall;
+                bool cellRightIsWall = cellRight == MapCellType::Wall;
+                bool cellUpIsWall = cellUp == MapCellType::Wall;
+                bool cellDownIsWall = cellDown == MapCellType::Wall;
+
+                if (cellLeftIsWall && cellRightIsWall && !cellUpIsWall && !cellDownIsWall) {
+                  if (cell.doorState.isOpen) {
+                    tileLayer.setTile(cellPostion, tileSetId, static_cast<int>(TileType::DoorRowOpened));
+                  } else {
+                    tileLayer.setTile(cellPostion, tileSetId, static_cast<int>(TileType::DoorRowClosed));
+                  }
+                }
+                else if (!cellLeftIsWall && !cellRightIsWall && cellUpIsWall && cellDownIsWall) {
+                  if (cell.doorState.isOpen) {
+                    tileLayer.setTile(cellPostion, tileSetId, static_cast<int>(TileType::DoorColumnOpened));
+                  } else {
+                    tileLayer.setTile(cellPostion, tileSetId, static_cast<int>(TileType::DoorColumnClosed));
+                  }
                 }
                 else {
                   assert(false);

@@ -18,6 +18,8 @@ montage_line "$TMP/walls_08.png" "wall_inter_up"
 montage_line "$TMP/walls_09.png" "wall_inter_right"
 montage_line "$TMP/walls_10.png" "wall_inter_down"
 montage_line "$TMP/walls_11.png" "wall_cross"
+montage_line "$TMP/walls_12.png" "door_row"
+montage_line "$TMP/walls_13.png" "door_col"
 
 montage "$TMP/*.png" -background none -tile 1x16 -geometry 4096x256  png32:walls.png
 
