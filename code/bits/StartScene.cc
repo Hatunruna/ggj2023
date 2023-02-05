@@ -233,8 +233,8 @@ namespace rc {
           return tileLayer;
         };
 
-        m_game.state.lisa.map.layers.push_back(createLevelTileLayer(level.cells, Hero::Lisa));
-        m_game.state.ryan.map.layers.push_back(createLevelTileLayer(level.cells, Hero::Ryan));
+        m_game.state.lisa.map.layers.push_back(createLevelTileLayer(m_game.state.lisa.map.levels.back().level.cells, Hero::Lisa));
+        m_game.state.ryan.map.layers.push_back(createLevelTileLayer(m_game.state.ryan.map.levels.back().level.cells, Hero::Ryan));
       }
 
       // TODO: set position from generated map

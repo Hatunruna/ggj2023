@@ -10,7 +10,7 @@ namespace rc {
     gf::Coordinates coordinates(target);
 
     gf::RectangleShape bar(coordinates.getRelativeSize({ 0.005f, 1.0f }));
-    bar.setColor(gf::Color::Yellow);
+    bar.setColor(gf::Color::Gray());
     bar.setPosition(coordinates.getRelativePoint({ 0.5f, 0.5f }));
     bar.setAnchor(gf::Anchor::Center);
 

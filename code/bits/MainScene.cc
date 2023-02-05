@@ -31,6 +31,7 @@ namespace rc {
   , m_rootModel(game.state, m_game.random)
   , m_ltRoot(game.state, Hero::Lisa, m_game.resources)
   , m_rtRoot(game.state, Hero::Ryan, m_game.resources)
+  , m_light(game.state)
   {
     auto ltViewport = gf::RectF::fromPositionSize({ 0.0f, 0.0f }, { 0.5f, 1.0f });
     m_ltWorldView.setViewport(ltViewport);
@@ -59,6 +60,7 @@ namespace rc {
     m_ltHero.m_otherEntity = &m_rtHero;
     m_rtHero.m_otherEntity = &m_ltHero;
 
+    addHudEntity(m_light);
     addHudEntity(m_split);
 
     lisaActions.up.addScancodeKeyControl(gf::Scancode::W);
@@ -143,13 +145,17 @@ namespace rc {
       const int levelIndex = heroState.levelIndex;
       MapLevel& level = m_game.state.players[heroIndex].map.levels[levelIndex];
 
-      auto checkComputer = [this, &level, &heroState](gf::Vector2i position) -> bool {
+      auto checkComputer = [this, &level, levelIndex](gf::Vector2i position) -> bool {
         const MapCell& cell = level.level.cells(position);
+
         if (cell.type == MapCellType::Computer) {
-          gf::Vector2i doorPosition = cell.computerState.controlledDoor;
-          MapCell& door = level.level.cells(doorPosition);
-          door.doorState.isOpen = true;
-          level.map.setEmpty(doorPosition);
+          for (auto& playerState: m_game.state.players) {
+            gf::Vector2i doorPosition = cell.computerState.controlledDoor;
+            MapCell& door = playerState.map.levels[levelIndex].level.cells(doorPosition);
+            door.doorState.isOpen = true;
+            playerState.map.levels[levelIndex].map.setEmpty(doorPosition);
+          }
+
           return true;
         }
 

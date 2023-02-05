@@ -21,6 +21,9 @@ namespace rc {
     constexpr int RoomsCount = 16;
     constexpr int MaxRetries = 100;
 
+    constexpr int MinComputer = 6;
+    constexpr int MaxComputer = 10;
+
     gf::Vector2i computeRoomSize(gf::Random& random) {
       switch (random.computeUniformInteger(0, 9)) {
         case 0:
@@ -358,6 +361,7 @@ namespace rc {
         if (map.isWalkable(next) && status(next) == CellStatus::Unexplored) {
           status(next) = CellStatus::Visited;
           queue.push_back(next);
+          path.push_back(next);
         }
       }
     }
@@ -392,11 +396,84 @@ namespace rc {
 
     assert(!starts.empty());
     auto path = computeMultiPath(map, starts, random);
-    computeDoorsAndComputers(path);
+    computeDoorsAndComputers(path, random);
+
+    // Update map to handle computers
+    map = std::move(computeMap(level.cells));
   }
 
-  void MapLevel::computeDoorsAndComputers(const std::vector<gf::Vector2i>& path) {
-    // TODO
+  void MapLevel::computeDoorsAndComputers(const std::vector<gf::Vector2i>& path, gf::Random& random) {
+    int computerNumber = random.computeUniformInteger(MinComputer, MaxComputer);
+
+    assert(computerNumber < level.rooms.size());
+
+    // Count number of rooms in the path
+    std::vector<std::pair<int, gf::RectI>> roomsInPath;
+    for (int i = 0; i < path.size(); ++i) {
+      const auto& pos = path[i];
+      for (const auto& room: level.rooms) {
+        if (room.contains(pos)
+        && std::find_if(roomsInPath.begin(), roomsInPath.end(), [&room](const auto& element) {
+          return element.second == room;
+        }) == roomsInPath.end()
+        && level.cells(room.getCenter()).type == MapCellType::Floor) {
+          gf::Log::debug("Room inserted %dx%d -> %d\n", room.getCenter().x, room.getCenter().y, level.cells(room.getCenter()).type);
+          roomsInPath.push_back({ i, room });
+          break;
+        }
+      }
+    }
+
+    assert(computerNumber < roomsInPath.size());
+    assert(roomsInPath.size() <= level.rooms.size());
+
+    // Add computers
+    const int computerMaxDistance = roomsInPath.size() / computerNumber;
+    int lastInsert = 0;
+    for (int i = 0; i < computerNumber && lastInsert < roomsInPath.size(); ++i) {
+      const int randomComputerOffset = random.computeUniformInteger(1, computerMaxDistance);
+
+      // No more path, no more computer
+      if (lastInsert + randomComputerOffset >= roomsInPath.size()) {
+        break;
+      }
+
+      assert(lastInsert + randomComputerOffset < roomsInPath.size());
+
+      const gf::RectI& computerRoom = roomsInPath[lastInsert + randomComputerOffset].second;
+      const gf::Vector2i computerRoomCenter = computerRoom.getCenter();
+
+      gf::Log::debug("Room checked %dx%d -> %d\n", computerRoomCenter.x, computerRoomCenter.y, level.cells(computerRoomCenter).type);
+
+      // No more path, no more computer
+      if (roomsInPath[lastInsert + randomComputerOffset].first + 1 >= path.size()) {
+        break;
+      }
+
+      assert(level.cells(computerRoomCenter).type == MapCellType::Floor);
+      assert(roomsInPath[lastInsert + randomComputerOffset].first + 1 < path.size());
+
+      level.cells(computerRoomCenter).type = MapCellType::Computer;
+
+      // Seek next locked door
+      bool first = true;
+      int nvLockedDoor = 1;
+      for (int j = roomsInPath[lastInsert + randomComputerOffset].first + 1; j < path.size(); ++j) {
+        if (level.cells(path[j]).type == MapCellType::Door && nvLockedDoor > 0) {
+          if (first) {
+            first = false;
+            continue;
+          }
+
+          --nvLockedDoor;
+          level.cells(path[j]).doorState.isOpen = false;
+          level.cells(computerRoomCenter).computerState.controlledDoor = path[j];
+          break;
+        }
+      }
+
+      lastInsert = lastInsert + randomComputerOffset + 1;
+    }
   }
 
 }

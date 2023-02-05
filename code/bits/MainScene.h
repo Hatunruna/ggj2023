@@ -6,6 +6,7 @@
 #include <gf/Direction.h>
 
 #include "HeroEntity.h"
+#include "LightEntity.h"
 #include "MapEntity.h"
 #include "RootEntity.h"
 #include "RootModel.h"
@@ -67,6 +68,7 @@ private:
   RootEntity m_ltRoot;
   RootEntity m_rtRoot;
 
+  LightEntity m_light;
   SplitEntity m_split;
 
   // actions

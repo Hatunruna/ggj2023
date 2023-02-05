@@ -1,5 +1,6 @@
 #include "RootModel.h"
 
+#include <gf/Geometry.h>
 #include <gf/Log.h>
 
 #include "GameState.h"
@@ -63,7 +64,7 @@ namespace rc {
     }
 
     if (m_state.phase == GamePhase::Light) {
-      time = gf::seconds(time.asSeconds() * 0.1f);
+      time = gf::seconds(time.asSeconds() * 0.05f);
     }
 
     m_time += time;
@@ -103,13 +104,28 @@ namespace rc {
   }
 
   std::optional<std::tuple<gf::Vector2i, std::size_t>> RootModel::findNextStep(std::size_t levelIndex, Hero target) {
-    if (levelIndex >= m_state.roots.size()) {
-//      assert(false);
-      return std::nullopt;
+    PlayerState& player = m_state.localPlayer(target);
+
+    while (levelIndex >= m_state.roots.size()) {
+      gf::Vector2i current = m_state.roots.back().head;
+
+      gf::Bresenham bresenham(current, player.hero.position);
+
+      do {
+        if (m_state.lisa.map.levels[m_state.roots.size()].map.isWalkable(current)) {
+          break;
+        }
+      } while (bresenham.step(current));
+
+
+      RootState root;
+      root.head = root.tail = current;
+      root.parts.push_back({ current, gf::vec(0, 15) });
+
+      m_state.roots.push_back(std::move(root));
     }
 
     RootState& root = m_state.roots[levelIndex];
-    PlayerState& player = m_state.localPlayer(target);
 
     auto path = player.map.levels[levelIndex].map.computeRoute(root.head, player.hero.position, 0.0f);
 
@@ -121,10 +137,7 @@ namespace rc {
   }
 
   void RootModel::updateLevel(std::size_t levelIndex, gf::Vector2i next) {
-    if (levelIndex >= m_state.roots.size()) {
-      // TODO: make the root grow up to this level
-      return;
-    }
+    assert(levelIndex < m_state.roots.size());
 
     RootState& root = m_state.roots[levelIndex];
     root.head = next;
