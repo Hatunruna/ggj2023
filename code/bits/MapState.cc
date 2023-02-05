@@ -190,11 +190,11 @@ namespace xy {
 
           gf::Vector2i start = current - dir;
 
-          while (mapRect.contains(current) && level(current).type == MapCellType::Wall
-            && level(current + gf::perp(dir)).type == MapCellType::Wall
-            && level(current - gf::perp(dir)).type == MapCellType::Wall
-            && level(current + 2 * gf::perp(dir)).type == MapCellType::Wall
-            && level(current - 2 * gf::perp(dir)).type == MapCellType::Wall
+          while (mapRect.contains(current) && isWall(level(current).type)
+            && isWall(level(current + gf::perp(dir)).type)
+            && isWall(level(current - gf::perp(dir)).type)
+            && isWall(level(current + 2 * gf::perp(dir)).type)
+            && isWall(level(current - 2 * gf::perp(dir)).type)
           ) {
             current += dir;
           }
@@ -354,12 +354,9 @@ namespace xy {
       starts = map.computeRoute(stairs[0], stairs[1], 0.0);
     }
 
-    // FIXME: Always trigger on last level
-    // assert(!starts.empty());
-    if (!starts.empty()) {
-      auto path = computeMultiPath(map, starts, random);
-      computeDoorsAndComputers(path);
-    }
+    assert(!starts.empty());
+    auto path = computeMultiPath(map, starts, random);
+    computeDoorsAndComputers(path);
   }
 
   void MapLevel::computeDoorsAndComputers(const std::vector<gf::Vector2i>& path) {

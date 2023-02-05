@@ -23,6 +23,10 @@ namespace xy {
     LiftR,
   };
 
+  inline bool isWall(MapCellType cellType) {
+    return cellType == MapCellType::Wall || cellType == MapCellType::Void;
+  };
+
   struct MapCell {
     MapCellType type;
 
