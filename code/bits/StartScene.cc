@@ -9,7 +9,7 @@ namespace rc {
 
   namespace {
 
-    constexpr gf::Vector2i LayerLayout = gf::vec(16, 16);
+    constexpr gf::Vector2i LayerLayout = gf::vec(16, 17);
 
     enum class TileType {
       Floor                 = 0,
@@ -28,6 +28,11 @@ namespace rc {
       DoorRowOpened         = LayerLayout.x * 12 + 1,
       DoorColumnClosed      = LayerLayout.x * 13 + 0,
       DoorColumnOpened      = LayerLayout.x * 13 + 1,
+      LiftLeft              = LayerLayout.x * 14 + 0,
+      LiftRight             = LayerLayout.x * 14 + 1,
+      StairsDown            = LayerLayout.x * 15 + 0,
+      StairsUp              = LayerLayout.x * 15 + 1,
+      Computer              = LayerLayout.x * 16 + 0,
     };
 
   }
@@ -224,6 +229,26 @@ namespace rc {
 
                 break;
               }
+
+              case MapCellType::LiftL:
+                tileLayer.setTile(cellPostion, tileSetId, static_cast<int>(TileType::LiftLeft));
+                break;
+
+              case MapCellType::LiftR:
+                tileLayer.setTile(cellPostion, tileSetId, static_cast<int>(TileType::LiftRight));
+                break;
+
+              case MapCellType::StairDown:
+                tileLayer.setTile(cellPostion, tileSetId, static_cast<int>(TileType::StairsDown));
+                break;
+
+              case MapCellType::StairUp:
+                tileLayer.setTile(cellPostion, tileSetId, static_cast<int>(TileType::StairsUp));
+                break;
+
+              case MapCellType::Computer:
+                tileLayer.setTile(cellPostion, tileSetId, static_cast<int>(TileType::Computer));
+                break;
 
               default:
                 break;

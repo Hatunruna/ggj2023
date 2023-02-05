@@ -9,6 +9,7 @@ namespace rc {
 
   constexpr float ViewSize = 1000.0f;
   // constexpr float ViewSize = 5000.0f;
+  constexpr int ViewRadius = 7;
 
   HeroActions::HeroActions()
   : up("Up")
@@ -190,7 +191,7 @@ namespace rc {
       gf::SquareMap& map = m_game.state.localPlayer(hero).map.levels[heroState.levelIndex].map;
 
       map.clearFieldOfVision();
-      map.computeFieldOfVision(heroState.position, 3);
+      map.computeFieldOfVision(heroState.position, ViewRadius);
     };
 
     updateFov(Hero::Lisa);

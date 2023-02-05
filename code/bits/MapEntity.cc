@@ -35,35 +35,14 @@ namespace rc {
       const MapCell& cell = level(position);
 
       gf::Color4f color;
-      switch (cell.type) {
-      case MapCellType::StairDown:
-        color = gf::Color::Yellow;
-        break;
-
-      case MapCellType::StairUp:
-        color = gf::Color::Magenta;
-        break;
-
-      case MapCellType::Computer:
-        color = gf::Color::Cyan;
-        break;
-
-      default:
-        continue;
-      }
-
-#if 0
       if (!fov.isInFieldOfVision(position))
       {
         if (!fov.isExplored(position)) {
-          color = gf::Color::Black;
+          rectangles.addRectangle(position * CellSize, CellSize, gf::Color::Black);
         } else if (fov.isExplored(position)) {
-          color = gf::Color::darker(color, 0.7f);
+          rectangles.addRectangle(position * CellSize, CellSize, gf::Color::Black * gf::Color::Opaque(0.7f));
         }
       }
-#endif
-
-      rectangles.addRectangle(position * CellSize, CellSize, color);
     }
 
     target.draw(rectangles, states);
