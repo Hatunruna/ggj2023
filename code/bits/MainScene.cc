@@ -135,7 +135,7 @@ namespace rc {
       }
 
       if (finished) {
-        m_game.replaceScene(m_game.gameOver);
+        m_game.state.status = GameStatus::Victory;
       }
     };
 
@@ -182,6 +182,14 @@ namespace rc {
   }
 
   void MainScene::doUpdate(gf::Time time) {
+    if (m_game.state.status == GameStatus::Victory) {
+      m_game.replaceScene(m_game.gameOver);
+    }
+
+    if (m_game.state.status == GameStatus::GameOver) {
+      m_game.replaceScene(m_game.gameOver);
+    }
+
     m_ltWorldEntities.update(time);
     m_rtWorldEntities.update(time);
     m_ltHudEntities.update(time);
