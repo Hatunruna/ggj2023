@@ -32,10 +32,6 @@ namespace xy {
 
       gf::Color4f color;
       switch (cell.type) {
-      case MapCellType::Wall:
-        color = gf::Color::Blue;
-        break;
-
       case MapCellType::StairDown:
         color = gf::Color::Yellow;
         break;
