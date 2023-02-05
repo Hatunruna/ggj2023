@@ -9,8 +9,8 @@
 namespace rc {
 
   TitleEntity::TitleEntity(gf::ResourceManager& resources)
-  : m_fontTitle(resources.getFont("fonts/deportees.otf"))
-  , m_fontSubTitle(resources.getFont("fonts/x-files.ttf"))
+  : m_fontSubTitle(resources.getFont("fonts/x-files.ttf"))
+  , m_texture(resources.getTexture("images/title.jpg"))
   {
   }
 
@@ -20,19 +20,16 @@ namespace rc {
   void TitleEntity::render(gf::RenderTarget &target, const gf::RenderStates &states) {
     gf::Coordinates coords(target);
 
-    unsigned titleCharacterSize = coords.getRelativeCharacterSize(0.4f);
-
-    gf::Text title("Root Company", m_fontTitle, titleCharacterSize);
-    title.setColor(gf::Color::White);
-    title.setPosition(coords.getCenter());
-    title.setAnchor(gf::Anchor::BottomCenter);
-    target.draw(title, states);
+    gf::Sprite background;
+    background.setTexture(m_texture);
+    background.setScale(coords.getWindowSize() / gf::vec(1920.0f, 1080.0f));
+    target.draw(background, states);
 
     unsigned subtitleCharacterSize = coords.getRelativeCharacterSize(0.05f);
 
     gf::Text subtitle("welcome in our laboratory about\n the culture of perennial plant", m_fontSubTitle, subtitleCharacterSize);
     subtitle.setColor(gf::Color::White);
-    subtitle.setPosition(coords.getRelativePoint({ 0.0f, 0.6f }));
+    subtitle.setPosition(coords.getRelativePoint({ 0.0f, 0.65f }));
     subtitle.setParagraphWidth(coords.getRelativeSize({ 1.0f, 0.5f}).width);
     subtitle.setAlignment(gf::Alignment::Center);
     target.draw(subtitle, states);
