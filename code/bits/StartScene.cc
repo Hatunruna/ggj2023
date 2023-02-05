@@ -69,19 +69,35 @@ namespace rc {
         if (first) {
           first = false;
 
+          // determine the position of Lisa and Ryan
+
           auto [ lisa, ryan ] = computeStartingPositions(level);
           m_game.state.lisa.hero.position = m_game.state.lisa.hero.target = lisa;
           m_game.state.ryan.hero.position = m_game.state.ryan.hero.target = ryan;
 
+          // determine the position of the root
+
+          gf::Vector2i rootStart;
+
+          do {
+            rootStart.x = m_game.random.computeUniformInteger(0, MapLength);
+            rootStart.y = m_game.random.computeUniformInteger(0, MapLength);
+          } while (level(rootStart).type != MapCellType::Floor || gf::manhattanDistance(rootStart, lisa) < MapLength || gf::manhattanDistance(rootStart, ryan) < MapLength);
+
+          RootState root;
+          root.tail = root.head = rootStart;
+          root.parts.push_back({ rootStart, gf::vec(0, 15) });
+
+          m_game.state.roots.push_back(root);
+
+          // create the map level
+
           auto mapLevel = MapLevel(level, m_game.random);
+          mapLevel.map.setWalkable(rootStart, false);
           m_game.state.lisa.map.levels.push_back(mapLevel);
           m_game.state.ryan.map.levels.push_back(std::move(mapLevel));
 
-          RootState root;
-          root.tail = root.head = ryan + gf::diry(5);
-          root.parts.push_back({ root.tail, gf::vec(0, 15) });
 
-          m_game.state.roots.push_back(root);
 
         } else {
           auto mapLevel = MapLevel(level, m_game.random);

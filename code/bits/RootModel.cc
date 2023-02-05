@@ -97,10 +97,12 @@ namespace rc {
     }
 
     RootState& root = m_state.roots[levelIndex];
-
     root.head = next;
     root.parts.push_back({ root.head, gf::vec(0, 0) });
     updateRoot(root);
+
+    m_state.lisa.map.levels[levelIndex].map.setWalkable(next, false);
+    m_state.ryan.map.levels[levelIndex].map.setWalkable(next, false);
   }
 
   void RootModel::updateRoot(RootState& root) {
