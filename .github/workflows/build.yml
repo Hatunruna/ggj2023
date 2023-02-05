@@ -8,7 +8,7 @@ on:
 
 env:
   BUILD_TYPE: Release
-  VCPKG_COMMIT: f14984af3738e69f197bf0e647a8dca12de92996
+  VCPKG_COMMIT: df806d3a4b8599b5429e1256a30cb0bcaf6b9178
 
 jobs:
   build-windows:
@@ -164,7 +164,7 @@ jobs:
         run: cmake --build ${{github.workspace}}/ggj2023/build --config ${{env.BUILD_TYPE}} --parallel
 
   build-macos:
-    runs-on: macos-12
+    runs-on: macos-latest
 
     env:
       VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg/binary-cache
