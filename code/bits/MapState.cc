@@ -384,11 +384,15 @@ namespace rc {
 
     if (stairs.size() == 2) {
       starts = map.computeRoute(stairs[0], stairs[1], 0.0);
+
+      if (starts.empty()) {
+        starts = stairs;
+      }
     }
 
-    // assert(!starts.empty());
-    // auto path = computeMultiPath(map, starts, random);
-    // computeDoorsAndComputers(path);
+    assert(!starts.empty());
+    auto path = computeMultiPath(map, starts, random);
+    computeDoorsAndComputers(path);
   }
 
   void MapLevel::computeDoorsAndComputers(const std::vector<gf::Vector2i>& path) {
