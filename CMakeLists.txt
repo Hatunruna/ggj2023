@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.18...3.21)
 
-set(GAME "roots-company")
+set(GAME "root-company")
 
 project(${GAME}
   VERSION 0.1.0
