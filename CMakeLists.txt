@@ -23,6 +23,8 @@ add_executable(${GAME}
   code/bits/CommonScene.cc
   code/bits/DialogEntity.cc
   code/bits/GameHub.cc
+  code/bits/GameOverEntity.cc
+  code/bits/GameOverScene.cc
   code/bits/GameState.cc
   code/bits/Hero.cc
   code/bits/HeroEntity.cc

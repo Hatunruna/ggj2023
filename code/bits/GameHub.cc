@@ -8,8 +8,9 @@ namespace rc {
   : GameManager("Root Company", { GAME_RELATIVE_DATADIR, GAME_DATADIR })
   , common(*this)
   , start(*this)
-  , main(*this)
   , lift(*this)
+  , main(*this)
+  , gameOver(*this)
   {
     gf::Ref<gf::Scene> scenes[] = { common, start };
     pushScenes(scenes);

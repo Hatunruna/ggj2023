@@ -279,7 +279,7 @@ namespace rc {
     std::vector<GeneratedMap> levels;
     std::vector<gf::RectI> stairs;
 
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < Levels; ++i) {
       auto level = generateLevel(MapSize, stairs, i);
       levels.emplace_back(std::move(level));
     }

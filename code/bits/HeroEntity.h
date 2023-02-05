@@ -19,7 +19,7 @@ namespace rc {
 
     void update(gf::Time time) override;
     void render(gf::RenderTarget &target, const gf::RenderStates &states) override;
-    void move(gf::Direction dir);
+    bool move(gf::Direction dir);
     void renderAnimation(gf::RenderTarget &target, const gf::RenderStates &states);
 
     HeroEntity *m_otherEntity;
