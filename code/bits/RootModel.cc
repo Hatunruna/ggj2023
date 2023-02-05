@@ -11,7 +11,7 @@ namespace rc {
     constexpr gf::Time RootUpdate = gf::seconds(1);
 
     constexpr int RootsCount[] = {
-      4, 4, 4, 4, 12, 4, 4, 4, 4, 12, 4, 4, 4, 4, 12, 0
+      4, 4, 4, 4, 12, 4, 4, 4, 4, 12, 4, 4, 4, 4, 8, 0
     };
 
     gf::Vector2i computeRandomTile(bool north, bool east, bool south, bool west, bool tail, gf::Random& random) {
