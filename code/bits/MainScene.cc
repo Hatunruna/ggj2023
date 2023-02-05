@@ -172,8 +172,8 @@ namespace rc {
     m_ltHudEntities.update(time);
     m_rtHudEntities.update(time);
 
-    m_ltWorldView.setCenter(m_game.state.lisa.hero.middle + CellSize / 2);
-    m_rtWorldView.setCenter(m_game.state.ryan.hero.middle + CellSize / 2);
+    m_ltWorldView.setCenter(gf::Vector2f(m_game.state.lisa.hero.middle) + gf::Vector2f(CellSize) * 0.5f);
+    m_rtWorldView.setCenter(gf::Vector2f(m_game.state.ryan.hero.middle) + gf::Vector2f(CellSize) * 0.5f);
 
     auto updateFov = [this](Hero hero) {
       const int index = static_cast<int>(hero);

@@ -8,7 +8,7 @@ namespace rc {
   struct HeroState {
     gf::Vector2i position;
     gf::Vector2i target;
-    gf::Vector2i middle;
+    gf::Vector2f middle;
     int levelIndex = 0;
     bool useStairs = false;
   };
