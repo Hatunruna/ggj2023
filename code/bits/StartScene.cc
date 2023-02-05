@@ -264,7 +264,7 @@ namespace rc {
 
       // TODO: set position from generated map
 
-      m_game.replaceScene(m_game.main); //, m_game.blackout, gf::seconds(TransitionDelay));
+      m_game.replaceScene(m_game.lift); //, m_game.blackout, gf::seconds(TransitionDelay));
     }
   }
 

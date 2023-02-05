@@ -12,6 +12,7 @@ namespace rc {
   : m_fontSubTitle(resources.getFont("fonts/x-files.ttf"))
   , m_texture(resources.getTexture("images/title.jpg"))
   {
+    m_texture.setSmooth();
   }
 
   void TitleEntity::update([[maybe_unused]] gf::Time time) {
