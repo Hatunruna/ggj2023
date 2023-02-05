@@ -63,7 +63,7 @@ namespace rc {
     }
 
     if (m_state.phase == GamePhase::Light) {
-      time = gf::seconds(time.asSeconds() * 0.1f);
+      time = gf::seconds(time.asSeconds() * 0.05f);
     }
 
     m_time += time;

@@ -31,6 +31,7 @@ namespace rc {
   , m_rootModel(game.state, m_game.random)
   , m_ltRoot(game.state, Hero::Lisa, m_game.resources)
   , m_rtRoot(game.state, Hero::Ryan, m_game.resources)
+  , m_light(game.state)
   {
     auto ltViewport = gf::RectF::fromPositionSize({ 0.0f, 0.0f }, { 0.5f, 1.0f });
     m_ltWorldView.setViewport(ltViewport);
@@ -59,6 +60,7 @@ namespace rc {
     m_ltHero.m_otherEntity = &m_rtHero;
     m_rtHero.m_otherEntity = &m_ltHero;
 
+    addHudEntity(m_light);
     addHudEntity(m_split);
 
     lisaActions.up.addScancodeKeyControl(gf::Scancode::W);

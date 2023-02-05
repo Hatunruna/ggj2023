@@ -17,9 +17,9 @@ namespace rc {
   }
 
   void MapEntity::render(gf::RenderTarget &target, const gf::RenderStates &states) {
-    if (m_state.phase == GamePhase::Dark) {
-      return;
-    }
+//     if (m_state.phase == GamePhase::Dark) {
+//       return;
+//     }
 
     PlayerState& playerState = m_state.localPlayer(m_hero);
     target.draw(playerState.map.layers[playerState.hero.levelIndex], states);
