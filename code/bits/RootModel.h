@@ -1,8 +1,14 @@
 #ifndef RC_ROOT_MODEL_H
 #define RC_ROOT_MODEL_H
 
+#include <optional>
+#include <tuple>
+
 #include <gf/Model.h>
 #include <gf/Random.h>
+#include <gf/Vector.h>
+
+#include "Hero.h"
 
 namespace rc {
   struct GameState;
@@ -14,7 +20,8 @@ namespace rc {
     void update(gf::Time time) override;
 
   private:
-    void updateLevel(gf::Time time, std::size_t levelIndex);
+    std::optional<std::tuple<gf::Vector2i, std::size_t>> findNextStep(std::size_t levelIndex, Hero target);
+    void updateLevel(std::size_t levelIndex, gf::Vector2i next);
     void updateRoot(RootState& root);
 
   private:

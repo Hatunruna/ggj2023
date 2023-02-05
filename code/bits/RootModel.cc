@@ -1,5 +1,7 @@
 #include "RootModel.h"
 
+#include <gf/Log.h>
+
 #include "GameState.h"
 
 namespace rc {
@@ -34,17 +36,61 @@ namespace rc {
   }
 
   void RootModel::update(gf::Time time) {
+    m_time += time;
+
+    if (m_time < RootUpdate) {
+      return;
+    }
+
+    m_time -= RootUpdate;
+
     std::size_t lisaIndex = m_state.lisa.hero.levelIndex;
+    auto lisaTarget = findNextStep(lisaIndex, Hero::Lisa);
+
     std::size_t ryanIndex = m_state.ryan.hero.levelIndex;
+    auto ryanTarget = findNextStep(ryanIndex, Hero::Ryan);
 
-    updateLevel(time, lisaIndex);
-
-    if (lisaIndex != ryanIndex) {
-      updateLevel(time, ryanIndex);
+    if (lisaIndex == ryanIndex) {
+      if (lisaTarget && ryanTarget) {
+        if (std::get<1>(*lisaTarget) < std::get<1>(*ryanTarget)) {
+          updateLevel(lisaIndex, std::get<0>(*lisaTarget));
+        } else {
+          updateLevel(ryanIndex, std::get<0>(*ryanTarget));
+        }
+      } else if (lisaTarget) {
+        updateLevel(lisaIndex, std::get<0>(*lisaTarget));
+      } else if (ryanTarget) {
+        updateLevel(ryanIndex, std::get<0>(*ryanTarget));
+      }
+    } else {
+      if (lisaTarget) {
+        updateLevel(lisaIndex, std::get<0>(*lisaTarget));
+      }
+      if (ryanTarget) {
+        updateLevel(ryanIndex, std::get<0>(*ryanTarget));
+      }
     }
   }
 
-  void RootModel::updateLevel(gf::Time time, std::size_t levelIndex) {
+  std::optional<std::tuple<gf::Vector2i, std::size_t>> RootModel::findNextStep(std::size_t levelIndex, Hero target) {
+    if (levelIndex >= m_state.roots.size()) {
+//      assert(false);
+      return std::nullopt;
+    }
+
+    RootState& root = m_state.roots[levelIndex];
+    PlayerState& player = m_state.localPlayer(target);
+
+    auto path = player.map.levels[levelIndex].map.computeRoute(root.head, player.hero.position, 0.0f);
+
+    if (path.size() < 2) {
+      return std::nullopt;
+    }
+
+    return std::make_tuple(path[1], path.size());
+  }
+
+  void RootModel::updateLevel(std::size_t levelIndex, gf::Vector2i next) {
     if (levelIndex >= m_state.roots.size()) {
       // TODO: make the root grow up to this level
       return;
@@ -52,17 +98,11 @@ namespace rc {
 
     RootState& root = m_state.roots[levelIndex];
 
-    m_time += time;
+    gf::Log::debug("Head: %i, %i, Next: %i,%i\n", root.head.x, root.head.y, next.x, next.y);
 
-    if (m_time >= RootUpdate) {
-      m_time -= RootUpdate;
-
-      // TODO: search for a hero
-      root.head += gf::diry(1);
-      root.parts.push_back({ root.head, gf::vec(0, 0) });
-
-      updateRoot(root);
-    }
+    root.head = next;
+    root.parts.push_back({ root.head, gf::vec(0, 0) });
+    updateRoot(root);
   }
 
   void RootModel::updateRoot(RootState& root) {
