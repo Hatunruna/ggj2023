@@ -145,13 +145,17 @@ namespace rc {
       const int levelIndex = heroState.levelIndex;
       MapLevel& level = m_game.state.players[heroIndex].map.levels[levelIndex];
 
-      auto checkComputer = [this, &level, &heroState](gf::Vector2i position) -> bool {
+      auto checkComputer = [this, &level, levelIndex](gf::Vector2i position) -> bool {
         const MapCell& cell = level.level.cells(position);
+
         if (cell.type == MapCellType::Computer) {
-          gf::Vector2i doorPosition = cell.computerState.controlledDoor;
-          MapCell& door = level.level.cells(doorPosition);
-          door.doorState.isOpen = true;
-          level.map.setEmpty(doorPosition);
+          for (auto& playerState: m_game.state.players) {
+            gf::Vector2i doorPosition = cell.computerState.controlledDoor;
+            MapCell& door = playerState.map.levels[levelIndex].level.cells(doorPosition);
+            door.doorState.isOpen = true;
+            playerState.map.levels[levelIndex].map.setEmpty(doorPosition);
+          }
+
           return true;
         }
 

@@ -57,7 +57,7 @@ namespace rc {
     gf::SquareMap map;
     GeneratedMap level;
 
-    void computeDoorsAndComputers(const std::vector<gf::Vector2i>& path);
+    void computeDoorsAndComputers(const std::vector<gf::Vector2i>& path, gf::Random& random);
   };
 
   struct MapState {
