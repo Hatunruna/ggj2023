@@ -1,4 +1,4 @@
-#include "GameOverEntity.h"
+#include "VictoryEntity.h"
 
 #include <gf/Coordinates.h>
 #include <gf/Log.h>
@@ -8,12 +8,12 @@
 
 namespace rc {
 
-  GameOverEntity::GameOverEntity(gf::ResourceManager& resources)
-  : m_texture(resources.getTexture("images/game_over_screen.jpg"))
+  VictoryEntity::VictoryEntity(gf::ResourceManager& resources)
+  : m_texture(resources.getTexture("images/victory_screen.jpg"))
   {
   }
 
-  void GameOverEntity::render(gf::RenderTarget &target, const gf::RenderStates &states) {
+  void VictoryEntity::render(gf::RenderTarget &target, const gf::RenderStates &states) {
     gf::Coordinates coords(target);
 
     gf::Sprite background;

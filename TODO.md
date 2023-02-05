@@ -11,5 +11,6 @@
 
 ## Post-GGJ
 
+- FogEntity
 - placement décor
 - paquet au début

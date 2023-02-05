@@ -183,7 +183,7 @@ namespace rc {
 
   void MainScene::doUpdate(gf::Time time) {
     if (m_game.state.status == GameStatus::Victory) {
-      m_game.replaceScene(m_game.gameOver);
+      m_game.replaceScene(m_game.victory);
     }
 
     if (m_game.state.status == GameStatus::GameOver) {

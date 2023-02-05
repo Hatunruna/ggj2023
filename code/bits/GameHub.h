@@ -9,6 +9,7 @@
 #include "LiftScene.h"
 #include "MainScene.h"
 #include "StartScene.h"
+#include "VictoryScene.h"
 
 namespace rc {
 
@@ -21,6 +22,7 @@ namespace rc {
     StartScene start;
     LiftScene lift;
     MainScene main;
+    VictoryScene victory;
     GameOverScene gameOver;
   };
 

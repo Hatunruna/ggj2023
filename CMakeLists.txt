@@ -39,6 +39,8 @@ add_executable(${GAME}
   code/bits/SplitEntity.cc
   code/bits/StartScene.cc
   code/bits/TitleEntity.cc
+  code/bits/VictoryEntity.cc
+  code/bits/VictoryScene.cc
 )
 
 target_include_directories(${GAME}

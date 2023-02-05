@@ -10,6 +10,7 @@ namespace rc {
   , start(*this)
   , lift(*this)
   , main(*this)
+  , victory(*this)
   , gameOver(*this)
   {
     gf::Ref<gf::Scene> scenes[] = { common, start };
