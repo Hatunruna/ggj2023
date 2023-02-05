@@ -107,7 +107,6 @@ namespace rc {
     PlayerState& player = m_state.localPlayer(target);
 
     while (levelIndex >= m_state.roots.size()) {
-      gf::Log::debug("Up!\n");
       gf::Vector2i current = m_state.roots.back().head;
 
       gf::Bresenham bresenham(current, player.hero.position);
@@ -138,7 +137,6 @@ namespace rc {
   }
 
   void RootModel::updateLevel(std::size_t levelIndex, gf::Vector2i next) {
-    gf::Log::debug("levelIndex: %zu\n", levelIndex);
     assert(levelIndex < m_state.roots.size());
 
     RootState& root = m_state.roots[levelIndex];
