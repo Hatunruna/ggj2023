@@ -11,6 +11,10 @@ include(GNUInstallDirs)
 find_package(gf REQUIRED COMPONENTS graphics)
 find_package(SFML REQUIRED COMPONENTS audio)
 
+if (APPLE)
+  find_library(COREAUDIO_LIBRARY CoreAudio)
+endif ()
+
 if (UNIX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
 endif ()
@@ -55,6 +59,7 @@ target_link_libraries(${GAME}
   PRIVATE
     gf::graphics
     sfml-audio
+    ${COREAUDIO_LIBRARY}
 )
 
 if (WIN32)
