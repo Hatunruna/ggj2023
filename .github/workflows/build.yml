@@ -39,7 +39,7 @@ jobs:
         run: |
           mkdir $Env:VCPKG_DEFAULT_BINARY_CACHE
           .\bootstrap-vcpkg.bat
-          .\vcpkg.exe install boost-algorithm:x64-windows boost-container:x64-windows boost-filesystem:x64-windows boost-heap:x64-windows freetype:x64-windows pugixml:x64-windows sdl2:x64-windows stb:x64-windows zlib:x64-windows
+          .\vcpkg.exe install sfml:x64-windows boost-algorithm:x64-windows boost-container:x64-windows boost-filesystem:x64-windows boost-heap:x64-windows freetype:x64-windows pugixml:x64-windows sdl2:x64-windows stb:x64-windows zlib:x64-windows
 
       # Compile GF
       - uses: actions/checkout@v3
@@ -117,7 +117,7 @@ jobs:
       - name: Install dependency
         run: |
           sudo apt update
-          sudo apt install -y libsdl2-dev libboost-dev libfreetype6-dev zlib1g-dev libpugixml-dev
+          sudo apt install -y libsdl2-dev libboost-dev libfreetype6-dev zlib1g-dev libpugixml-dev libsfml-dev
 
       # Compile GF
       - uses: actions/checkout@v3
@@ -191,7 +191,7 @@ jobs:
         run: |
           mkdir $VCPKG_DEFAULT_BINARY_CACHE
           ./bootstrap-vcpkg.sh
-          ./vcpkg install boost-algorithm:x64-osx boost-container:x64-osx boost-filesystem:x64-osx boost-heap:x64-osx freetype:x64-osx pugixml:x64-osx sdl2:x64-osx stb:x64-osx zlib:x64-osx
+          ./vcpkg install sfml:x64-osx boost-algorithm:x64-osx boost-container:x64-osx boost-filesystem:x64-osx boost-heap:x64-osx freetype:x64-osx pugixml:x64-osx sdl2:x64-osx stb:x64-osx zlib:x64-osx
 
       # Compile GF
       - uses: actions/checkout@v3
