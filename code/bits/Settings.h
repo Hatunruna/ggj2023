@@ -14,7 +14,7 @@ namespace rc {
   inline constexpr int MapLength = SpaceWidth * 3 + CorridorWidth * 2 + 2;
   inline constexpr gf::Vector2i MapSize = gf::vec(MapLength, MapLength);
 
-  inline constexpr int Levels = 2;
+  inline constexpr int Levels = 10;
 }
 
 #endif // RC_SETTINGS_H
