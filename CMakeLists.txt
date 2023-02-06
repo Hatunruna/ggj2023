@@ -76,6 +76,14 @@ if (WIN32)
       $<TARGET_FILE_DIR:${GAME}>/libpng16d.dll
       $<TARGET_FILE_DIR:${GAME}>/pugixml_d.dll
       $<TARGET_FILE_DIR:${GAME}>/zlibd1.dll
+      $<TARGET_FILE_DIR:${GAME}>/FLAC.dll
+      $<TARGET_FILE_DIR:${GAME}>/ogg.dll
+      $<TARGET_FILE_DIR:${GAME}>/OpenAL32.dll
+      $<TARGET_FILE_DIR:${GAME}>/sfml-audio-d-2.dll
+      $<TARGET_FILE_DIR:${GAME}>/sfml-system-d-2.dll
+      $<TARGET_FILE_DIR:${GAME}>/vorbis.dll
+      $<TARGET_FILE_DIR:${GAME}>/vorbisenc.dll
+      $<TARGET_FILE_DIR:${GAME}>/vorbisfile.dll
       $<TARGET_FILE_DIR:${GAME}>/prises.pdb
     DESTINATION .
     CONFIGURATIONS Debug
@@ -93,6 +101,14 @@ if (WIN32)
       $<TARGET_FILE_DIR:${GAME}>/libpng16.dll
       $<TARGET_FILE_DIR:${GAME}>/pugixml.dll
       $<TARGET_FILE_DIR:${GAME}>/zlib1.dll
+      $<TARGET_FILE_DIR:${GAME}>/FLAC.dll
+      $<TARGET_FILE_DIR:${GAME}>/ogg.dll
+      $<TARGET_FILE_DIR:${GAME}>/OpenAL32.dll
+      $<TARGET_FILE_DIR:${GAME}>/sfml-audio-2.dll
+      $<TARGET_FILE_DIR:${GAME}>/sfml-system-2.dll
+      $<TARGET_FILE_DIR:${GAME}>/vorbis.dll
+      $<TARGET_FILE_DIR:${GAME}>/vorbisenc.dll
+      $<TARGET_FILE_DIR:${GAME}>/vorbisfile.dll
     DESTINATION .
     CONFIGURATIONS Release
   )
