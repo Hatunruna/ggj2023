@@ -51,11 +51,21 @@ namespace rc {
   }
 
   void DialogEntity::render(gf::RenderTarget &target, const gf::RenderStates &states) {
+    gf::Coordinates coords(target);
+
+    unsigned instructionsCharacterSize = coords.getRelativeCharacterSize(0.03f);
+
+    gf::Text instructions("Press a button to start", m_font_text, instructionsCharacterSize);
+    instructions.setParagraphWidth(coords.getRelativeSize({ 0.5f, 0.0f }).width);
+    instructions.setAlignment(gf::Alignment::Center);
+    instructions.setColor(gf::Color::Gray());
+    instructions.setPosition(coords.getRelativePoint({ 0.4f, 0.9f }));
+    instructions.setAnchor(gf::Anchor::TopLeft);
+    target.draw(instructions, states);
+
     if (m_currentDialogIndex >= m_dialogs.size()) {
       return;
     }
-
-    gf::Coordinates coords(target);
 
     unsigned textCharacterSize = coords.getRelativeCharacterSize(0.05f);
 
@@ -73,15 +83,6 @@ namespace rc {
     text.setAnchor(gf::Anchor::TopLeft);
     target.draw(text, states);
 
-    unsigned instructionsCharacterSize = coords.getRelativeCharacterSize(0.03f);
-
-    gf::Text instructions("Press a button to start", m_font_text, instructionsCharacterSize);
-    instructions.setParagraphWidth(coords.getRelativeSize({ 0.5f, 0.0f }).width);
-    instructions.setAlignment(gf::Alignment::Center);
-    instructions.setColor(gf::Color::Gray());
-    instructions.setPosition(coords.getRelativePoint({ 0.4f, 0.9f }));
-    instructions.setAnchor(gf::Anchor::TopLeft);
-    target.draw(instructions, states);
   }
 
 }
