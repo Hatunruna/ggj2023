@@ -7,9 +7,11 @@
 
 namespace rc {
 
-  constexpr float ViewSize = 1000.0f;
-  // constexpr float ViewSize = 5000.0f;
-  constexpr int ViewRadius = 7;
+  namespace {
+    constexpr float ViewSize = 1000.0f;
+    // constexpr float ViewSize = 5000.0f;
+    constexpr int ViewRadius = 7;
+  }
 
   HeroActions::HeroActions()
   : up("Up")
@@ -29,6 +31,7 @@ namespace rc {
   , m_rtMap(game, game.state, Hero::Ryan)
   , m_ltHero(game.state, Hero::Lisa, m_game.resources)
   , m_rtHero(game.state, Hero::Ryan, m_game.resources)
+  , m_heroHud(game.resources)
   , m_rootModel(game.state, m_game.random)
   , m_ltRoot(game.state, Hero::Lisa, m_game.resources)
   , m_rtRoot(game.state, Hero::Ryan, m_game.resources)
@@ -64,6 +67,7 @@ namespace rc {
 
     addHudEntity(m_light);
     addHudEntity(m_split);
+    addHudEntity(m_heroHud);
 
     lisaActions.up.addScancodeKeyControl(gf::Scancode::W);
     lisaActions.up.setContinuous();
@@ -192,6 +196,27 @@ namespace rc {
 
     if (m_game.state.status == GameStatus::GameOver) {
       m_game.replaceScene(m_game.gameOver);
+    }
+
+    for (int i = 0; i < 2; ++i) {
+      Hero hero = static_cast<Hero>(i);
+      const int heroIndex = static_cast<int>(hero);
+
+      HeroState& heroState = m_game.state.players[heroIndex].hero;
+      const int levelIndex = heroState.levelIndex;
+      MapLevel& level = m_game.state.players[heroIndex].map.levels[levelIndex];
+
+      bool nearOfComputer = false;
+      for (const auto& cellPosition : level.level.cells.get4NeighborsRange(heroState.position)) {
+        const MapCell& cell = level.level.cells(cellPosition);
+
+        if (cell.type == MapCellType::Computer) {
+          nearOfComputer = true;
+          break;
+        }
+      }
+
+      m_heroHud.showInteract(hero, nearOfComputer);
     }
 
     m_ltWorldEntities.update(time);

@@ -30,6 +30,7 @@ add_executable(${GAME}
   code/bits/GameState.cc
   code/bits/Hero.cc
   code/bits/HeroEntity.cc
+  code/bits/HeroHudEntity.cc
   code/bits/LiftEntity.cc
   code/bits/LiftScene.cc
   code/bits/LightEntity.cc

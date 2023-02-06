@@ -8,6 +8,7 @@
 #include <SFML/Audio.hpp>
 
 #include "HeroEntity.h"
+#include "HeroHudEntity.h"
 #include "LightEntity.h"
 #include "MapEntity.h"
 #include "RootEntity.h"
@@ -65,6 +66,8 @@ private:
 
   HeroEntity m_ltHero;
   HeroEntity m_rtHero;
+
+  HeroHudEntity m_heroHud;
 
   RootModel m_rootModel;
   RootEntity m_ltRoot;
