@@ -32,7 +32,7 @@ namespace rc {
     }
 
     if (m_restartAction.isActive()) {
-      m_game.replaceScene(m_game.start); //, m_game.blackout, gf::seconds(TransitionDelay));
+      m_game.replaceScene(m_game.start, m_game.blackout, gf::seconds(1.0f));
     }
   }
 

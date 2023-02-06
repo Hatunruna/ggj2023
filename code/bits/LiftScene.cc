@@ -34,7 +34,7 @@ namespace rc {
     }
 
     if (m_startAction.isActive()) {
-      m_game.replaceScene(m_game.main);
+      m_game.replaceScene(m_game.main, m_game.blackout, gf::seconds(1.0f));
     }
   }
 

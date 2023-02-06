@@ -2,6 +2,7 @@
 #define RC_GAME_HUB_H
 
 #include <gf/GameManager.h>
+#include <gf/SegueEffects.h>
 
 #include "AudioManager.h"
 #include "CommonScene.h"
@@ -28,6 +29,7 @@ namespace rc {
     VictoryScene victory;
     GameOverScene gameOver;
 
+    gf::BlackoutSegueEffect blackout;
   };
 
 
