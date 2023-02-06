@@ -9,6 +9,7 @@
 namespace rc {
 
   enum class LiftAnimationState {
+    WarmUp,
     Begin,
     Middle,
     End,
