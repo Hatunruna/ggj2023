@@ -93,7 +93,7 @@ namespace rc {
         message.setOutlineThickness(3.0f);
         message.setAnchor(gf::Anchor::Center);
 
-        target.draw(interactText, states);
+        target.draw(message, states);
       }
     }
   }
