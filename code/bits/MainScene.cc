@@ -207,16 +207,29 @@ namespace rc {
       MapLevel& level = m_game.state.players[heroIndex].map.levels[levelIndex];
 
       bool nearOfComputer = false;
+      bool doorIsOpened = false;
       for (const auto& cellPosition : level.level.cells.get4NeighborsRange(heroState.position)) {
         const MapCell& cell = level.level.cells(cellPosition);
 
         if (cell.type == MapCellType::Computer) {
           nearOfComputer = true;
+
+          const MapCell& doorCell = level.level.cells(cell.computerState.controlledDoor);
+          doorIsOpened = doorCell.doorState.isOpen;
           break;
         }
       }
 
-      m_heroHud.showInteract(hero, nearOfComputer);
+      if (nearOfComputer && !doorIsOpened) {
+        m_heroHud.showInteract(hero, true);
+        m_heroHud.showMessage(hero, "");
+      } else if (nearOfComputer && doorIsOpened) {
+        m_heroHud.showInteract(hero, false);
+        m_heroHud.showMessage(hero, "The door is opened");
+      } else {
+        m_heroHud.showInteract(hero, false);
+        m_heroHud.showMessage(hero, "");
+      }
     }
 
     m_ltWorldEntities.update(time);

@@ -13,6 +13,7 @@ namespace rc {
     HeroHudEntity(gf::ResourceManager& resources);
 
     void showInteract(Hero hero, bool showed);
+    void showMessage(Hero hero, const std::string& message);
 
     void update(gf::Time time) override;
     void render(gf::RenderTarget &target, const gf::RenderStates &states) override;
@@ -21,6 +22,7 @@ namespace rc {
     gf::Font& m_font;
 
     std::vector<bool> m_showInteract;
+    std::vector<std::string> m_showMessage;
   };
 
 }

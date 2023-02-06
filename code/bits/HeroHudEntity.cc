@@ -9,12 +9,17 @@ namespace rc {
   HeroHudEntity::HeroHudEntity(gf::ResourceManager& resources)
   : m_font(resources.getFont("fonts/x-files.ttf"))
   , m_showInteract({ false, false })
+  , m_showMessage({ "", "" })
   {
 
   }
 
   void HeroHudEntity::showInteract(Hero hero, bool showed) {
     m_showInteract[static_cast<int>(hero)] = showed;
+  }
+
+  void HeroHudEntity::showMessage(Hero hero, const std::string& message) {
+    m_showMessage[static_cast<int>(hero)] = message;
   }
 
   void HeroHudEntity::update(gf::Time time) {
@@ -63,6 +68,32 @@ namespace rc {
           interactText.setAnchor(gf::Anchor::CenterRight);
           target.draw(interactText, states);
         }
+      }
+    }
+
+    for (int i = 0; i < m_showMessage.size(); ++i) {
+      if (!m_showMessage[i].empty()) {
+        gf::Text message;
+
+        switch (static_cast<Hero>(i)) {
+          case Hero::Lisa:
+            message.setPosition(coords.getRelativePoint(gf::vec(0.25f, 0.40f)));
+            break;
+
+          case Hero::Ryan:
+            message.setPosition(coords.getRelativePoint(gf::vec(0.75f, 0.40f)));
+            break;
+        }
+
+        message.setString(m_showMessage[i]);
+        message.setFont(m_font);
+        message.setCharacterSize(coords.getRelativeCharacterSize(0.025f));
+        message.setColor(gf::Color::White);
+        message.setOutlineColor(gf::Color::Black);
+        message.setOutlineThickness(3.0f);
+        message.setAnchor(gf::Anchor::Center);
+
+        target.draw(interactText, states);
       }
     }
   }
