@@ -123,6 +123,7 @@ namespace rc {
           tileset.setTileSize(SpriteSize - 2);
           tileset.setSpacing(gf::vec(2, 2));
           tileset.setMargin(gf::vec(1, 1));
+          tileset.setOffset(gf::projy(SpriteSize - CellSize));
 
           for (const auto& cellPostion: cells.getPositionRange()) {
             const auto& cell = cells(cellPostion);
